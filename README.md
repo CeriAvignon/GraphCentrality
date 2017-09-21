@@ -1,6 +1,6 @@
 # GraphCentrality
 =======
-*Bibliothèque de mesures de centralité en Java*
+*Java library to process graph centrality measures*
 
 * Copyright 2017-18 CERI L3 IL
 
