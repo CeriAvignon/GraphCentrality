@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 fichier + modification fichier
+=======
+création du fichier
+>>>>>>> refs/remotes/origin/g12
