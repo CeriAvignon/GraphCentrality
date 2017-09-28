@@ -2,7 +2,7 @@
 *Java library to process graph centrality measures*
 
 * Copyright 2017-18 CERI L3 IL
-
+zaa a
 GraphCentrality is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation. For source availability and license information see `licence.txt`
 
 * CERI: http://ceri.univ-avignon.fr/
