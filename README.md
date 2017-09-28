@@ -10,7 +10,6 @@ GraphCentrality is free software: you can redistribute it and/or modify it under
 
 -----------------------------------------------------------------------
 
-ca change rien
 
 ## Description
 Bla bla bla.
