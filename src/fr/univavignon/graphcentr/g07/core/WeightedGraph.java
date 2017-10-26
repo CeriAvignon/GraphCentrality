@@ -7,48 +7,36 @@ package fr.univavignon.graphcentr.g07.core;
  */
 public class WeightedGraph extends Graph<Node, WeightedLink>
 {
+
 	/**
-	 * Links two Nodes and set link's weight
-	 * Note : Link will be shared in both nodes
+	 * Links two nodes and set link's weight
 	 * @param inSourceNode Source node
 	 * @param inDestinationNode Destination node
-	 * @param inWeight Link weight
+	 * @param inWeight Link's weight
+	 * @return Created link between source node & destination node
 	 */
-	public void linkNode(Node inSourceNode, Node inDestinationNode, int inWeight)
+	public WeightedLink linkNode(Node inSourceNode, Node inDestinationNode, int inWeight)
 	{
-		WeightedLink NewLink = new WeightedLink(inSourceNode, inDestinationNode);
-		NewLink.setWeight(inWeight);
-		Links.add(NewLink);
-		inSourceNode.addLink(NewLink);
+		int SourceNodeIndex = Nodes.indexOf(inSourceNode);
+		int DestinationNodeIndex = Nodes.indexOf(inDestinationNode);
 		
-		NewLink = new WeightedLink(inDestinationNode, inSourceNode);
-		NewLink.setWeight(inWeight);
-		inDestinationNode.addLink(NewLink);
+		return linkNode(SourceNodeIndex, DestinationNodeIndex, inWeight);
 	}
-	
-	/**
-	 * Links two Nodes based on indexes and set link's weight
-	 * Note : Link will be shared in both nodes
-	 * @param inSourceNodeIndex
-	 * @param inDestinationNodeIndex
-	 * @param inWeight 
-	 */
-	public void linkNode(int inSourceNodeIndex, int inDestinationNodeIndex, int inWeight)
-	{
-		Node SourceNode = Nodes.get(inSourceNodeIndex);
-		Node DestinationNode = Nodes.get(inDestinationNodeIndex);
 
-		linkNode(SourceNode, DestinationNode, inWeight);
-	}
-	
 	/**
-	 * Create a node and and it in the graph
-	 * @return Created node
+	 * Links two nodes and set link's weight
+	 * @param inSourceNodeIndex Source node index
+	 * @param inDestinationNodeIndex Destination node index
+	 * @param inWeight Link's weight
+	 * @return Created link between source node & destination node
 	 */
-	public Node createNode()
+	public WeightedLink linkNode(int inSourceNodeIndex, int inDestinationNodeIndex, int inWeight)
 	{
-		Node NewNode = new Node();
-		addNode(NewNode);
-		return NewNode;
+		WeightedLink FirstLink = super.linkNode(inSourceNodeIndex, inDestinationNodeIndex);
+		FirstLink.setWeight(inWeight);
+		WeightedLink SecondLink = super.linkNode(inDestinationNodeIndex, inSourceNodeIndex);
+		SecondLink.setWeight(inWeight);
+		
+		return FirstLink;
 	}
 }

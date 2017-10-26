@@ -7,7 +7,7 @@ package fr.univavignon.graphcentr.g07.core;
  * @param <FirstValueType>
  * @param <SecondValueType>
  */
-class Pair <FirstValueType, SecondValueType>
+public class Pair <FirstValueType, SecondValueType>
 {
 	/**
 	 * First value

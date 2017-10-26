@@ -26,16 +26,18 @@ abstract class AbstractNode<LinkType extends AbstractLink<?>>
 	 * Add given link to links
 	 * @param InLink link to add
 	 */
-	public void addLink(LinkType InLink)
+	@SuppressWarnings("unchecked")
+	public <T> void addLink(T InLink)
 	{
-		Links.add(InLink);
+		Links.add((LinkType)InLink);
 	}
 	
 	/**
 	 * Add given link to links
 	 * @param InLink Link to remove
 	 */
-	public void removeLink(LinkType InLink)
+	@SuppressWarnings("unlikely-arg-type")
+	public <T> void removeLink(T InLink)
 	{
 		Links.remove(InLink);
 	}
