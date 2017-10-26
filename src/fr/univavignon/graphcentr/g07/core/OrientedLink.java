@@ -7,21 +7,5 @@ package fr.univavignon.graphcentr.g07.core;
  */
 public class OrientedLink extends AbstractLink<OrientedNode>
 {
-	/**
-	 * Default constructor
-	 */
-	public OrientedLink()
-	{
-		super();
-	}
-	
-	/**
-	 * Register both nodes
-	 * @param InSourceNode
-	 * @param InDestinationNode
-	 */
-	public OrientedLink(OrientedNode InSourceNode, OrientedNode InDestinationNode) 
-	{
-		super(InSourceNode, InDestinationNode);
-	}
+	// Nothing to do
 }

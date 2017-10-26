@@ -34,19 +34,9 @@ public class GraphCompatibilityChecker
 	static public <NodeType extends AbstractNode<?>, LinkType extends AbstractLink<?>, DesiredNodeType>
 	boolean nodesAreCompatible(Graph<NodeType, LinkType> inGraph, Class<DesiredNodeType> DesiredNodeClass) 
 	{				
-		// First resolve class names to get template parameters classes
-		inGraph.resolveClassNames();
 
 		// Get node class from inGraph by using forName method
-		@SuppressWarnings("rawtypes")
-		Class NodeClass = null;
-		try 
-		{
-			NodeClass = Class.forName(inGraph.getNodeTypeClassName());
-		} catch (ClassNotFoundException e1) 
-		{
-			e1.printStackTrace();
-		}
+		Class<NodeType> NodeClass = inGraph.getNodeClass();
 		
 		try 
 		{
@@ -70,19 +60,9 @@ public class GraphCompatibilityChecker
 	static public <NodeType extends AbstractNode<?>, LinkType extends AbstractLink<?>, DesiredLinkType>
 	boolean linksAreCompatible(Graph<NodeType, LinkType> inGraph, Class<DesiredLinkType> DesiredLinkClass) 
 	{				
-		// First resolve class names to get template parameters classes
-		inGraph.resolveClassNames();
 
 		// Get node class from inGraph by using forName method
-		@SuppressWarnings("rawtypes")
-		Class LinkClass = null;
-		try 
-		{
-			LinkClass = Class.forName(inGraph.getLinkTypeClassName());
-		} catch (ClassNotFoundException e1) 
-		{
-			e1.printStackTrace();
-		}
+		Class<LinkType> LinkClass = inGraph.getLinkClass();
 		
 		try 
 		{

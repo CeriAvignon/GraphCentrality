@@ -14,42 +14,24 @@ public class SimpleGraph extends Graph<Node, Link>
 	 * @param inSourceNode
 	 * @param inDestinationNode
 	 */
-	public void linkNode(Node inSourceNode, Node inDestinationNode)
+	@Override
+	public Link linkNode(Node inSourceNode, Node inDestinationNode)
 	{
-		Link NewLink = new Link(inSourceNode, inDestinationNode);
-		Links.add(NewLink);
-		inSourceNode.addLink(NewLink);
+		Link NewLink = super.linkNode(inSourceNode, inDestinationNode);
+		super.linkNode(inDestinationNode, inSourceNode);
 		
-		NewLink = new Link(inDestinationNode, inSourceNode);
-		Links.add(NewLink);
-		inDestinationNode.addLink(NewLink);
+		return NewLink;
 	}
 	
-	/**
-	 * Links two Nodes based on indexes
-	 * Note : Link will be shared in both nodes
-	 * @param inSourceNodeIndex
-	 * @param inDestinationNodeIndex
-	 */
-	public void linkNode(int inSourceNodeIndex, int inDestinationNodeIndex)
+	@Override
+	public Link linkNode(int inSourceNodeIndex, int inDestinationNodeIndex)
 	{
-		Node SourceNode = Nodes.get(inSourceNodeIndex);
-		Node DestinationNode = Nodes.get(inDestinationNodeIndex);
-
-		linkNode(SourceNode, DestinationNode);
+		Link NewLink = super.linkNode(inSourceNodeIndex, inDestinationNodeIndex);
+		super.linkNode(inDestinationNodeIndex, inSourceNodeIndex);
+		
+		return NewLink;
 	}
-	
-	/**
-	 * Create a node and push it in the graph
-	 * @return Created node
-	 */
-	public Node createNode()
-	{
-		Node NewNode = new Node();
-		addNode(NewNode);
-		return NewNode;
-	}
-	
+			
 	@Override
 	public int getLinkCount()
 	{

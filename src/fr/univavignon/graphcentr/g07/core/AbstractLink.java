@@ -28,18 +28,38 @@ abstract class AbstractLink<NodeType>
 	 */
 	public AbstractLink(NodeType InSourceNode, NodeType InDestinationNode)
 	{		
-		linkNode(InSourceNode, InDestinationNode);
+		setSourceNode(InSourceNode);
+		setDestinationNode(InDestinationNode);
+	}
+		
+	/**
+	 * Set source node
+	 * @param inNode
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> void setSourceNode(T inNode)
+	{
+		SourceNode = (NodeType) inNode;
 	}
 	
 	/**
-	 * Links two nodes
-	 * @param InSourceNode Source node
-	 * @param InDestinationNode Destination node
+	 * Set destination node
+	 * @param inNode
 	 */
-	public void linkNode(NodeType InSourceNode, NodeType InDestinationNode)
+	@SuppressWarnings("unchecked")
+	public <T> void setDestinationNode(T inNode)
 	{
-		SourceNode = InSourceNode;
-		DestinationNode = InDestinationNode;
+		DestinationNode = (NodeType) inNode;
+	}
+	
+	/**
+	 * Returns true if given node is used in this link
+	 * @param inNode Node to test
+	 * @return True if node is concerned
+	 */
+	public <T> boolean nodeIsConcerned(T inNode)
+	{
+		return (inNode == SourceNode || inNode == DestinationNode);
 	}
 		
 	/**

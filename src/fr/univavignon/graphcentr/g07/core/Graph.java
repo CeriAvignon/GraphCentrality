@@ -1,5 +1,6 @@
 package fr.univavignon.graphcentr.g07.core;
 
+import java.util.Iterator;
 import java.util.Vector;
 import java.lang.reflect.ParameterizedType;
 
@@ -10,29 +11,26 @@ import java.lang.reflect.ParameterizedType;
  * @param <NodeType> Type of node used by graph
  * @param <LinkType> Type of link used by graph
  */
-class Graph
+public class Graph
 <
 	 NodeType extends AbstractNode<?>
 	,LinkType extends AbstractLink<?>
 >
 {
-	/**
-	 * Vector of nodes
-	 */
+	/** Vector of nodes */
 	protected Vector<NodeType> Nodes;
-	/**
-	 * Vector of created links
-	 */
+	/** Vector of created links */
 	protected Vector<LinkType> Links;
 	
-	/**
-	 * String used to resolve template-class type
-	 */
+	/** String used to resolve template-class type */
 	private String NodeTypeClassName;
-	/**
-	 * String used to resolve template-class type
-	 */
+	/** String used to resolve template-class type */
 	private String NodeLinkClassName;
+	
+	/** Node class for NodeType instances */
+	private Class<NodeType> NodeClass;
+	/** Link class for LinkType instances */
+	private Class<LinkType> LinkClass;
 	
 	/**
 	 * Default constructor
@@ -41,41 +39,73 @@ class Graph
 	{
 		Nodes = new Vector<NodeType>();
 		Links = new Vector<LinkType>();
+		
+		initializeClass();
 	}
 	
 	/**
-	 * Resolve both NodeTypeClassName & NodeLinkClassName
+	 * Initialise graph classes (NodeClass & LinkClass)
 	 */
-	public void resolveClassNames()
+	@SuppressWarnings("unchecked")
+	protected void initializeClass()
 	{
-		if(NodeTypeClassName == null)
+		// Get templates parameters class names
+		ParameterizedType pt = (ParameterizedType) getClass().getGenericSuperclass();
+		NodeTypeClassName = pt.getActualTypeArguments()[0].toString().split("\\s")[1]; 
+		NodeLinkClassName = pt.getActualTypeArguments()[1].toString().split("\\s")[1]; 
+		
+		// Initialise Node/Link class for future instances
+		try 
 		{
-			ParameterizedType pt = (ParameterizedType) getClass().getGenericSuperclass();
-			NodeTypeClassName = pt.getActualTypeArguments()[0].toString().split("\\s")[1]; 
-		}
-		if(NodeLinkClassName == null)
+			NodeClass = (Class<NodeType>) Class.forName(NodeTypeClassName);
+			LinkClass = (Class<LinkType>) Class.forName(NodeLinkClassName);
+		} catch (ClassNotFoundException e) 
 		{
-			ParameterizedType pt = (ParameterizedType) getClass().getGenericSuperclass();
-			NodeLinkClassName = pt.getActualTypeArguments()[1].toString().split("\\s")[1]; 
+			e.printStackTrace();
 		}
 	}
 	
 	/**
-	 * Returns NodeTypeClassName
-	 * @return NodeTypeClassName
+	 * Returns node class (for node instancing)
+	 * @return Node class
 	 */
-	public String getNodeTypeClassName()
+	public Class<NodeType> getNodeClass()
 	{
-		return NodeTypeClassName;
+		return NodeClass;
 	}
 	
 	/**
-	 * Returns NodeLinkClassName
-	 * @return NodeLinkClassName
+	 * Returns link class (for link instancing)
+	 * @return Link class
 	 */
-	public String getLinkTypeClassName()
+	public Class<LinkType> getLinkClass()
 	{
-		return NodeLinkClassName;
+		return LinkClass;
+	}
+	
+	/**
+	 * Create a NodeType and add it to graph
+	 * @return Created node
+	 */
+	public NodeType createNode()
+	{
+		NodeType NewNode = null;
+		
+		// Useless try and catch 
+		try 
+		{
+			NewNode = NodeClass.newInstance();
+		} catch (InstantiationException e) 
+		{
+			e.printStackTrace();
+		} catch (IllegalAccessException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		addNode(NewNode);
+		
+		return NewNode;
 	}
 	
 	/**
@@ -93,7 +123,30 @@ class Graph
 	 */
 	public void removeNode(NodeType inNode)
 	{
+		NodeType RemovedNode = inNode;
 		Nodes.remove(inNode);
+		
+		// Remove all removed node's links
+		for(AbstractLink<?> CurrentLink : RemovedNode.getLinks())
+			Links.remove(CurrentLink);
+		
+		// Then search for each node if links are related with deleted node
+		for(NodeType CurrentNode : Nodes)
+		{
+			@SuppressWarnings("unchecked")
+			Iterator<AbstractLink<?>> LinkIterator = (Iterator<AbstractLink<?>>) CurrentNode.getLinks().iterator();
+			while(LinkIterator.hasNext())
+			{
+				AbstractLink<?> CurrentLink = LinkIterator.next();
+				
+				if(CurrentLink.nodeIsConcerned(RemovedNode))
+				{
+					//CurrentNode.removeLink(CurrentLink);
+					LinkIterator.remove();
+					Links.remove(CurrentLink);
+				}
+			}
+		}
 	}
 	
 	/**
@@ -102,7 +155,8 @@ class Graph
 	 */
 	public void removeNode(int inIndex)
 	{
-		Nodes.remove(inIndex);
+		NodeType NodeToRemove = Nodes.get(inIndex);
+		removeNode(NodeToRemove);
 	}
 	
 	/**
@@ -121,6 +175,40 @@ class Graph
 	public int getNodeCount()
 	{
 		return Nodes.size();
+	}
+	
+	public LinkType linkNode(NodeType inSourceNode, NodeType inDestinationNode)
+	{
+		int SourceNodeIndex = Nodes.indexOf(inSourceNode);
+		int DestinationNodeIndex = Nodes.indexOf(inDestinationNode);
+		
+		return linkNode(SourceNodeIndex, DestinationNodeIndex);
+	}
+	
+	public LinkType linkNode(int inSourceNodeIndex, int inDestinationNodeIndex)
+	{
+		NodeType SourceNode = Nodes.get(inSourceNodeIndex);
+		NodeType DestinationNode = Nodes.get(inDestinationNodeIndex);
+		
+		LinkType NewLink = null;
+		
+		try 
+		{
+			NewLink = LinkClass.newInstance();
+		} catch (InstantiationException e) 
+		{
+			e.printStackTrace();
+		} catch (IllegalAccessException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		NewLink.setSourceNode(SourceNode);
+		NewLink.setDestinationNode(DestinationNode);
+		SourceNode.addLink(NewLink);
+		Links.add(NewLink);
+		
+		return NewLink;
 	}
 	
 	/**

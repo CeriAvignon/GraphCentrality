@@ -24,6 +24,7 @@ public class SpatialNode extends Node implements AbstractSpatialInformation
 	public SpatialNode()
 	{
 		super();
+		setPosition(0.0, 0.0);
 	}
 	
 	/**
