@@ -2,7 +2,7 @@ package fr.univavignon.graphcentr.g07.core;
 
 /**
  * 
- * @author EthosReaper
+ * @author JackassDestroyer
  * Link with a weight
  */
 public class WeightedLink extends Link implements AbstractWeightedInformation
@@ -11,6 +11,14 @@ public class WeightedLink extends Link implements AbstractWeightedInformation
 	 * Link's weight
 	 */
 	protected double Weight;
+	
+	/**
+	 * Default constructor
+	 */
+	public WeightedLink()
+	{
+		super();
+	}
 
 	/**
 	 * Default constructor, link both nodes

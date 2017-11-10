@@ -19,7 +19,7 @@ public class IncidenceMatrix extends Matrix<Integer> implements AbstractDataStru
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public <NodeType extends AbstractNode<LinkType>, LinkType extends AbstractLink<NodeType>> 
+	public <NodeType extends AbstractNode<?>, LinkType extends AbstractLink<?>> 
 	void copyGraph(Graph<NodeType, LinkType> inGraph)
 	{
 		matrix.clear();
@@ -101,7 +101,7 @@ public class IncidenceMatrix extends Matrix<Integer> implements AbstractDataStru
 	@Override
 	public void print() 
 	{
-		int NumberSize = 3;
+		int NumberSize = 4;
 		
 		for(int i = 0; i < matrix.size(); i++)
 		{
@@ -111,6 +111,10 @@ public class IncidenceMatrix extends Matrix<Integer> implements AbstractDataStru
 				if(matrix.get(i).get(j) != null)
 					Number = Integer.toString(matrix.get(i).get(j));
 				
+				if(matrix.get(i).get(j) >= 0)
+				{
+					Number = " "+Number;
+				}
 				System.out.print(Number);
 				for(int SpaceCount = 0; SpaceCount < NumberSize - Number.length(); SpaceCount++)
 					System.out.print(" ");

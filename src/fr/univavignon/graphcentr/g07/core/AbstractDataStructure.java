@@ -11,7 +11,7 @@ interface AbstractDataStructure
 	 * Copy given simple-like-graph into other type of data
 	 * @param inGraph Graph to copy
 	 */
-	public <NodeType extends AbstractNode<LinkType>, LinkType extends AbstractLink<NodeType>> 
+	public <NodeType extends AbstractNode<?>, LinkType extends AbstractLink<?>> 
 	void copyGraph(Graph<NodeType, LinkType> inGraph);
 	
 	/**

@@ -177,6 +177,12 @@ public class Graph
 		return Nodes.size();
 	}
 	
+	/**
+	 * Link two nodes
+	 * @param inSourceNode
+	 * @param inDestinationNode
+	 * @return Created link
+	 */
 	public LinkType linkNode(NodeType inSourceNode, NodeType inDestinationNode)
 	{
 		int SourceNodeIndex = Nodes.indexOf(inSourceNode);
@@ -185,6 +191,12 @@ public class Graph
 		return linkNode(SourceNodeIndex, DestinationNodeIndex);
 	}
 	
+	/**
+	 * Link two nodes
+	 * @param inSourceNodeIndex
+	 * @param inDestinationNodeIndex
+	 * @return Created link
+	 */
 	public LinkType linkNode(int inSourceNodeIndex, int inDestinationNodeIndex)
 	{
 		NodeType SourceNode = Nodes.get(inSourceNodeIndex);
@@ -227,6 +239,17 @@ public class Graph
 	public Vector<LinkType> getLinks()
 	{
 		return Links;
+	}
+	
+	/**
+	 * Returns last link
+	 * @return Last link
+	 */
+	@SuppressWarnings("unchecked")
+	public <T>
+	T getLastLink()
+	{
+		return (T) Links.lastElement();
 	}
 	
 	/**

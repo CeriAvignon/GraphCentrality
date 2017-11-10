@@ -7,7 +7,7 @@ import java.util.Vector;
  * @author JackassDestroyer
  * Algorithm's output which associate a node to a value
  */
-public class AlgorithmResult 
+class AlgorithmResult 
 {
 	/** */
 	protected Vector<NodeResult> result;
