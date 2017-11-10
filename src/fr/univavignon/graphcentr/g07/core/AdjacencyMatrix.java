@@ -22,7 +22,7 @@ public class AdjacencyMatrix extends Matrix<Integer> implements AbstractDataStru
 	 * Copy graph overriding for simple-like-graph
 	 */
 	@Override
-	public <NodeType extends AbstractNode<LinkType>, LinkType extends AbstractLink<NodeType>>
+	public <NodeType extends AbstractNode<?>, LinkType extends AbstractLink<?>>
 	void copyGraph(Graph<NodeType, LinkType> inGraph) 
 	{			
 		matrix.clear();
@@ -37,11 +37,11 @@ public class AdjacencyMatrix extends Matrix<Integer> implements AbstractDataStru
 		for(int i = 0; i < NodeCount; i++)
 		{
 			NodeType CurrentNode = inGraph.at(i);
-			Vector<LinkType> Links = CurrentNode.getLinks();
+			Vector<?> Links = CurrentNode.getLinks();
 			
 			for(int j = 0; j < CurrentNode.getLinkCount(); j++)
 			{
-				AbstractLink<?> CurrentLink = Links.get(j);
+				AbstractLink<?> CurrentLink = (AbstractLink<?>)Links.get(j);
 				int SrcIndex = inGraph.indexOf(CurrentLink.getSourceNode());
 				int DestIndex = inGraph.indexOf(CurrentLink.getDestinationNode());
 				int Value = 1;

@@ -29,19 +29,19 @@ public class AdjacencyList implements AbstractDataStructure
 		return List;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	public <NodeType extends AbstractNode<LinkType>, LinkType extends AbstractLink<NodeType>> void copyGraph(
-			Graph<NodeType, LinkType> inGraph) 
+	public <NodeType extends AbstractNode<?>, LinkType extends AbstractLink<?>> 
+	void copyGraph(Graph<NodeType, LinkType> inGraph) 
 	{
 		List.clear();
 		Vector<NodeType> Nodes = inGraph.getNodes();
 		
 		for(NodeType CurrentNode : Nodes)
 		{
-			Pair<AbstractNode<?>,Vector<Integer>> Node = new Pair<AbstractNode<?>,Vector<Integer>>();
-			Node.FirstValue = CurrentNode;
-			Node.SecondValue = new Vector<Integer>();
-			for(LinkType CurrentLink : CurrentNode.getLinks())
+			Pair<AbstractNode<?>,Vector<Integer>> Node = new Pair<>(CurrentNode, new Vector<Integer>());
+			// Useless unchecked warning
+			for(LinkType CurrentLink : (Vector<LinkType>)CurrentNode.getLinks())
 			{
 				int Index = Nodes.indexOf(CurrentLink.getDestinationNode());
 				Node.SecondValue.add(Index);

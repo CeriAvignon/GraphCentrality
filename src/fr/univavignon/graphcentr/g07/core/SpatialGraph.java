@@ -5,9 +5,8 @@ package fr.univavignon.graphcentr.g07.core;
  * @author JackassDestroyer
  * Simple graph with SpatialNode
  */
-public class SpatialGraph extends Graph<SpatialNode, Link>
-{
-	
+public class SpatialGraph extends SimpleLikeGraph<SpatialNode, Link>
+{	
 	/**
 	 * Create a node and push it in the graph
 	 * @param inX X coord

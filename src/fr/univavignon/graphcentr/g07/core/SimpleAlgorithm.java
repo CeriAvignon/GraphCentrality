@@ -14,15 +14,20 @@ public class SimpleAlgorithm
 	 */
 	static public <GraphNodeType extends Node, GraphLinkType extends Link> 
 	AlgorithmResult evaluate(Graph<GraphNodeType, GraphLinkType> inGraph) 
-	{
+	{	
 		AlgorithmResult Result = new AlgorithmResult("Highest degree node");
+		
+		if(inGraph.getNodeCount() <= 0)
+			return Result;
 		
 		int NodeIndex = 0;
 		for(int i = 0; i < inGraph.getNodeCount(); i++)
 		{
 			Node CurrentNode = inGraph.at(i);
 			if(CurrentNode.getLinkCount() > inGraph.at(NodeIndex).getLinkCount())
+			{
 				NodeIndex = i;
+			}
 		}
 		
 		Result.add(inGraph.at(NodeIndex), NodeIndex);

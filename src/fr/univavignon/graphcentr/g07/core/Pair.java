@@ -17,4 +17,22 @@ public class Pair <FirstValueType, SecondValueType>
 	 * Second value
 	 */
 	public SecondValueType SecondValue;
+	
+	/**
+	 * Default constructor
+	 */
+	public Pair()
+	{
+	}
+	
+	/**
+	 * Initialise both values
+	 * @param inFirstValue
+	 * @param inSecondValue
+	 */
+	public Pair(FirstValueType inFirstValue, SecondValueType inSecondValue)
+	{
+		FirstValue = inFirstValue;
+		SecondValue = inSecondValue;
+	}
 }

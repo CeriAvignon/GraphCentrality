@@ -5,9 +5,8 @@ package fr.univavignon.graphcentr.g07.core;
  * @author JackassDestroyer
  * Simple graph with weighted links
  */
-public class WeightedGraph extends Graph<Node, WeightedLink>
-{
-
+public class WeightedGraph extends SimpleLikeGraph<Node, WeightedLink>
+{	
 	/**
 	 * Links two nodes and set link's weight
 	 * @param inSourceNode Source node
@@ -34,7 +33,7 @@ public class WeightedGraph extends Graph<Node, WeightedLink>
 	{
 		WeightedLink FirstLink = super.linkNode(inSourceNodeIndex, inDestinationNodeIndex);
 		FirstLink.setWeight(inWeight);
-		WeightedLink SecondLink = super.linkNode(inDestinationNodeIndex, inSourceNodeIndex);
+		WeightedLink SecondLink = getLastLink();
 		SecondLink.setWeight(inWeight);
 		
 		return FirstLink;

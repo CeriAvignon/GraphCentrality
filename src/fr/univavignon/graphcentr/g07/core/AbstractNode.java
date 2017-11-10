@@ -57,7 +57,7 @@ abstract class AbstractNode<LinkType extends AbstractLink<?>>
 	 * @param inOther
 	 * @return If node is linked with given node
 	 */
-	public boolean isLinkedWith(AbstractNode<LinkType> inOther)
+	public boolean isLinkedWith(AbstractNode<?> inOther)
 	{
 		for(LinkType CurrentLink : Links)
 		{

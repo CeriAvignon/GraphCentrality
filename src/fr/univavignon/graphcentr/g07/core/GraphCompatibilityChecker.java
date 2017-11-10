@@ -40,14 +40,18 @@ public class GraphCompatibilityChecker
 		
 		try 
 		{
-			if(!NodeClass.isInstance(DesiredNodeClass.newInstance()))
+			if(!DesiredNodeClass.isInstance(NodeClass.newInstance()))
 				return false;
-			
-		} catch (InstantiationException | IllegalAccessException e) 
+		} 
+		catch (InstantiationException e) 
+		{
+			e.printStackTrace();
+		} 
+		catch (IllegalAccessException e) 
 		{
 			e.printStackTrace();
 		}
-		
+			
 		return true;
 	}
 	
@@ -66,14 +70,18 @@ public class GraphCompatibilityChecker
 		
 		try 
 		{
-			if(!LinkClass.isInstance(DesiredLinkClass.newInstance()))
+			if(!DesiredLinkClass.isInstance(LinkClass.newInstance()))
 				return false;
-			
-		} catch (InstantiationException | IllegalAccessException e) 
+		} 
+		catch (InstantiationException e) 
+		{
+			e.printStackTrace();
+		} 
+		catch (IllegalAccessException e) 
 		{
 			e.printStackTrace();
 		}
-		
+			
 		return true;
 	}
 }
