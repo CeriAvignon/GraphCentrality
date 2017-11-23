@@ -9,7 +9,7 @@ import java.util.Vector;
  *  Note : Given links are not checked, you have to handle null-cases
  * @param <LinkType> Which type of link it contains
  */
-abstract class AbstractNode<LinkType extends AbstractLink<?>>
+public abstract class AbstractNode<LinkType extends AbstractLink<?>>
 {
 	/** Links to other nodes */
 	protected Vector<LinkType> Links;

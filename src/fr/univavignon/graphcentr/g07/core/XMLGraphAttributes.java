@@ -70,7 +70,7 @@ class XMLGraphAttributes
 			
 			if(NodeType.getNodeValue().equalsIgnoreCase("node"))
 				NodeAttributes.add(new XMLUserDefinedAttribute(Type, inNode));
-			else if(NodeType.getNodeValue().equalsIgnoreCase("node"))
+			else if(NodeType.getNodeValue().equalsIgnoreCase("edge"))
 				LinkAttributes.add(new XMLUserDefinedAttribute(Type, inNode));
 		}
 	}

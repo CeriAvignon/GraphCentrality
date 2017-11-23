@@ -73,7 +73,7 @@ public class GraphMLReader extends GraphFileReader
 		// Check graph compatibility
 		bGraphIsWeighted = GraphCompatibilityChecker.nodesAreCompatible(inGraph, AbstractWeightedInformation.class);
 		bGraphIsSpatial = GraphCompatibilityChecker.nodesAreCompatible(inGraph, AbstractSpatialInformation.class);
-		bGraphIsOriented = GraphCompatibilityChecker.isCompatible(inGraph, OrientedNode.class, OrientedLink.class);
+		bGraphIsOriented = GraphCompatibilityChecker.isCompatible(inGraph, DirectedNode.class, DirectedLink.class);
 		
 		// Parse file
 		Document ReadFile = null;

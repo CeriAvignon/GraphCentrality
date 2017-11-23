@@ -5,7 +5,7 @@ package fr.univavignon.graphcentr.g07.core;
  * @author JackassDestroyer
  * Spatial information : class will have two coords
  */
-interface AbstractSpatialInformation
+public interface AbstractSpatialInformation
 {
 	/**
 	 * Set node coords

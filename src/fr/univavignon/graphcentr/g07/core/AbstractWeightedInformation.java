@@ -5,7 +5,7 @@ package fr.univavignon.graphcentr.g07.core;
  * @author JackassDestroyer
  * Weighted information : class will have a weight
  */
-interface AbstractWeightedInformation 
+public interface AbstractWeightedInformation 
 {
 	/**
 	 * Set link weight

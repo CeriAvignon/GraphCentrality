@@ -257,7 +257,7 @@ public class Graph
 	 * @param inIndex
 	 * @return Node
 	 */
-	public NodeType at(int inIndex)
+	public NodeType getNodeAt(int inIndex)
 	{		
 		return Nodes.get(inIndex);
 	}

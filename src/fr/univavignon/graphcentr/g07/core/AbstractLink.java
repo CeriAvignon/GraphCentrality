@@ -7,7 +7,7 @@ package fr.univavignon.graphcentr.g07.core;
  * Inherit from it to add other information when linking two nodes
  * @param <NodeType> Node type to link
  */
-abstract class AbstractLink<NodeType>
+public abstract class AbstractLink<NodeType>
 {
 	/** "Parent" node */
 	protected NodeType SourceNode;

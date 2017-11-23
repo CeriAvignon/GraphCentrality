@@ -36,7 +36,7 @@ public class AdjacencyMatrix extends Matrix<Integer> implements AbstractDataStru
 		// Parse each nodes
 		for(int i = 0; i < NodeCount; i++)
 		{
-			NodeType CurrentNode = inGraph.at(i);
+			NodeType CurrentNode = inGraph.getNodeAt(i);
 			Vector<?> Links = CurrentNode.getLinks();
 			
 			for(int j = 0; j < CurrentNode.getLinkCount(); j++)

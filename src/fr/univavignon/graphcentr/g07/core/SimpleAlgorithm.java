@@ -23,14 +23,14 @@ public class SimpleAlgorithm
 		int NodeIndex = 0;
 		for(int i = 0; i < inGraph.getNodeCount(); i++)
 		{
-			Node CurrentNode = inGraph.at(i);
-			if(CurrentNode.getLinkCount() > inGraph.at(NodeIndex).getLinkCount())
+			Node CurrentNode = inGraph.getNodeAt(i);
+			if(CurrentNode.getLinkCount() > inGraph.getNodeAt(NodeIndex).getLinkCount())
 			{
 				NodeIndex = i;
 			}
 		}
 		
-		Result.add(inGraph.at(NodeIndex), NodeIndex);
+		Result.add(inGraph.getNodeAt(NodeIndex), NodeIndex);
 		
 		return Result;
 	}	

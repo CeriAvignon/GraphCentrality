@@ -24,9 +24,9 @@ public class IncidenceMatrix extends Matrix<Integer> implements AbstractDataStru
 	{
 		matrix.clear();
 		// Special for oriented graphs
-		if(GraphCompatibilityChecker.isCompatible(inGraph, OrientedNode.class, OrientedLink.class))
+		if(GraphCompatibilityChecker.isCompatible(inGraph, DirectedNode.class, DirectedLink.class))
 		{
-			copyOrientedGraph((Graph<OrientedNode, OrientedLink>)inGraph);
+			copyOrientedGraph((Graph<DirectedNode, DirectedLink>)inGraph);
 			return;
 		}
 		
@@ -61,7 +61,7 @@ public class IncidenceMatrix extends Matrix<Integer> implements AbstractDataStru
 	 * Specialisation for oriented graph
 	 * @param inGraph
 	 */
-	protected <NodeType extends OrientedNode, LinkType extends OrientedLink> 
+	protected <NodeType extends DirectedNode, LinkType extends DirectedLink> 
 	void copyOrientedGraph(Graph<NodeType, LinkType> inGraph)
 	{
 		Vector<NodeType> Nodes = inGraph.getNodes();
