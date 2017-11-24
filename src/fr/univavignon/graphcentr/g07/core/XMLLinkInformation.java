@@ -77,7 +77,7 @@ class XMLLinkInformation
 			
 			if(Weight == 0)
 			{
-				String WeightValue = inAttributes.getNodeAttribute(Attributes, "weight");
+				String WeightValue = inAttributes.getLinkAttribute(Attributes, "weight");
 				if(WeightValue != "")
 					Weight = Double.parseDouble(WeightValue);
 			}
@@ -100,7 +100,7 @@ class XMLLinkInformation
 			
 			if(Weight == 0)
 			{
-				String WeightValue = inAttributes.getNodeAttribute(Attributes, "weight");
+				String WeightValue = inAttributes.getLinkAttribute(Attributes, "weight");
 				if(WeightValue != "")
 					Weight = Double.parseDouble(WeightValue);
 			}
