@@ -61,6 +61,7 @@ public class AdjacencyMatrix extends Matrix<Double> implements AbstractDataStruc
 	
 	/**
 	 * Copy graph overriding for weighted-simple-like-graph
+	 * @param inGraph Graph to copy
 	 */
 	protected <NodeType extends AbstractNode<?>, LinkType extends AbstractLink<?>>
 	void copyWeightedGraph(AbstractGraph<NodeType, LinkType> inGraph) 

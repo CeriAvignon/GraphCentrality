@@ -28,12 +28,12 @@ public class DirectedWeightedSpatialGraph  extends DirectedGraph<SpatialNode, We
 	 * @param inWeight Link's weight
 	 * @return Created link between source node & destination node
 	 */
-	public WeightedLink linkNode(Node inSourceNode, Node inDestinationNode, int inWeight)
+	public WeightedLink createLink(Node inSourceNode, Node inDestinationNode, int inWeight)
 	{
 		int SourceNodeIndex = Nodes.indexOf(inSourceNode);
 		int DestinationNodeIndex = Nodes.indexOf(inDestinationNode);
 		
-		return linkNode(SourceNodeIndex, DestinationNodeIndex, inWeight);
+		return createLink(SourceNodeIndex, DestinationNodeIndex, inWeight);
 	}
 
 	/**
@@ -43,9 +43,9 @@ public class DirectedWeightedSpatialGraph  extends DirectedGraph<SpatialNode, We
 	 * @param inWeight Link's weight
 	 * @return Created link between source node & destination node
 	 */
-	public WeightedLink linkNode(int inSourceNodeIndex, int inDestinationNodeIndex, int inWeight)
+	public WeightedLink createLink(int inSourceNodeIndex, int inDestinationNodeIndex, int inWeight)
 	{
-		WeightedLink FirstLink = super.linkNode(inSourceNodeIndex, inDestinationNodeIndex);
+		WeightedLink FirstLink = super.createLink(inSourceNodeIndex, inDestinationNodeIndex);
 		FirstLink.setWeight(inWeight);
 		WeightedLink SecondLink = getLastLink();
 		SecondLink.setWeight(inWeight);

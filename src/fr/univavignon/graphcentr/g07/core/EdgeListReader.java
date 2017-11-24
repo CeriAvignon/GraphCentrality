@@ -58,7 +58,7 @@ public class EdgeListReader extends GraphFileReader
 				GraphNodeType DestinationNode = (GraphNodeType)findNode(ReadNodes, DestinationNodeName);
 				
 				if(!SourceNode.isLinkedWith(DestinationNode))
-					inGraph.linkNode(SourceNode, DestinationNode);
+					inGraph.createLink(SourceNode, DestinationNode);
 			}
 		}
 	}

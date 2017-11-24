@@ -112,7 +112,7 @@ public class IncidenceMatrix extends Matrix<Double> implements AbstractDataStruc
 	@Override
 	public void print() 
 	{
-		int NumberSize = 5;
+		int NumberSize = 6;
 		
 		for(int i = 0; i < matrix.size(); i++)
 		{

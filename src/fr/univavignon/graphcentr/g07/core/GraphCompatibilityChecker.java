@@ -28,7 +28,7 @@ public class GraphCompatibilityChecker
 	/**
 	 * Test if graph is directed
 	 * @param inGraph Graph to test
-	 * @return
+	 * @return True if graph is directed
 	 */
 	static public <NodeType extends AbstractNode<?>, LinkType extends AbstractLink<?>>
 	boolean isDirected(AbstractGraph<NodeType, LinkType> inGraph) 

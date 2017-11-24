@@ -186,12 +186,12 @@ abstract class AbstractGraph
 	 * @param inDestinationNode
 	 * @return Created link
 	 */
-	public LinkType linkNode(NodeType inSourceNode, NodeType inDestinationNode)
+	public LinkType createLink(NodeType inSourceNode, NodeType inDestinationNode)
 	{
 		int SourceNodeIndex = Nodes.indexOf(inSourceNode);
 		int DestinationNodeIndex = Nodes.indexOf(inDestinationNode);
 		
-		return linkNode(SourceNodeIndex, DestinationNodeIndex);
+		return createLink(SourceNodeIndex, DestinationNodeIndex);
 	}
 	
 	/**
@@ -200,7 +200,7 @@ abstract class AbstractGraph
 	 * @param inDestinationNodeIndex
 	 * @return Created link
 	 */
-	public abstract LinkType linkNode(int inSourceNodeIndex, int inDestinationNodeIndex);
+	public abstract LinkType createLink(int inSourceNodeIndex, int inDestinationNodeIndex);
 
 	
 	/**

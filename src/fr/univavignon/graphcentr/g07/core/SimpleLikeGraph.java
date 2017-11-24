@@ -15,7 +15,7 @@ NodeType extends AbstractNode<?>
 extends AbstractGraph<NodeType, LinkType>
 {
 	@Override
-	public LinkType linkNode(int inSourceNodeIndex, int inDestinationNodeIndex)
+	public LinkType createLink(int inSourceNodeIndex, int inDestinationNodeIndex)
 	{
 		NodeType SourceNode = Nodes.get(inSourceNodeIndex);
 		NodeType DestinationNode = Nodes.get(inDestinationNodeIndex);

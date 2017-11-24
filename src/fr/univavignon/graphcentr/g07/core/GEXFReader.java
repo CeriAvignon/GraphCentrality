@@ -225,7 +225,7 @@ public class GEXFReader extends GraphFileReader
 			if(SourceNode == null || DestinationNode == null)
 				continue;
 			
-			Current.Link = inGraph.linkNode(inGraph.indexOf(SourceNode), inGraph.indexOf(DestinationNode));
+			Current.Link = inGraph.createLink(inGraph.indexOf(SourceNode), inGraph.indexOf(DestinationNode));
 			
 			if(bGraphIsWeighted)
 			{
