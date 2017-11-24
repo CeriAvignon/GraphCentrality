@@ -24,7 +24,7 @@ public class EdgeListReader extends GraphFileReader
 	 * @param inGraph Graph to update
 	 */
 	public <GraphNodeType extends AbstractNode<?>, GraphLinkType extends AbstractLink<?>> 
-	void updateFromFile(String inFileName, char inSeparator, Graph<GraphNodeType, GraphLinkType> inGraph)
+	void updateFromFile(String inFileName, char inSeparator, AbstractGraph<GraphNodeType, GraphLinkType> inGraph)
 	{
 		openFile(inFileName);
 		

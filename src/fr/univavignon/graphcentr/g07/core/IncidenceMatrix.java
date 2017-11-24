@@ -7,28 +7,29 @@ import java.util.Vector;
  * @author JackassDestroyer
  * Transform a graph into an incidence matrix.
  */
-public class IncidenceMatrix extends Matrix<Integer> implements AbstractDataStructure
+public class IncidenceMatrix extends Matrix<Double> implements AbstractDataStructure
 {
 	/**
 	 * Default constructor
 	 */
 	public IncidenceMatrix()
 	{
-		matrix = new Vector<Vector<Integer>>();
+		matrix = new Vector<Vector<Double>>();
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public <NodeType extends AbstractNode<?>, LinkType extends AbstractLink<?>> 
-	void copyGraph(Graph<NodeType, LinkType> inGraph)
+	void copyGraph(AbstractGraph<NodeType, LinkType> inGraph)
 	{
 		matrix.clear();
 		// Special for oriented graphs
-		if(GraphCompatibilityChecker.isCompatible(inGraph, DirectedNode.class, DirectedLink.class))
+		if(GraphCompatibilityChecker.isDirected(inGraph))
 		{
-			copyOrientedGraph((Graph<DirectedNode, DirectedLink>)inGraph);
+			copyOrientedGraph((DirectedGraph<NodeType, LinkType>)inGraph);
 			return;
 		}
+		
+		boolean bWeighted = GraphCompatibilityChecker.linksAreCompatible(inGraph, AbstractWeightedInformation.class);
 		
 		Vector<NodeType> Nodes = inGraph.getNodes();
 		Vector<LinkType> Links = inGraph.getLinks();
@@ -39,7 +40,7 @@ public class IncidenceMatrix extends Matrix<Integer> implements AbstractDataStru
 		// Initialise matrix
 		setRowCount(NodeCount);
 		setColumnCount(LinkCount);
-		fill(0);
+		fill(0.0);
 		
 		// For each nodes get links
 		for(int i = 0; i < Nodes.size(); i++)
@@ -49,10 +50,13 @@ public class IncidenceMatrix extends Matrix<Integer> implements AbstractDataStru
 			for(int j = 0; j < CurrentNode.getLinkCount(); j++)
 			{
 				int LinkIndex = Links.indexOf(CurrentNode.getLinks().get(j));
+				double Value = 1.0;
+				
+				if(bWeighted)
+					Value = ((AbstractWeightedInformation)CurrentNode.getLinks().get(j)).getWeight();
+				
 				if(LinkIndex != -1)
-				{
-					setValueAt(1, LinkIndex / 2, i);
-				}
+					setValueAt(Value, LinkIndex / 2, i);
 			}
 		}
 	}
@@ -61,9 +65,11 @@ public class IncidenceMatrix extends Matrix<Integer> implements AbstractDataStru
 	 * Specialisation for oriented graph
 	 * @param inGraph
 	 */
-	protected <NodeType extends DirectedNode, LinkType extends DirectedLink> 
-	void copyOrientedGraph(Graph<NodeType, LinkType> inGraph)
+	protected <NodeType extends AbstractNode<?>, LinkType extends AbstractLink<?>> 
+	void copyOrientedGraph(DirectedGraph<NodeType, LinkType> inGraph)
 	{
+		boolean bWeighted = GraphCompatibilityChecker.linksAreCompatible(inGraph, AbstractWeightedInformation.class);
+		
 		Vector<NodeType> Nodes = inGraph.getNodes();
 		Vector<LinkType> Links = inGraph.getLinks();
 		
@@ -73,7 +79,7 @@ public class IncidenceMatrix extends Matrix<Integer> implements AbstractDataStru
 		// Initialise matrix
 		setRowCount(NodeCount);
 		setColumnCount(LinkCount);
-		fill(0);
+		fill(0.0);
 		
 		for(int i = 0; i < Nodes.size(); i++)
 		{
@@ -81,10 +87,15 @@ public class IncidenceMatrix extends Matrix<Integer> implements AbstractDataStru
 			for(int j = 0; j < CurrentNode.getLinkCount(); j++)
 			{
 				int LinkIndex = Links.indexOf(CurrentNode.getLinks().get(j));
+				double Value = 1;
+				
+				if(bWeighted)
+					Value = ((AbstractWeightedInformation)CurrentNode.getLinks().get(j)).getWeight();
+				
 				if(LinkIndex != -1)
 				{
-					setValueAt(-1, LinkIndex, i);
-					setValueAt(1, LinkIndex, Nodes.indexOf(CurrentNode.getLinks().get(j).getDestinationNode()));
+					setValueAt(-Value, LinkIndex, i);
+					setValueAt(Value, LinkIndex, Nodes.indexOf(CurrentNode.getLinks().get(j).getDestinationNode()));
 				}
 			}
 		}
@@ -92,7 +103,7 @@ public class IncidenceMatrix extends Matrix<Integer> implements AbstractDataStru
 	
 	@Override
 	public <NodeType extends Node, LinkType extends Link> 
-	void updateGraph(Graph<NodeType, LinkType> inOutGraph) 
+	void updateGraph(AbstractGraph<NodeType, LinkType> inOutGraph) 
 	{		
 		// @TODO
 	}
@@ -101,7 +112,7 @@ public class IncidenceMatrix extends Matrix<Integer> implements AbstractDataStru
 	@Override
 	public void print() 
 	{
-		int NumberSize = 4;
+		int NumberSize = 5;
 		
 		for(int i = 0; i < matrix.size(); i++)
 		{
@@ -109,7 +120,7 @@ public class IncidenceMatrix extends Matrix<Integer> implements AbstractDataStru
 			{
 				String Number = "0";
 				if(matrix.get(i).get(j) != null)
-					Number = Integer.toString(matrix.get(i).get(j));
+					Number = Double.toString(matrix.get(i).get(j));
 				
 				if(matrix.get(i).get(j) >= 0)
 				{

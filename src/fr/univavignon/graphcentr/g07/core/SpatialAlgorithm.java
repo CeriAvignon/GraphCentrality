@@ -12,8 +12,8 @@ public class SpatialAlgorithm
 	 * @param inGraph Graph to evaluate
 	 * @return AlgorithmResult
 	 */
-	static public <GraphNodeType extends SpatialNode, GraphLinkType extends Link> 
-	AlgorithmResult evaluate(Graph<GraphNodeType, GraphLinkType> inGraph) 
+	public <GraphNodeType extends Node & AbstractSpatialInformation, GraphLinkType extends Link> 
+	AlgorithmResult evaluate(AbstractGraph<GraphNodeType, GraphLinkType> inGraph) 
 	{	
 		// Do stuff
 		

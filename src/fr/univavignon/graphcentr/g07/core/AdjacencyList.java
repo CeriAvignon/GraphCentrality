@@ -32,7 +32,7 @@ public class AdjacencyList implements AbstractDataStructure
 	@SuppressWarnings("unchecked")
 	@Override
 	public <NodeType extends AbstractNode<?>, LinkType extends AbstractLink<?>> 
-	void copyGraph(Graph<NodeType, LinkType> inGraph) 
+	void copyGraph(AbstractGraph<NodeType, LinkType> inGraph) 
 	{
 		List.clear();
 		Vector<NodeType> Nodes = inGraph.getNodes();
@@ -40,6 +40,10 @@ public class AdjacencyList implements AbstractDataStructure
 		for(NodeType CurrentNode : Nodes)
 		{
 			Pair<AbstractNode<?>,Vector<Integer>> Node = new Pair<>(CurrentNode, new Vector<Integer>());
+			boolean bHaveLinks = (CurrentNode.getLinkCount() > 0);
+			if(!bHaveLinks)
+				continue;
+			
 			// Useless unchecked warning
 			for(LinkType CurrentLink : (Vector<LinkType>)CurrentNode.getLinks())
 			{
@@ -51,7 +55,7 @@ public class AdjacencyList implements AbstractDataStructure
 	}
 
 	@Override
-	public <NodeType extends Node, LinkType extends Link> void updateGraph(Graph<NodeType, LinkType> inOutGraph) 
+	public <NodeType extends Node, LinkType extends Link> void updateGraph(AbstractGraph<NodeType, LinkType> inOutGraph) 
 	{		
 		// @TODO
 	}

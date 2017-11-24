@@ -60,7 +60,7 @@ public class SpatialNode extends Node implements AbstractSpatialInformation
 	@Override
 	public String toString()
 	{
-		return "["+x+";"+y+"]";
+		return ""+ID+" ["+x+";"+y+"]";
 	}
 
 }

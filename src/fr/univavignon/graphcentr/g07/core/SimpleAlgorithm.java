@@ -12,8 +12,8 @@ public class SimpleAlgorithm
 	 * @param inGraph Graph to evaluate
 	 * @return AlgorithmResult
 	 */
-	static public <GraphNodeType extends Node, GraphLinkType extends Link> 
-	AlgorithmResult evaluate(Graph<GraphNodeType, GraphLinkType> inGraph) 
+	public <GraphNodeType extends Node, GraphLinkType extends Link> 
+	AlgorithmResult evaluate(SimpleLikeGraph<GraphNodeType, GraphLinkType> inGraph) 
 	{	
 		AlgorithmResult Result = new AlgorithmResult("Highest degree node");
 		

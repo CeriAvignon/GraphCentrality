@@ -14,11 +14,15 @@ public abstract class AbstractNode<LinkType extends AbstractLink<?>>
 	/** Links to other nodes */
 	protected Vector<LinkType> Links;
 	
+	/** Node's id in graph */
+	protected int ID;
+	
 	/**
 	 * Default constructor
 	 */
 	public AbstractNode()
 	{
+		resetID();
 		Links = new Vector<LinkType>();
 	}
 	
@@ -80,5 +84,28 @@ public abstract class AbstractNode<LinkType extends AbstractLink<?>>
 	public int getLinkCount()
 	{
 		return Links.size();
+	}
+	
+	/**
+	 * Sets node's ID
+	 * @param inID
+	 */
+	public void setID(int inID)
+	{
+		ID = inID;
+	}
+	
+	/**
+	 * Resets node's ID
+	 */
+	public void resetID()
+	{
+		ID = -1;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return ""+ID;
 	}
 }

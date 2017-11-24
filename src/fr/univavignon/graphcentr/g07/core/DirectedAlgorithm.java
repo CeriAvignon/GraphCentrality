@@ -12,14 +12,14 @@ public class DirectedAlgorithm
 	 * @param inGraph Graph to evaluate
 	 * @return AlgorithmResult
 	 */
-	static public <GraphNodeType extends DirectedNode, GraphLinkType extends DirectedLink> 
-	AlgorithmResult evaluate(Graph<GraphNodeType, GraphLinkType> inGraph) 
+	public <GraphNodeType extends Node, GraphLinkType extends Link> 
+	AlgorithmResult evaluate(DirectedGraph<GraphNodeType, GraphLinkType> inGraph) 
 	{
 		AlgorithmResult Result = new AlgorithmResult("Leaf nodes (Node: Index)");
 		
 		for(int i = 0; i < inGraph.getNodeCount(); i++)
 		{
-			DirectedNode CurrentNode = inGraph.getNodeAt(i);
+			Node CurrentNode = inGraph.getNodeAt(i);
 			if(CurrentNode.getLinkCount() == 0)
 				Result.add(CurrentNode, i);
 		}

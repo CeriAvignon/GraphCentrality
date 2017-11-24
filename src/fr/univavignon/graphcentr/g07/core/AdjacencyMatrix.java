@@ -7,7 +7,7 @@ import java.util.Vector;
  * @author JackassDestroyer
  * Transform a graph into an adjacency matrix.
  */
-public class AdjacencyMatrix extends Matrix<Integer> implements AbstractDataStructure
+public class AdjacencyMatrix extends Matrix<Double> implements AbstractDataStructure
 {
 
 	/**
@@ -15,7 +15,7 @@ public class AdjacencyMatrix extends Matrix<Integer> implements AbstractDataStru
 	 */
 	public AdjacencyMatrix()
 	{
-		matrix = new Vector<Vector<Integer>>();
+		matrix = new Vector<Vector<Double>>();
 	}
 	
 	/**
@@ -23,7 +23,7 @@ public class AdjacencyMatrix extends Matrix<Integer> implements AbstractDataStru
 	 */
 	@Override
 	public <NodeType extends AbstractNode<?>, LinkType extends AbstractLink<?>>
-	void copyGraph(Graph<NodeType, LinkType> inGraph) 
+	void copyGraph(AbstractGraph<NodeType, LinkType> inGraph) 
 	{			
 		matrix.clear();
 		int NodeCount = inGraph.getNodeCount();
@@ -31,8 +31,14 @@ public class AdjacencyMatrix extends Matrix<Integer> implements AbstractDataStru
 		// Initialise matrix
 		setRowCount(NodeCount);
 		setColumnCount(NodeCount);
-		fill(0);
+		fill(0.0);
 		
+		if(GraphCompatibilityChecker.linksAreCompatible(inGraph, WeightedLink.class))
+		{
+			copyWeightedGraph(inGraph);
+			return;
+		}
+
 		// Parse each nodes
 		for(int i = 0; i < NodeCount; i++)
 		{
@@ -44,7 +50,7 @@ public class AdjacencyMatrix extends Matrix<Integer> implements AbstractDataStru
 				AbstractLink<?> CurrentLink = (AbstractLink<?>)Links.get(j);
 				int SrcIndex = inGraph.indexOf(CurrentLink.getSourceNode());
 				int DestIndex = inGraph.indexOf(CurrentLink.getDestinationNode());
-				int Value = 1;
+				double Value = 1;
 				if (SrcIndex == DestIndex)
 					Value = 2;
 				
@@ -53,9 +59,36 @@ public class AdjacencyMatrix extends Matrix<Integer> implements AbstractDataStru
 		}
 	}
 	
+	/**
+	 * Copy graph overriding for weighted-simple-like-graph
+	 */
+	protected <NodeType extends AbstractNode<?>, LinkType extends AbstractLink<?>>
+	void copyWeightedGraph(AbstractGraph<NodeType, LinkType> inGraph) 
+	{	
+		int NodeCount = inGraph.getNodeCount();
+		// Parse each nodes
+		for(int i = 0; i < NodeCount; i++)
+		{
+			NodeType CurrentNode = inGraph.getNodeAt(i);
+			Vector<?> Links = CurrentNode.getLinks();
+			
+			for(int j = 0; j < CurrentNode.getLinkCount(); j++)
+			{
+				WeightedLink CurrentLink = (WeightedLink)Links.get(j);
+				int SrcIndex = inGraph.indexOf(CurrentLink.getSourceNode());
+				int DestIndex = inGraph.indexOf(CurrentLink.getDestinationNode());
+				double Value = CurrentLink.getWeight();
+				if (SrcIndex == DestIndex)
+					Value = CurrentLink.getWeight();
+				
+				setValueAt(Value, SrcIndex, DestIndex);
+			}
+		}
+	}
+	
 	@Override
 	public <NodeType extends Node, LinkType extends Link> 
-	void updateGraph(Graph<NodeType, LinkType> inOutGraph) 
+	void updateGraph(AbstractGraph<NodeType, LinkType> inOutGraph) 
 	{	
 		// @TODO
 	}
@@ -64,7 +97,7 @@ public class AdjacencyMatrix extends Matrix<Integer> implements AbstractDataStru
 	@Override
 	public void print() 
 	{
-		int NumberSize = 3;
+		int NumberSize = 5;
 		
 		for(int i = 0; i < matrix.size(); i++)
 		{
@@ -72,7 +105,7 @@ public class AdjacencyMatrix extends Matrix<Integer> implements AbstractDataStru
 			{
 				String Number = "0";
 				if(matrix.get(j).get(i) != null)
-					Number = Integer.toString(matrix.get(j).get(i));
+					Number = Double.toString(matrix.get(j).get(i));
 				
 				System.out.print(Number);
 				for(int SpaceCount = 0; SpaceCount < NumberSize - Number.length(); SpaceCount++)

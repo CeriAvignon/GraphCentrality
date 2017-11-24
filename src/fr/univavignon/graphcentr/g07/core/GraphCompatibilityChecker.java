@@ -18,11 +18,22 @@ public class GraphCompatibilityChecker
 	 * @return If both nodes/links are compatible
 	 */
 	static public <NodeType extends AbstractNode<?>, LinkType extends AbstractLink<?>, DesiredNodeType, DesiredLinkType>
-	boolean isCompatible(Graph<NodeType, LinkType> inGraph, Class<DesiredNodeType> DesiredNodeClass
+	boolean isCompatible(AbstractGraph<NodeType, LinkType> inGraph, Class<DesiredNodeType> DesiredNodeClass
 			, Class<DesiredLinkType> DesiredLinkClass) 
 	{					
 		return GraphCompatibilityChecker.nodesAreCompatible(inGraph, DesiredNodeClass) && 
 				GraphCompatibilityChecker.linksAreCompatible(inGraph, DesiredLinkClass);
+	}
+	
+	/**
+	 * Test if graph is directed
+	 * @param inGraph Graph to test
+	 * @return
+	 */
+	static public <NodeType extends AbstractNode<?>, LinkType extends AbstractLink<?>>
+	boolean isDirected(AbstractGraph<NodeType, LinkType> inGraph) 
+	{					
+		return (inGraph instanceof DirectedGraph);
 	}
 	
 	/**
@@ -32,7 +43,7 @@ public class GraphCompatibilityChecker
 	 * @return If nodes are compatible
 	 */
 	static public <NodeType extends AbstractNode<?>, LinkType extends AbstractLink<?>, DesiredNodeType>
-	boolean nodesAreCompatible(Graph<NodeType, LinkType> inGraph, Class<DesiredNodeType> DesiredNodeClass) 
+	boolean nodesAreCompatible(AbstractGraph<NodeType, LinkType> inGraph, Class<DesiredNodeType> DesiredNodeClass) 
 	{				
 
 		// Get node class from inGraph by using forName method
@@ -62,7 +73,7 @@ public class GraphCompatibilityChecker
 	 * @return If links are compatible
 	 */
 	static public <NodeType extends AbstractNode<?>, LinkType extends AbstractLink<?>, DesiredLinkType>
-	boolean linksAreCompatible(Graph<NodeType, LinkType> inGraph, Class<DesiredLinkType> DesiredLinkClass) 
+	boolean linksAreCompatible(AbstractGraph<NodeType, LinkType> inGraph, Class<DesiredLinkType> DesiredLinkClass) 
 	{				
 
 		// Get node class from inGraph by using forName method

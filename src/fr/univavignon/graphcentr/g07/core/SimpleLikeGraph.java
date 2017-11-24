@@ -12,13 +12,39 @@ public class SimpleLikeGraph
 NodeType extends AbstractNode<?>
 ,LinkType extends AbstractLink<?>
 >
-extends Graph<NodeType, LinkType>
+extends AbstractGraph<NodeType, LinkType>
 {
 	@Override
 	public LinkType linkNode(int inSourceNodeIndex, int inDestinationNodeIndex)
 	{
-		LinkType NewLink = super.linkNode(inSourceNodeIndex, inDestinationNodeIndex);
-		super.linkNode(inDestinationNodeIndex, inSourceNodeIndex);
+		NodeType SourceNode = Nodes.get(inSourceNodeIndex);
+		NodeType DestinationNode = Nodes.get(inDestinationNodeIndex);
+		
+		LinkType NewLink = null;
+		LinkType BackLink = null;
+		
+		try 
+		{
+			NewLink = LinkClass.newInstance();
+			BackLink = LinkClass.newInstance();
+		} catch (InstantiationException e) 
+		{
+			e.printStackTrace();
+		} catch (IllegalAccessException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		NewLink.setSourceNode(SourceNode);
+		NewLink.setDestinationNode(DestinationNode);
+		
+		BackLink.setSourceNode(DestinationNode);
+		BackLink.setDestinationNode(SourceNode);
+		
+		SourceNode.addLink(NewLink);
+		DestinationNode.addLink(BackLink);
+		Links.add(NewLink);
+		Links.add(BackLink);
 		
 		return NewLink;
 	}

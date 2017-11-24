@@ -12,14 +12,14 @@ interface AbstractDataStructure
 	 * @param inGraph Graph to copy
 	 */
 	public <NodeType extends AbstractNode<?>, LinkType extends AbstractLink<?>> 
-	void copyGraph(Graph<NodeType, LinkType> inGraph);
+	void copyGraph(AbstractGraph<NodeType, LinkType> inGraph);
 	
 	/**
 	 * Convert intern data structure to given simple-like-graph
 	 * @param inOutGraph Graph to update
 	 */
 	public <NodeType extends Node, LinkType extends Link> 
-	void updateGraph(Graph<NodeType, LinkType> inOutGraph);
+	void updateGraph(AbstractGraph<NodeType, LinkType> inOutGraph);
 	
 	/**
 	 * Prints data structure

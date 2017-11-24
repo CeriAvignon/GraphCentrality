@@ -12,8 +12,8 @@ public class WeightedAlgorithm
 	 * @param inGraph Graph to evaluate
 	 * @return AlgorithmResult
 	 */
-	static public <GraphNodeType extends Node, GraphLinkType extends Link & AbstractWeightedInformation> 
-	AlgorithmResult evaluate(Graph<GraphNodeType, GraphLinkType> inGraph) 
+	public <GraphNodeType extends Node, GraphLinkType extends Link & AbstractWeightedInformation> 
+	AlgorithmResult evaluate(AbstractGraph<GraphNodeType, GraphLinkType> inGraph) 
 	{
 		// Instantiate new algorithm result
 		AlgorithmResult Result = new AlgorithmResult("Weightest node");

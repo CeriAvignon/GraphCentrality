@@ -66,14 +66,14 @@ public class GEXFReader extends GraphFileReader
 	 * @param inGraph Graph to update
 	 */
 	public <GraphNodeType extends AbstractNode<?>, GraphLinkType extends AbstractLink<?>> 
-	void updateFromFile(String inFileName, Graph<GraphNodeType, GraphLinkType> inGraph)
+	void updateFromFile(String inFileName, AbstractGraph<GraphNodeType, GraphLinkType> inGraph)
 	{
 		openFile(inFileName);
 		
 		// Check graph compatibility
 		bGraphIsWeighted = GraphCompatibilityChecker.nodesAreCompatible(inGraph, AbstractWeightedInformation.class);
 		bGraphIsSpatial = GraphCompatibilityChecker.nodesAreCompatible(inGraph, AbstractSpatialInformation.class);
-		bGraphIsOriented = GraphCompatibilityChecker.isCompatible(inGraph, DirectedNode.class, DirectedLink.class);
+		bGraphIsOriented = GraphCompatibilityChecker.isDirected(inGraph);
 		
 		// Parse file
 		Document ReadFile = null;
@@ -187,7 +187,7 @@ public class GEXFReader extends GraphFileReader
 	 * @param inGraph Graph to update
 	 */
 	protected <GraphNodeType extends AbstractNode<?>, GraphLinkType extends AbstractLink<?>> 
-	void createNodes(Graph<GraphNodeType, GraphLinkType> inGraph)
+	void createNodes(AbstractGraph<GraphNodeType, GraphLinkType> inGraph)
 	{
 		for(XMLNodeInformation Current : NodeInfos)
 		{
@@ -205,7 +205,7 @@ public class GEXFReader extends GraphFileReader
 	 * @param inGraph Graph to update
 	 */
 	protected <GraphNodeType extends AbstractNode<?>, GraphLinkType extends AbstractLink<?>> 
-	void createLinks(Graph<GraphNodeType, GraphLinkType> inGraph)
+	void createLinks(AbstractGraph<GraphNodeType, GraphLinkType> inGraph)
 	{
 		for(XMLLinkInformation Current : LinkInfos)
 		{
