@@ -29,7 +29,13 @@ public abstract class AbstractNode<LinkType extends AbstractLink<?>>
 	@SuppressWarnings("unchecked")
 	public <T> void addLink(T InLink)
 	{
-		Links.add((LinkType)InLink);
+		AbstractLink<AbstractNode<?>> Link = (AbstractLink<AbstractNode<?>>)(InLink);
+		// If source node is not itself, return
+		if(Link.getSourceNode() != this)
+			return;
+		
+		if(!isLinkedWith(Link.getDestinationNode()))
+			Links.add((LinkType)InLink);
 	}
 	
 	/**
