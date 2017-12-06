@@ -36,9 +36,9 @@ public class EdgeListReader extends AbstractGraphFileReader
 		Vector<Pair<String, GraphNodeType>> ReadNodes = new Vector<>();
 		Vector<Vector<String>> ReadLinks = new Vector<>();
 		
-		for(int i = 0; i < Lines.size(); i++)
+		for(int i = 0; i < lines.size(); i++)
 		{
-			String CurrentLine = Lines.get(i);
+			String CurrentLine = lines.get(i);
 			Vector<String> Nodes = splitBySeparator(CurrentLine, inSeparator);
 			ReadLinks.addElement(Nodes);
 			for(String CurrentNode : Nodes)

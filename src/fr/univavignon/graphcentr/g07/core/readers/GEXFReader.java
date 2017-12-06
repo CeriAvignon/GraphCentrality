@@ -35,9 +35,9 @@ public class GEXFReader extends AbstractGraphFileReader
 	protected DocumentBuilder builder;
 
 	/** User-defined attribute for nodes */
-	protected Vector<XMLNodeInformation> NodeInfos;
+	protected Vector<XMLNodeInformation> nodeInfos;
 	/** User-defined attribute for links */
-	protected Vector<XMLLinkInformation> LinkInfos;
+	protected Vector<XMLLinkInformation> linkInfos;
 	/** User-defined attributes */
 	protected XMLGraphAttributes Attributes;
 	
@@ -48,6 +48,19 @@ public class GEXFReader extends AbstractGraphFileReader
 	/** True if graph is directed */
 	protected boolean bDirectedGraph = false;
 	
+	/** Attributes identifier in GEXF file */
+	private static final String ATT_IDENTIFIER = "attributes";
+	/** Node identifier in GEXF file */
+	private static final String NODE_IDENTIFIER = "node";
+	/** Nodes identifier in GEXF file */
+	private static final String NODES_IDENTIFIER = "nodes";
+	/** Edge identifier in GEXF file */
+	private static final String EDGE_IDENTIFIER = "edge";
+	/** Edges identifier in GEXF file */
+	private static final String EDGES_IDENTIFIER = "edges";
+	/** Graph identifier in GEXF file */
+	private static final String GRAPH_IDENTIFIER = "graph";
+	
 	/**
 	 * Default constructor
 	 */
@@ -55,8 +68,8 @@ public class GEXFReader extends AbstractGraphFileReader
 	{
 		super();
 		
-		NodeInfos = new Vector<>();
-		LinkInfos = new Vector<>();
+		nodeInfos = new Vector<>();
+		linkInfos = new Vector<>();
 		
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		try 
@@ -109,10 +122,10 @@ public class GEXFReader extends AbstractGraphFileReader
 		bDirectedGraph = inGraph instanceof AbstractDirectedGraph<?, ?>;
 				
 		// Parse file
-		Document ReadFile = null;
+		Document readFile = null;
 		try 
 		{
-			ReadFile = builder.parse(new File(inFileName));
+			readFile = builder.parse(new File(inFileName));
 		} 
 		catch (SAXException e) 
 		{
@@ -124,11 +137,11 @@ public class GEXFReader extends AbstractGraphFileReader
 		}
 
 		// Extract user-defined attributes
-		extractAttributes(ReadFile);
+		extractAttributes(readFile);
 		// Parse nodes from file and extract XML infos
-		parseNodes(ReadFile);
+		parseNodes(readFile);
 		// Parse links from file and extract XML infos
-		parseLinks(ReadFile);
+		parseLinks(readFile);
 		// Create nodes from parsed XML infos
 		createNodes(inGraph);
 		// Create links from parsed XML infos
@@ -142,11 +155,11 @@ public class GEXFReader extends AbstractGraphFileReader
 	protected void extractAttributes(Document inDocument)
 	{
 		Attributes = new XMLGraphAttributes(GraphFileType.GEXF);
-		NodeList Graphs = inDocument.getElementsByTagName("attributes");
+		NodeList graphs = inDocument.getElementsByTagName(ATT_IDENTIFIER);
 		
-		for(int i = 0; i < Graphs.getLength(); i++)
+		for(int i = 0; i < graphs.getLength(); i++)
 		{
-			Attributes.extractAttributes(Graphs.item(i));
+			Attributes.extractAttributes(graphs.item(i));
 		}
 	}
 	
@@ -156,30 +169,30 @@ public class GEXFReader extends AbstractGraphFileReader
 	 */
 	protected void parseNodes(Document inDocument)
 	{
-		NodeInfos.clear();
+		nodeInfos.clear();
 		
-		NodeList Graphs = inDocument.getElementsByTagName("graph");
-		if(Graphs.getLength() <= 0)
+		NodeList graphs = inDocument.getElementsByTagName(GRAPH_IDENTIFIER);
+		if(graphs.getLength() <= 0)
 			return;
 		
-		NodeList Child = Graphs.item(0).getChildNodes();
-		org.w3c.dom.Node Nodes = null;
+		NodeList child = graphs.item(0).getChildNodes();
+		org.w3c.dom.Node nodes = null;
 		
-		for(int i = 0; i < Child.getLength(); i++)
+		for(int i = 0; i < child.getLength(); i++)
 		{
-			org.w3c.dom.Node CurrentChild = Child.item(i);
-			if(CurrentChild.getNodeName() == "nodes")
-				Nodes = CurrentChild;
+			org.w3c.dom.Node currentChild = child.item(i);
+			if(currentChild.getNodeName().equalsIgnoreCase(NODES_IDENTIFIER))
+				nodes = currentChild;
 		}
 		
-		if(Nodes == null)
+		if(nodes == null)
 			return;
 		
-		for(int i = 0; i < Nodes.getChildNodes().getLength(); i++)
+		for(int i = 0; i < nodes.getChildNodes().getLength(); i++)
 		{
-			org.w3c.dom.Node CurrentNode = Nodes.getChildNodes().item(i);
-			if(CurrentNode.getNodeName() == "node")
-				NodeInfos.add(new XMLNodeInformation(GraphFileType.GEXF, CurrentNode, Attributes));		
+			org.w3c.dom.Node currentNode = nodes.getChildNodes().item(i);
+			if(currentNode.getNodeName().equalsIgnoreCase(NODE_IDENTIFIER))
+				nodeInfos.add(new XMLNodeInformation(GraphFileType.GEXF, currentNode, Attributes));		
 		}
 	}
 	
@@ -189,29 +202,29 @@ public class GEXFReader extends AbstractGraphFileReader
 	 */
 	protected void parseLinks(Document inFile)
 	{
-		NodeList Graphs = inFile.getElementsByTagName("graph");
-		if(Graphs.getLength() <= 0)
+		NodeList graphs = inFile.getElementsByTagName(GRAPH_IDENTIFIER);
+		if(graphs.getLength() <= 0)
 			return;
 		
-		NodeList Child = Graphs.item(0).getChildNodes();
-		org.w3c.dom.Node Links = null;
+		NodeList child = graphs.item(0).getChildNodes();
+		org.w3c.dom.Node links = null;
 		
-		for(int i = 0; i < Child.getLength(); i++)
+		for(int i = 0; i < child.getLength(); i++)
 		{
-			org.w3c.dom.Node CurrentChild = Child.item(i);
-			if(CurrentChild.getNodeName() == "edges")
-				Links = CurrentChild;
+			org.w3c.dom.Node currentChild = child.item(i);
+			if(currentChild.getNodeName().equalsIgnoreCase(EDGES_IDENTIFIER))
+				links = currentChild;
 		}
 		
 		// Add error ?
-		if(Links == null)
+		if(links == null)
 			return;
 		
-		for(int i = 0; i < Links.getChildNodes().getLength(); i++)
+		for(int i = 0; i < links.getChildNodes().getLength(); i++)
 		{
-			org.w3c.dom.Node CurrentLink = Links.getChildNodes().item(i);
-			if(CurrentLink.getNodeName() == "edge")
-				LinkInfos.add(new XMLLinkInformation(GraphFileType.GEXF, CurrentLink, Attributes));			
+			org.w3c.dom.Node currentLink = links.getChildNodes().item(i);
+			if(currentLink.getNodeName().equalsIgnoreCase(EDGE_IDENTIFIER))
+				linkInfos.add(new XMLLinkInformation(GraphFileType.GEXF, currentLink, Attributes));			
 		}
 	}
 	
@@ -222,14 +235,14 @@ public class GEXFReader extends AbstractGraphFileReader
 	protected <GraphNodeType extends Node, GraphLinkType extends Link> 
 	void createNodes(AbstractGraph<GraphNodeType, GraphLinkType> inGraph)
 	{
-		for(XMLNodeInformation Current : NodeInfos)
+		for(XMLNodeInformation current : nodeInfos)
 		{
-			Current.Node = inGraph.createNode();
+			current.Node = inGraph.createNode();
 			if(bSpatialGraph)
 			{
-				SpatialNode CurrentNode = (SpatialNode)Current.Node;
-				CurrentNode.setX(Current.X);
-				CurrentNode.setY(Current.Y);
+				SpatialNode currentNode = (SpatialNode)current.Node;
+				currentNode.setX(current.X);
+				currentNode.setY(current.Y);
 			}
 		}
 	}
@@ -241,36 +254,36 @@ public class GEXFReader extends AbstractGraphFileReader
 	protected <GraphNodeType extends Node, GraphLinkType extends Link> 
 	void createLinks(AbstractGraph<GraphNodeType, GraphLinkType> inGraph)
 	{
-		for(XMLLinkInformation Current : LinkInfos)
+		for(XMLLinkInformation current : linkInfos)
 		{
-			Node SourceNode = null;
-			Node DestinationNode = null;
+			Node sourceNode = null;
+			Node destinationNode = null;
 			
-			for(XMLNodeInformation CurrentNode : NodeInfos)
+			for(XMLNodeInformation CurrentNode : nodeInfos)
 			{
-				if(CurrentNode.Identifier.equalsIgnoreCase(Current.SourceIdentifier))
-					SourceNode = CurrentNode.Node;
+				if(CurrentNode.Identifier.equalsIgnoreCase(current.SourceIdentifier))
+					sourceNode = CurrentNode.Node;
 				
-				if(CurrentNode.Identifier.equalsIgnoreCase(Current.DestinationIdentifier))
-					DestinationNode = CurrentNode.Node;
+				if(CurrentNode.Identifier.equalsIgnoreCase(current.DestinationIdentifier))
+					destinationNode = CurrentNode.Node;
 			}
 			
 			// Add error ?
-			if(SourceNode == null || DestinationNode == null)
+			if(sourceNode == null || destinationNode == null)
 				continue;
 			
-			Current.Link = inGraph.createLink(SourceNode.getIdentifier(), DestinationNode.getIdentifier());
+			current.Link = inGraph.createLink(sourceNode.getIdentifier(), destinationNode.getIdentifier());
 			
 			if(bWeightedGraph)
 			{
-				WeightedLink CurrentLink = (WeightedLink)Current.Link;
-				CurrentLink.setWeight(Current.Weight);
+				WeightedLink currentLink = (WeightedLink)current.Link;
+				currentLink.setWeight(current.Weight);
 				
 				if(!bDirectedGraph)
 				{
 					AbstractSimpleGraph<GraphNodeType, GraphLinkType> simpleGraph = (AbstractSimpleGraph<GraphNodeType, GraphLinkType>)inGraph;
-					CurrentLink = (WeightedLink)simpleGraph.getLastBackLink();
-					CurrentLink.setWeight(Current.Weight);
+					currentLink = (WeightedLink)simpleGraph.getLastBackLink();
+					currentLink.setWeight(current.Weight);
 				}
 			}
 		}

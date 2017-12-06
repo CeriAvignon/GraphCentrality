@@ -17,6 +17,25 @@ class XMLGraphAttributes
 	/** Type of XML graph */
 	public GraphFileType Type;
 	
+	/** Node identifier in XML file */
+	private static final String NODE_IDENTIFIER = "node";
+	/** Edge identifier in XML file */
+	private static final String EDGE_IDENTIFIER = "edge";
+	/** Attribute target in XML file */
+	private static final String ATTRIBUTE_TARGET = "for";
+	
+	/** Attribute identifier in GEXF files */
+	private static final String GEXF_ATT_IDENTIFIER = "attribute";
+	/** Attribute class in GEXF files */
+	private static final String GEXF_ATT_CLASS = "class";
+	/** Attribute value in GEXF files */
+	private static final String GEXF_ATT_VALUE = "value";
+	
+	/** Attribute identifier in GraphML file */
+	private static final String GRAPHML_ATT_IDENTIFIER = "data";
+	/** Attribute name in GraphML file */
+	private static final String GRAPHML_ATT_NAME = "key";
+	
 	/**
 	 * Default constructor
 	 * @param inType
@@ -36,41 +55,41 @@ class XMLGraphAttributes
 	{
 		if(Type == GraphFileType.GEXF)
 		{
-			org.w3c.dom.Node Class = inNode.getAttributes().getNamedItem("class");
+			org.w3c.dom.Node Class = inNode.getAttributes().getNamedItem(GEXF_ATT_CLASS);
 			if(Class == null)
 				return;
 	
-			if(Class.getNodeValue().equalsIgnoreCase("node"))
+			if(Class.getNodeValue().equalsIgnoreCase(NODE_IDENTIFIER))
 			{
 				for(int i = 0; i < inNode.getChildNodes().getLength(); i++)
 				{
 					org.w3c.dom.Node CurrentNode = inNode.getChildNodes().item(i);
-					if(CurrentNode.getNodeName().equalsIgnoreCase("attribute"))
+					if(CurrentNode.getNodeName().equalsIgnoreCase(GEXF_ATT_IDENTIFIER))
 						NodeAttributes.add(new XMLUserDefinedAttribute(Type, CurrentNode));
 				}
 			}
-			else if(Class.getNodeValue().equalsIgnoreCase("edge"))
+			else if(Class.getNodeValue().equalsIgnoreCase(EDGE_IDENTIFIER))
 			{
 				for(int i = 0; i < inNode.getChildNodes().getLength(); i++)
 				{
 					org.w3c.dom.Node CurrentNode = inNode.getChildNodes().item(i);
-					if(CurrentNode.getNodeName().equalsIgnoreCase("attribute"))
+					if(CurrentNode.getNodeName().equalsIgnoreCase(GEXF_ATT_IDENTIFIER))
 						LinkAttributes.add(new XMLUserDefinedAttribute(Type, CurrentNode));
 				}
 			}
 		}
 		else if(Type == GraphFileType.GraphML)
 		{
-			if(!inNode.getNodeName().equalsIgnoreCase("key"))
+			if(!inNode.getNodeName().equalsIgnoreCase(GRAPHML_ATT_NAME))
 				return;
 			
-			org.w3c.dom.Node NodeType = inNode.getAttributes().getNamedItem("for");
+			org.w3c.dom.Node NodeType = inNode.getAttributes().getNamedItem(ATTRIBUTE_TARGET);
 			if(NodeType == null)
 				return;
 			
-			if(NodeType.getNodeValue().equalsIgnoreCase("node"))
+			if(NodeType.getNodeValue().equalsIgnoreCase(NODE_IDENTIFIER))
 				NodeAttributes.add(new XMLUserDefinedAttribute(Type, inNode));
-			else if(NodeType.getNodeValue().equalsIgnoreCase("edge"))
+			else if(NodeType.getNodeValue().equalsIgnoreCase(EDGE_IDENTIFIER))
 				LinkAttributes.add(new XMLUserDefinedAttribute(Type, inNode));
 		}
 	}
@@ -133,13 +152,13 @@ class XMLGraphAttributes
 				if(CurrentNode.getAttributes() == null)
 					continue;
 				
-				org.w3c.dom.Node Id = CurrentNode.getAttributes().getNamedItem("for");
+				org.w3c.dom.Node Id = CurrentNode.getAttributes().getNamedItem(ATTRIBUTE_TARGET);
 				if(Id == null)
 					continue;
 				
 				if(Id.getNodeValue().equalsIgnoreCase(Attribute.AttributeIdentifier))
 				{
-					org.w3c.dom.Node Value = CurrentNode.getAttributes().getNamedItem("value");
+					org.w3c.dom.Node Value = CurrentNode.getAttributes().getNamedItem(GEXF_ATT_VALUE);
 					if(Value == null)
 						return OutputValue;
 					
@@ -155,10 +174,10 @@ class XMLGraphAttributes
 				org.w3c.dom.Node CurrentNode = inNodes.item(i);
 				if(CurrentNode.getAttributes() == null)
 					continue;
-				if(!CurrentNode.getNodeName().equalsIgnoreCase("data"))
+				if(!CurrentNode.getNodeName().equalsIgnoreCase(GRAPHML_ATT_IDENTIFIER))
 					continue;
 				
-				org.w3c.dom.Node Id = CurrentNode.getAttributes().getNamedItem("key");
+				org.w3c.dom.Node Id = CurrentNode.getAttributes().getNamedItem(GRAPHML_ATT_NAME);
 				if(Id == null)
 					continue;
 				

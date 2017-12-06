@@ -76,6 +76,22 @@ extends AbstractGraph<NodeType, LinkType>
 		return links.get(inNode.getIdentifier()).size();
 	}
 	
+	/**
+	 * Returns an array of nodes degree 
+	 * @return Array of nodes degree
+	 */
+	public int[] getNodesDegree()
+	{
+		int[] degrees = new int[nodes.size()];
+		
+		for(int i = 0; i < nodes.size(); i++)
+		{
+			degrees[i] = getNodeDegree(nodes.get(i));
+		}
+		
+		return degrees;
+	}
+	
 	@Override
 	public double[][] toAdjacencyMatrix()
 	{

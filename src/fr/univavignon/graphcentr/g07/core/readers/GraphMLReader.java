@@ -47,6 +47,15 @@ public class GraphMLReader extends AbstractGraphFileReader
 	/** True if graph is directed */
 	protected boolean bDirectedGraph = false;
 	
+	/** Node identifier in GraphML file */
+	private static final String NODE_IDENTIFIER = "node";
+	/** Edge identifier in GraphML file */
+	private static final String EDGE_IDENTIFIER = "edge";
+	/** Graph identifier in GraphML file */
+	private static final String GRAPH_IDENTIFIER = "graph";
+	/** GraphML header identifier in GraphML file */
+	private static final String GRAPHML_IDENTIFIER = "graphml";
+	
 	/**
 	 * Default constructor
 	 */
@@ -143,7 +152,7 @@ public class GraphMLReader extends AbstractGraphFileReader
 	protected void extractAttributes(Document inDocument)
 	{
 		Attributes = new XMLGraphAttributes(GraphFileType.GraphML);
-		NodeList Graphs = inDocument.getElementsByTagName("graphml");
+		NodeList Graphs = inDocument.getElementsByTagName(GRAPHML_IDENTIFIER);
 		
 		for(int i = 0; i < Graphs.item(0).getChildNodes().getLength(); i++)
 		{
@@ -159,7 +168,7 @@ public class GraphMLReader extends AbstractGraphFileReader
 	{
 		NodeInfos.clear();
 		
-		NodeList Graphs = inDocument.getElementsByTagName("graph");
+		NodeList Graphs = inDocument.getElementsByTagName(GRAPH_IDENTIFIER);
 		if(Graphs.getLength() <= 0)
 			return;
 		
@@ -168,7 +177,7 @@ public class GraphMLReader extends AbstractGraphFileReader
 		for(int i = 0; i < Child.getLength(); i++)
 		{
 			org.w3c.dom.Node CurrentChild = Child.item(i);
-			if(CurrentChild.getNodeName().equalsIgnoreCase("node"))
+			if(CurrentChild.getNodeName().equalsIgnoreCase(NODE_IDENTIFIER))
 				NodeInfos.add(new XMLNodeInformation(GraphFileType.GraphML, CurrentChild, Attributes));	
 		}
 	}
@@ -181,7 +190,7 @@ public class GraphMLReader extends AbstractGraphFileReader
 	{
 		LinkInfos.clear();
 		
-		NodeList Graphs = inDocument.getElementsByTagName("graph");
+		NodeList Graphs = inDocument.getElementsByTagName(GRAPH_IDENTIFIER);
 		if(Graphs.getLength() <= 0)
 			return;
 		
@@ -190,7 +199,7 @@ public class GraphMLReader extends AbstractGraphFileReader
 		for(int i = 0; i < Child.getLength(); i++)
 		{
 			org.w3c.dom.Node CurrentChild = Child.item(i);
-			if(CurrentChild.getNodeName().equalsIgnoreCase("edge"))	
+			if(CurrentChild.getNodeName().equalsIgnoreCase(EDGE_IDENTIFIER))	
 				LinkInfos.add(new XMLLinkInformation(GraphFileType.GraphML, CurrentChild, Attributes));	
 		}
 	}

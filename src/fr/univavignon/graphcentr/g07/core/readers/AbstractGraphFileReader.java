@@ -20,16 +20,16 @@ abstract class AbstractGraphFileReader
 	protected FileReader fileReader = null;
 	
 	/** File content */
-	protected String FileContent = "";
+	protected String fileContent = "";
 	/** File content's lines */
-	protected Vector<String> Lines = null;
+	protected Vector<String> lines = null;
 	
 	/**
 	 * Default constructor
 	 */
 	public AbstractGraphFileReader()
 	{
-		Lines = new Vector<String>();
+		lines = new Vector<String>();
 	}
 	
 	/**
@@ -44,15 +44,15 @@ abstract class AbstractGraphFileReader
 			fileReader = new FileReader(inFileName);
 			bufferReader = new BufferedReader(fileReader);
 			
-			FileContent = "";
-			Lines.clear();
+			fileContent = "";
+			lines.clear();
 			
 			String currentLine;
 			
 			while ((currentLine = bufferReader.readLine()) != null) 
 			{
-				Lines.add(currentLine);
-				FileContent += currentLine+"\n";
+				lines.add(currentLine);
+				fileContent += currentLine+"\n";
 			}
 			
 			return true;

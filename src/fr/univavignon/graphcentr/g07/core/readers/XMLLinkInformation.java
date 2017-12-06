@@ -24,6 +24,19 @@ class XMLLinkInformation
 	/** File's type */
 	public GraphFileType Type;
 	
+	/** XML Node identifier in XML files */
+	private static final String NODE_IDENTIFIER = "id";
+	/** Source node identifier in XML files */
+	private static final String SOURCE_IDENTIFIER = "source";
+	/** Target node identifier in XML files */
+	private static final String TARGET_IDENTIFIER = "target";
+	/** Weight user-defined attribute identifier in XML files */
+	private static final String WEIGHT_IDENTIFIER = "weight";
+	
+	/** Attributes identifier in GEXF files */
+	private static final String ATTRIBUTES_IDENTIFIER = "attvalues";
+
+	
 	/**
 	 * Default constructor
 	 * @param inType Type of file
@@ -51,10 +64,10 @@ class XMLLinkInformation
 	{
 		if(Type == GraphFileType.GEXF)
 		{
-			org.w3c.dom.Node Id = inNode.getAttributes().getNamedItem("id");
-			org.w3c.dom.Node SourceId = inNode.getAttributes().getNamedItem("source");
-			org.w3c.dom.Node DestinationId = inNode.getAttributes().getNamedItem("target");
-			org.w3c.dom.Node ReadWeight = inNode.getAttributes().getNamedItem("weight");
+			org.w3c.dom.Node Id = inNode.getAttributes().getNamedItem(NODE_IDENTIFIER);
+			org.w3c.dom.Node SourceId = inNode.getAttributes().getNamedItem(SOURCE_IDENTIFIER);
+			org.w3c.dom.Node DestinationId = inNode.getAttributes().getNamedItem(TARGET_IDENTIFIER);
+			org.w3c.dom.Node ReadWeight = inNode.getAttributes().getNamedItem(WEIGHT_IDENTIFIER);
 			
 			if(SourceId != null && DestinationId != null)
 			{
@@ -71,7 +84,7 @@ class XMLLinkInformation
 			for(int i = 0; i < inNode.getChildNodes().getLength(); i++)
 			{
 				org.w3c.dom.Node CurrentNode = inNode.getChildNodes().item(i);
-				if(CurrentNode.getNodeName().equalsIgnoreCase("attvalues"))
+				if(CurrentNode.getNodeName().equalsIgnoreCase(ATTRIBUTES_IDENTIFIER))
 				{
 					Attributes = CurrentNode.getChildNodes();
 					break;
@@ -80,16 +93,16 @@ class XMLLinkInformation
 			
 			if(Weight == 0)
 			{
-				String WeightValue = inAttributes.getLinkAttribute(Attributes, "weight");
+				String WeightValue = inAttributes.getLinkAttribute(Attributes, WEIGHT_IDENTIFIER);
 				if(WeightValue != "")
 					Weight = Double.parseDouble(WeightValue);
 			}
 		}
 		else if(Type == GraphFileType.GraphML)
 		{
-			org.w3c.dom.Node Id = inNode.getAttributes().getNamedItem("id");
-			org.w3c.dom.Node SourceId = inNode.getAttributes().getNamedItem("source");
-			org.w3c.dom.Node DestinationId = inNode.getAttributes().getNamedItem("target");
+			org.w3c.dom.Node Id = inNode.getAttributes().getNamedItem(NODE_IDENTIFIER);
+			org.w3c.dom.Node SourceId = inNode.getAttributes().getNamedItem(SOURCE_IDENTIFIER);
+			org.w3c.dom.Node DestinationId = inNode.getAttributes().getNamedItem(TARGET_IDENTIFIER);
 			
 			if(SourceId != null && DestinationId != null)
 			{
@@ -103,7 +116,7 @@ class XMLLinkInformation
 			
 			if(Weight == 0)
 			{
-				String WeightValue = inAttributes.getLinkAttribute(Attributes, "weight");
+				String WeightValue = inAttributes.getLinkAttribute(Attributes, WEIGHT_IDENTIFIER);
 				if(WeightValue != "")
 					Weight = Double.parseDouble(WeightValue);
 			}
