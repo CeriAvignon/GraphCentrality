@@ -1,11 +1,36 @@
 package fr.univavignon.graphcentr.g07.core;
 
 /**
+ * @author Holstein Kelian
  * 
- * @author JackassDestroyer
- * Simple node used in simple graph and derived
+ * @brief Link between two nodes
  */
-public class Node extends AbstractNode<Link>
+public class Node
 {
-	// Nothing to do
+	/** Node identifier in graph */
+	private int identifier = -1;
+	
+	/**
+	 * Sets node id
+	 * @param inID 
+	 */
+	public void setIdentifier(int inID)
+	{
+		identifier = inID;
+	}
+	
+	/**
+	 * Returns node id
+	 * @return Node's identifier
+	 */
+	public int getIdentifier()
+	{
+		return identifier;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "Node "+identifier;
+	}
 }

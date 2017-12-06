@@ -1,44 +1,48 @@
 package fr.univavignon.graphcentr.g07.core;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
+
 import java.lang.reflect.ParameterizedType;
 
 /**
  * 
- * @author JackassDestroyer
- * Generic class that represents a graph. Provides few methods for node creation/linking
+ * @author Holstein Kelian
+ *  
  * @param <NodeType> Type of node used by graph
  * @param <LinkType> Type of link used by graph
+ * @brief Generic class that represents a graph. Provides few methods for node creation/linking
  */
-abstract class AbstractGraph
+public abstract class AbstractGraph
 <
-	 NodeType extends AbstractNode<?>
-	,LinkType extends AbstractLink<?>
+	 NodeType extends Node
+	,LinkType extends Link
 >
 {
 	/** Vector of nodes */
-	protected Vector<NodeType> Nodes;
+	protected List<NodeType> nodes;
 	/** Vector of created links */
-	protected Vector<LinkType> Links;
+	protected List<List<LinkType>> links;
 	
 	/** String used to resolve template-class type */
-	protected String NodeTypeClassName;
+	private String nodeTypeClassName;
 	/** String used to resolve template-class type */
-	protected String NodeLinkClassName;
+	private String nodeLinkClassName;
 	
 	/** Node class for NodeType instances */
-	protected Class<NodeType> NodeClass;
+	private Class<NodeType> nodeClass;
 	/** Link class for LinkType instances */
-	protected Class<LinkType> LinkClass;
+	private Class<LinkType> linkClass;
 	
 	/**
 	 * Default constructor
 	 */
 	public AbstractGraph()
 	{
-		Nodes = new Vector<NodeType>();
-		Links = new Vector<LinkType>();
+		nodes = new ArrayList<NodeType>();
+		links = new ArrayList<List<LinkType>>();
 		
 		initializeClass();
 	}
@@ -47,18 +51,18 @@ abstract class AbstractGraph
 	 * Initialise graph classes (NodeClass & LinkClass)
 	 */
 	@SuppressWarnings("unchecked")
-	protected void initializeClass()
+	private void initializeClass()
 	{
 		// Get templates parameters class names
 		ParameterizedType pt = (ParameterizedType) getClass().getGenericSuperclass();
-		NodeTypeClassName = pt.getActualTypeArguments()[0].toString().split("\\s")[1]; 
-		NodeLinkClassName = pt.getActualTypeArguments()[1].toString().split("\\s")[1]; 
+		nodeTypeClassName = pt.getActualTypeArguments()[0].toString().split("\\s")[1]; 
+		nodeLinkClassName = pt.getActualTypeArguments()[1].toString().split("\\s")[1]; 
 		
 		// Initialise Node/Link class for future instances
 		try 
 		{
-			NodeClass = (Class<NodeType>) Class.forName(NodeTypeClassName);
-			LinkClass = (Class<LinkType>) Class.forName(NodeLinkClassName);
+			nodeClass = (Class<NodeType>) Class.forName(nodeTypeClassName);
+			linkClass = (Class<LinkType>) Class.forName(nodeLinkClassName);
 		} catch (ClassNotFoundException e) 
 		{
 			e.printStackTrace();
@@ -66,35 +70,34 @@ abstract class AbstractGraph
 	}
 	
 	/**
-	 * Returns node class (for node instancing)
-	 * @return Node class
+	 * Returns a class of node type
+	 * @return Class<NodeType>
 	 */
 	public Class<NodeType> getNodeClass()
 	{
-		return NodeClass;
+		return nodeClass;
 	}
-	
 	/**
-	 * Returns link class (for link instancing)
-	 * @return Link class
+	 * Returns a class of link type
+	 * @return Class<LinkType>
 	 */
 	public Class<LinkType> getLinkClass()
 	{
-		return LinkClass;
+		return linkClass;
 	}
-	
+		
 	/**
 	 * Create a NodeType and add it to graph
 	 * @return Created node
 	 */
 	public NodeType createNode()
 	{
-		NodeType NewNode = null;
+		NodeType newNode = null;
 		
 		// Useless try and catch 
 		try 
 		{
-			NewNode = NodeClass.newInstance();
+			newNode = nodeClass.newInstance();
 		} catch (InstantiationException e) 
 		{
 			e.printStackTrace();
@@ -103,11 +106,18 @@ abstract class AbstractGraph
 			e.printStackTrace();
 		}
 		
-		NewNode.setID(Nodes.size());
-		addNode(NewNode);
+		// Set node id
+		addNode(newNode);
+		initializeNode(newNode);
 		
-		return NewNode;
+		return newNode;
 	}
+	
+	/**
+	 * Initialise given node
+	 * @param inNode Node to initialise
+	 */
+	protected abstract void initializeNode(NodeType inNode);
 	
 	/**
 	 * Add a node
@@ -115,8 +125,9 @@ abstract class AbstractGraph
 	 */
 	public void addNode(NodeType inNode)
 	{
-		inNode.setID(Nodes.size());
-		Nodes.add(inNode);
+		inNode.setIdentifier(nodes.size());
+		nodes.add(inNode);
+		links.add(new ArrayList<LinkType>());
 	}
 	
 	/**
@@ -125,111 +136,45 @@ abstract class AbstractGraph
 	 */
 	public void removeNode(NodeType inNode)
 	{
-		NodeType RemovedNode = inNode;
-		inNode.resetID();
-		Nodes.remove(inNode);
-		
-		// Remove all removed node's links
-		for(AbstractLink<?> CurrentLink : RemovedNode.getLinks())
-			Links.remove(CurrentLink);
-		
-		// Then search for each node if links are related with deleted node
-		for(NodeType CurrentNode : Nodes)
-		{
-			@SuppressWarnings("unchecked")
-			Iterator<AbstractLink<?>> LinkIterator = (Iterator<AbstractLink<?>>) CurrentNode.getLinks().iterator();
-			while(LinkIterator.hasNext())
-			{
-				AbstractLink<?> CurrentLink = LinkIterator.next();
-				
-				if(CurrentLink.nodeIsConcerned(RemovedNode))
-				{
-					//CurrentNode.removeLink(CurrentLink);
-					LinkIterator.remove();
-					Links.remove(CurrentLink);
-				}
-			}
-		}
+		removeNode(getNodeIndex(inNode));
 	}
 	
 	/**
 	 * Remove a node at given index
-	 * @param inIndex Node to remove
+	 * @param inIndexToRemove Node to remove
 	 */
-	public void removeNode(int inIndex)
+	public void removeNode(int inIndexToRemove)
 	{
-		NodeType NodeToRemove = Nodes.get(inIndex);
-		removeNode(NodeToRemove);
-	}
-	
-	/**
-	 * Returns all nodes
-	 * @return Nodes
-	 */
-	public Vector<NodeType> getNodes()
-	{
-		return Nodes;
-	}
-	
-	/**
-	 * Returns node count
-	 * @return Node count
-	 */
-	public int getNodeCount()
-	{
-		return Nodes.size();
-	}
-	
-	/**
-	 * Link two nodes
-	 * @param inSourceNode
-	 * @param inDestinationNode
-	 * @return Created link
-	 */
-	public LinkType createLink(NodeType inSourceNode, NodeType inDestinationNode)
-	{
-		int SourceNodeIndex = Nodes.indexOf(inSourceNode);
-		int DestinationNodeIndex = Nodes.indexOf(inDestinationNode);
-		
-		return createLink(SourceNodeIndex, DestinationNodeIndex);
-	}
-	
-	/**
-	 * Link two nodes
-	 * @param inSourceNodeIndex
-	 * @param inDestinationNodeIndex
-	 * @return Created link
-	 */
-	public abstract LinkType createLink(int inSourceNodeIndex, int inDestinationNodeIndex);
-
-	
-	/**
-	 * Returns graph's link count
-	 * @return Link count
-	 */
-	public int getLinkCount()
-	{
-		return Links.size();
-	}
-	
-	/**
-	 * Returns all links
-	 * @return Links
-	 */
-	public Vector<LinkType> getLinks()
-	{
-		return Links;
-	}
-	
-	/**
-	 * Returns last link
-	 * @return Last link
-	 */
-	@SuppressWarnings("unchecked")
-	public <T>
-	T getLastLink()
-	{
-		return (T) Links.lastElement();
+		nodes.remove(inIndexToRemove);
+		links.remove(inIndexToRemove);
+		// Decrease by one all node indexes if above removed one
+		// same for links
+		for(NodeType currentNode : nodes)
+		{
+			if(currentNode.getIdentifier() > inIndexToRemove)
+				currentNode.setIdentifier(currentNode.getIdentifier() - 1);
+			
+			List<LinkType> nodeLinks = links.get(currentNode.getIdentifier());
+			Iterator<LinkType> it = nodeLinks.iterator();
+			while(it.hasNext())
+			{
+				LinkType currentLink = it.next();
+				int srcID = currentLink.getSourceIdentifier();
+				int dstID = currentLink.getDestinationIdentifier();
+				
+				// If current link have source node or destination node equals to removed one, delete it
+				if(srcID == inIndexToRemove || dstID == inIndexToRemove)
+				{
+					it.remove();
+					continue;
+				}
+				
+				if(srcID > inIndexToRemove)
+					currentLink.setSourceIdentifier(srcID - 1);
+				if(dstID > inIndexToRemove)
+					currentLink.setDestinationIdentifier(dstID - 1);
+			}
+		}
 	}
 	
 	/**
@@ -239,7 +184,7 @@ abstract class AbstractGraph
 	 */
 	public NodeType getNodeAt(int inIndex)
 	{		
-		return Nodes.get(inIndex);
+		return nodes.get(inIndex);
 	}
 	
 	/**
@@ -247,10 +192,128 @@ abstract class AbstractGraph
 	 * @param inNode
 	 * @return Node's index
 	 */
-	@SuppressWarnings("unlikely-arg-type")
-	public <T>
-	int indexOf(T inNode)
+	public int getNodeIndex(NodeType inNode)
 	{
-		return Nodes.indexOf(inNode);
+		return nodes.indexOf(inNode);
 	}
+	
+	/**
+	 * Returns all nodes
+	 * @return Nodes
+	 */
+	public List<NodeType> getNodes()
+	{
+		return Collections.unmodifiableList(nodes);
+	}
+	
+	/**
+	 * Returns node count
+	 * @return Node count
+	 */
+	public int getNodeCount()
+	{
+		return nodes.size();
+	}
+	
+	/**
+	 * Test if source node is adjacent to destination node
+	 * @param inSourceNode Source node
+	 * @param inDestinatonNode Destination node
+	 * @return Adjacent to destination node 
+	 */
+	public boolean isAdjacentTo(NodeType inSourceNode, NodeType inDestinatonNode)
+	{
+		int destinationNodeIndex = getNodeIndex(inDestinatonNode);
+		
+		for(LinkType currentLink : getNodeLinks(inSourceNode))
+		{
+			if(currentLink.getDestinationIdentifier() == destinationNodeIndex)
+				return true;
+		}
+		
+		return false;
+	}
+	
+	
+	/**
+	 * Link two nodes
+	 * @param inSourceNode
+	 * @param inDestinationNode
+	 * @return Created link
+	 */
+	public abstract LinkType createLink(NodeType inSourceNode, NodeType inDestinationNode);
+	/**
+	 * Initialise created link
+	 * @param inLink
+	 */
+	protected abstract void initializeLink(LinkType inLink);
+	/**
+	 * Link two nodes
+	 * @param inSourceNodeIndex
+	 * @param inDestinationNodeIndex
+	 * @return Created link
+	 */
+	public abstract LinkType createLink(int inSourceNodeIndex, int inDestinationNodeIndex);
+
+	/**
+	 * Create a NodeType and add it to graph
+	 * @return Created node
+	 */
+	protected LinkType createLink()
+	{
+		LinkType newLink = null;
+		
+		// Useless try and catch 
+		try 
+		{
+			newLink = linkClass.newInstance();
+		} catch (InstantiationException e) 
+		{
+			e.printStackTrace();
+		} catch (IllegalAccessException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		return newLink;
+	}
+	
+	/**
+	 * Add a link 
+	 * @param inLink
+	 */
+	public void addLink(LinkType inLink)
+	{
+		links.get(inLink.getSourceIdentifier()).add(inLink);
+	}
+	
+	/**
+	 * Returns graph's link count
+	 * @return Link count
+	 */
+	public int getLinkCount()
+	{
+		return links.size();
+	}
+	
+	/**
+	 * Returns all linksfrom given node
+	 * @param inNode 
+	 * @return Nodes
+	 */
+	public List<LinkType> getNodeLinks(NodeType inNode)
+	{
+		return Collections.unmodifiableList(links.get(inNode.getIdentifier()));
+	}
+	
+	/**
+	 * Transform graph to an adjacency matrix
+	 * @return Adjacency matrix
+	 */
+	public abstract double[][] toAdjacencyMatrix(); 
+	/**
+	 * Transform graph to an incidence matrix
+	 * @return Incidence matrix
+	 */
+	public abstract double[][] toIncidenceMatrix(); 
 }

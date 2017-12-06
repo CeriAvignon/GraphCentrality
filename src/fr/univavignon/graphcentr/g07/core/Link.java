@@ -1,26 +1,54 @@
 package fr.univavignon.graphcentr.g07.core;
 
 /**
- * @author JackassDestroyer
- * @brief Simple link between two nodes, 0 informations added
+ * @author Holstein Kelian
+ * 
+ * @brief Link between two nodes
  */
-public class Link extends AbstractLink<Node>
+public class Link
 {	
+	/** Source node id */
+	private int sourceIdentifier = -1;
+	/** Destination node id */
+	private int destinationIdentifier = -1;
+	
 	/**
-	 * Default constructor
+	 * Set source node id
+	 * @param inID
 	 */
-	public Link()
+	public void setSourceIdentifier(int inID)
 	{
-		super();
+		sourceIdentifier = inID;
+	}
+	/**
+	 * Set destination node id
+	 * @param inID
+	 */
+	public void setDestinationIdentifier(int inID)
+	{
+		destinationIdentifier = inID;
 	}
 	
 	/**
-	 * Register both nodes
-	 * @param InSourceNode
-	 * @param InDestinationNode
+	 * Returns source node id
+	 * @return Source node id
 	 */
-	public Link(Node InSourceNode, Node InDestinationNode) 
+	public int getSourceIdentifier()
 	{
-		super(InSourceNode, InDestinationNode);
+		return sourceIdentifier;
+	}
+	/**
+	 * Returns destination node id
+	 * @return Destination node id
+	 */
+	public int getDestinationIdentifier()
+	{
+		return destinationIdentifier;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "" + sourceIdentifier + " -> " + destinationIdentifier;
 	}
 }
