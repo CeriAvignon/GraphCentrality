@@ -1,66 +1,50 @@
 package fr.univavignon.graphcentr.g07.core;
 
-import java.util.Vector;
-
 /**
+ * @author Holstein Kelian
  * 
- * @author JackassDestroyer
- * Node with spatial information
+ * @brief Type of node with a position (2D)
  */
-public class SpatialNode extends Node implements AbstractSpatialInformation
+public class SpatialNode extends Node
 {
-	/**
-	 * x position
-	 */
-	protected double x;
-	/**
-	 * y position
-	 */
-	protected double y;
+	/** Node x position */
+	private double x = 0.0;
+	/** Node y position */
+	private double y = 0.0;
 	
 	/**
-	 * Default constructor
-	 */
-	public SpatialNode()
-	{
-		super();
-		setPosition(0.0, 0.0);
-	}
-	
-	/**
-	 * Set spatial node coords
+	 * Set node x position
 	 * @param inX
-	 * @param inY
 	 */
-	public SpatialNode(double inX, double inY)
-	{
-		Links = new Vector<Link>();
-		setPosition(inX, inY);
-	}
-
-	@Override
-	public void setPosition(double inX, double inY) 
+	public void setX(double inX)
 	{
 		x = inX;
+	}
+	
+	/**
+	 * Set node y position
+	 * @param inY
+	 */
+	public void setY(double inY)
+	{
 		y = inY;
 	}
-
-	@Override
-	public double getX() 
+	
+	/**
+	 * Returns node's x position
+	 * @return X position
+	 */
+	public double getX()
 	{
 		return x;
 	}
-
-	@Override
-	public double getY() 
+	
+	/**
+	 * Returns node's y position
+	 * @return Y position
+	 */
+	public double getY()
 	{
 		return y;
 	}
-	
-	@Override
-	public String toString()
-	{
-		return "["+x+";"+y+"]";
-	}
-
 }
