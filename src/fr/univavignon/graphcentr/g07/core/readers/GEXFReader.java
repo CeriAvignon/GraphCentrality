@@ -4,6 +4,7 @@ package fr.univavignon.graphcentr.g07.core.readers;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
@@ -12,6 +13,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import fr.univavignon.graphcentr.g07.core.AbstractDirectedGraph;
@@ -132,6 +134,70 @@ public class GEXFReader extends AbstractGraphFileReader
 			e.printStackTrace();
 		} 
 		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+
+		// Extract user-defined attributes
+		extractAttributes(readFile);
+		// Parse nodes from file and extract XML infos
+		parseNodes(readFile);
+		// Parse links from file and extract XML infos
+		parseLinks(readFile);
+		// Create nodes from parsed XML infos
+		createNodes(inGraph);
+		// Create links from parsed XML infos
+		createLinks(inGraph);
+	}
+	
+	/**
+	 * Read given string and update graph
+	 * @param inString String to parse as XML
+	 * @param inGraph Graph to update
+	 */
+	public <GraphNodeType extends Node, GraphLinkType extends Link> 
+	void updateFromString(String inString, AbstractGraph<GraphNodeType, GraphLinkType> inGraph)
+	{
+		try 
+		{
+			bWeightedGraph = WeightedLink.class.isInstance(inGraph.getLinkClass().newInstance());
+		} 
+		catch (InstantiationException e1) 
+		{
+			e1.printStackTrace();
+		} 
+		catch (IllegalAccessException e1) 
+		{
+			e1.printStackTrace();
+		}
+		
+		try 
+		{
+			bSpatialGraph = SpatialNode.class.isInstance(inGraph.getNodeClass().newInstance());
+		} 
+		catch (InstantiationException e1) 
+		{
+			e1.printStackTrace();
+		} 
+		catch (IllegalAccessException e1) 
+		{
+			e1.printStackTrace();
+		}
+		
+		bDirectedGraph = inGraph instanceof AbstractDirectedGraph<?, ?>;
+		
+		// Set reader's content
+		setContent(inString);
+				
+		// Parse text
+		Document readFile = null;
+		try 
+		{
+			readFile = builder.parse(new InputSource(new ByteArrayInputStream(fileContent.getBytes("utf-8"))));
+		} catch (SAXException e) 
+		{
+			e.printStackTrace();
+		} catch (IOException e) 
 		{
 			e.printStackTrace();
 		}

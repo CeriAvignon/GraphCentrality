@@ -67,6 +67,53 @@ public class EdgeListReader extends AbstractGraphFileReader
 	}
 	
 	/**
+	 * Read given string and update graph
+	 * @param inString String to parse
+	 * @param inSeparator Separator used
+	 * @param inGraph Graph to update
+	 */
+	public <GraphNodeType extends Node, GraphLinkType extends Link> 
+	void updateFromString(String inString, char inSeparator, AbstractGraph<GraphNodeType, GraphLinkType> inGraph)
+	{		
+		Vector<Pair<String, GraphNodeType>> ReadNodes = new Vector<>();
+		Vector<Vector<String>> ReadLinks = new Vector<>();
+		
+		// Set reader's content
+		setContent(inString);
+		
+		for(int i = 0; i < lines.size(); i++)
+		{
+			String CurrentLine = lines.get(i);
+			Vector<String> Nodes = splitBySeparator(CurrentLine, inSeparator);
+			ReadLinks.addElement(Nodes);
+			for(String CurrentNode : Nodes)
+			{
+				addUnique(ReadNodes, CurrentNode);
+			}
+		}
+		
+		for(Pair<String, GraphNodeType> Current : ReadNodes)
+			Current.SecondValue = inGraph.createNode();
+		
+		for(Vector<String> CurrentVector : ReadLinks)
+		{
+			if(CurrentVector.size() <= 1)
+				continue;
+			
+			String SourceNodeName = CurrentVector.get(0);
+			GraphNodeType SourceNode = findNode(ReadNodes, SourceNodeName);
+			for(int i = 1; i < CurrentVector.size(); i++)
+			{
+				String DestinationNodeName = CurrentVector.get(i);
+				GraphNodeType DestinationNode = findNode(ReadNodes, DestinationNodeName);
+				
+				if(!inGraph.isAdjacentTo(SourceNode, DestinationNode))
+					inGraph.createLink(SourceNode, DestinationNode);
+			}
+		}
+	}
+	
+	/**
 	 * Split string by inSeparator
 	 * @param inLine
 	 * @param inSeparator
@@ -91,7 +138,9 @@ public class EdgeListReader extends AbstractGraphFileReader
 			}
 		}
 		if(CurrentString != "")
+		{
 			SplitedString.add(CurrentString.trim());
+		}
 		
 		return SplitedString;
 	}

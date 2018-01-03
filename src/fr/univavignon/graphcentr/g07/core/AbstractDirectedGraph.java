@@ -1,6 +1,7 @@
 package fr.univavignon.graphcentr.g07.core;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -35,6 +36,13 @@ extends AbstractGraph<NodeType, LinkType>
 	}
 	
 	@Override
+	public void clear()
+	{
+		super.clear();
+		incomingLinks.clear();
+	}
+	
+	@Override
 	public void addNode(NodeType inNode)
 	{
 		super.addNode(inNode);
@@ -57,6 +65,10 @@ extends AbstractGraph<NodeType, LinkType>
 	@Override
 	public LinkType createLink(int inSourceNodeIndex, int inDestinationNodeIndex)
 	{
+		// If link already exists, return it
+		if(isAdjacentTo(inSourceNodeIndex, inDestinationNodeIndex))
+			return getLink(inSourceNodeIndex, inDestinationNodeIndex);
+		
 		// Create link between source and destination node
 		LinkType link = createLink();
 		link.setSourceIdentifier(inSourceNodeIndex);
@@ -93,6 +105,7 @@ extends AbstractGraph<NodeType, LinkType>
 				if(srcID == inIndexToRemove || dstID == inIndexToRemove)
 				{
 					it.remove();
+					linkCount--;
 					continue;
 				}
 				
@@ -137,7 +150,27 @@ extends AbstractGraph<NodeType, LinkType>
 	}
 	
 	/**
-	 * Returns node degree
+	 * Returns node incoming degree
+	 * @param inNodeIndex Node's index
+	 * @return Node's degree
+	 */
+	public int getIncomingDegree(int inNodeIndex)
+	{
+		return getIncomingDegree(getNodeAt(inNodeIndex));
+	}
+	
+	/**
+	 * Returns all incoming links of given node
+	 * @param inNode 
+	 * @return Nodes
+	 */
+	public List<LinkType> getNodeIncomingLinks(NodeType inNode)
+	{
+		return Collections.unmodifiableList(incomingLinks.get(inNode.getIdentifier()));
+	}
+	
+	/**
+	 * Returns node outgoing degree
 	 * @param inNode	
 	 * @return Node's degree
 	 */
@@ -146,10 +179,20 @@ extends AbstractGraph<NodeType, LinkType>
 		return links.get(inNode.getIdentifier()).size();
 	}
 	
+	/**
+	 * Returns node outgoing degree
+	 * @param inNodeIndex Node's index
+	 * @return Node's degree
+	 */
+	public int getOutgoingDegree(int inNodeIndex)
+	{
+		return getOutgoingDegree(getNodeAt(inNodeIndex));
+	}
+	
 	
 	/**
 	 * Returns an array of nodes incoming degree
-	 * @return Array of incoming degrees
+	 * @return All incoming degrees
 	 */
 	public int[] getNodesIncomingDegree()
 	{
@@ -165,7 +208,7 @@ extends AbstractGraph<NodeType, LinkType>
 	
 	/**
 	 * Returns an array of nodes outgoing degree
-	 * @return Array of outgoing degrees
+	 * @return All outgoing degrees
 	 */
 	public int[] getNodesOutgoingDegree()
 	{
@@ -177,6 +220,36 @@ extends AbstractGraph<NodeType, LinkType>
 		}
 		
 		return degrees;
+	}
+	
+	@Override
+	public void removeLink(int inSourceNodeID, int inDestinationNodeID)
+	{
+		List<LinkType> nodeLinks = links.get(inSourceNodeID);
+		Iterator<LinkType> it = nodeLinks.iterator();
+		while(it.hasNext())
+		{
+			LinkType currentLink = it.next();
+			if(currentLink.getDestinationIdentifier() == inDestinationNodeID)
+			{
+				it.remove();
+				linkCount--;
+				break;
+			}
+		}
+		
+		// Remove incoming link as well
+		nodeLinks = incomingLinks.get(inDestinationNodeID);
+		it = nodeLinks.iterator();
+		while(it.hasNext())
+		{
+			LinkType currentLink = it.next();
+			if(currentLink.getSourceIdentifier() == inSourceNodeID)
+			{
+				it.remove();
+				break;
+			}
+		}
 	}
 	
 	@Override

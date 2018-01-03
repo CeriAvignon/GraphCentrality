@@ -21,10 +21,12 @@ public abstract class AbstractGraph
 	,LinkType extends Link
 >
 {
-	/** Vector of nodes */
+	/** List of nodes */
 	protected List<NodeType> nodes;
-	/** Vector of created links */
+	/** List of created links */
 	protected List<List<LinkType>> links;
+	/** Total link count */
+	protected int linkCount;
 	
 	/** String used to resolve template-class type */
 	private String nodeTypeClassName;
@@ -85,6 +87,16 @@ public abstract class AbstractGraph
 	{
 		return linkClass;
 	}
+	
+	/**
+	 * Remove all nodes and links
+	 */
+	public void clear()
+	{
+		nodes.clear();
+		links.clear();
+		linkCount = 0;
+	}
 		
 	/**
 	 * Create a NodeType and add it to graph
@@ -123,7 +135,7 @@ public abstract class AbstractGraph
 	 * Add a node
 	 * @param inNode Node to add
 	 */
-	public void addNode(NodeType inNode)
+	protected void addNode(NodeType inNode)
 	{
 		inNode.setIdentifier(nodes.size());
 		nodes.add(inNode);
@@ -166,6 +178,7 @@ public abstract class AbstractGraph
 				if(srcID == inIndexToRemove || dstID == inIndexToRemove)
 				{
 					it.remove();
+					linkCount--;
 					continue;
 				}
 				
@@ -194,7 +207,7 @@ public abstract class AbstractGraph
 	 */
 	public int getNodeIndex(NodeType inNode)
 	{
-		return nodes.indexOf(inNode);
+		return inNode.getIdentifier();
 	}
 	
 	/**
@@ -234,6 +247,52 @@ public abstract class AbstractGraph
 		return false;
 	}
 	
+	/**
+	 * Test if source node is adjacent to destination node
+	 * @param inSourceNodeIndex Source node index
+	 * @param inDestinatonNodeIndex Destination node index
+	 * @return Adjacent to destination node 
+	 */
+	public boolean isAdjacentTo(int inSourceNodeIndex, int inDestinatonNodeIndex)
+	{
+		NodeType sourceNode = getNodeAt(inSourceNodeIndex);
+		NodeType destinationNode = getNodeAt(inDestinatonNodeIndex);
+		
+		return isAdjacentTo(sourceNode, destinationNode);
+	}
+	
+	/**
+	 * Return link
+	 * @param inSourceNode Source node
+	 * @param inDestinatonNode Destination node
+	 * @return Link
+	 */
+	protected LinkType getLink(NodeType inSourceNode, NodeType inDestinatonNode)
+	{
+		int destinationNodeIndex = getNodeIndex(inDestinatonNode);
+		
+		for(LinkType currentLink : getNodeLinks(inSourceNode))
+		{
+			if(currentLink.getDestinationIdentifier() == destinationNodeIndex)
+				return currentLink;
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Return link
+	 * @param inSourceNodeIndex Source node index
+	 * @param inDestinatonNodeIndex Destination node index
+	 * @return Link
+	 */
+	protected LinkType getLink(int inSourceNodeIndex, int inDestinatonNodeIndex)
+	{
+		NodeType sourceNode = getNodeAt(inSourceNodeIndex);
+		NodeType destinationNode = getNodeAt(inDestinatonNodeIndex);
+		
+		return getLink(sourceNode, destinationNode);
+	}
 	
 	/**
 	 * Link two nodes
@@ -280,11 +339,55 @@ public abstract class AbstractGraph
 	
 	/**
 	 * Add a link 
-	 * @param inLink
+	 * @param inLink Link to add
 	 */
-	public void addLink(LinkType inLink)
+	protected void addLink(LinkType inLink)
 	{
 		links.get(inLink.getSourceIdentifier()).add(inLink);
+		linkCount++;
+	}
+	
+	/**
+	 * Remove a link
+	 * @param inLink Link to remove
+	 */
+	public void removeLink(LinkType inLink)
+	{
+		removeLink(inLink.getSourceIdentifier(), inLink.getDestinationIdentifier());
+	}
+	
+	/**
+	 * Remove a link
+	 * @param inSourceNodeID Source node identifier
+	 * @param inDestinationNodeID Destination node identifier
+	 */
+	public void removeLink(int inSourceNodeID, int inDestinationNodeID)
+	{
+		List<LinkType> nodeLinks = links.get(inSourceNodeID);
+		Iterator<LinkType> it = nodeLinks.iterator();
+		while(it.hasNext())
+		{
+			LinkType currentLink = it.next();
+			if(currentLink.getDestinationIdentifier() == inDestinationNodeID)
+			{
+				it.remove();
+				linkCount--;
+				break;
+			}
+		}
+	}
+	
+	/**
+	 * Remove a link
+	 * @param inSourceNode Source node
+	 * @param inDestinationNode Destination node
+	 */
+	public void removeLink(NodeType inSourceNode, NodeType inDestinationNode)
+	{
+		int sourceNodeIndex = getNodeIndex(inSourceNode);
+		int destinationNodeIndex = getNodeIndex(inDestinationNode);
+		
+		removeLink(sourceNodeIndex, destinationNodeIndex);
 	}
 	
 	/**
@@ -293,11 +396,11 @@ public abstract class AbstractGraph
 	 */
 	public int getLinkCount()
 	{
-		return links.size();
+		return linkCount;
 	}
 	
 	/**
-	 * Returns all linksfrom given node
+	 * Returns all links of given node
 	 * @param inNode 
 	 * @return Nodes
 	 */

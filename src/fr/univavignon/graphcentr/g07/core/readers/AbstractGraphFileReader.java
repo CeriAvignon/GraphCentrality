@@ -80,4 +80,32 @@ abstract class AbstractGraphFileReader
 		
 		return false;
 	}
+	
+	/**
+	 * Sets content
+	 * @param inContent
+	 */
+	final protected void setContent(String inContent)
+	{
+		fileContent = inContent;
+		lines.clear();
+		
+		String currentLine = "";
+		
+		for(int i = 0; i < inContent.length(); i++)
+		{
+			char currentChar = inContent.charAt(i);
+			if(currentChar == '\n')
+			{
+				lines.add(currentLine);
+				currentLine = "";
+				continue;
+			}
+			
+			currentLine += currentChar;
+		}
+		
+		if(currentLine != "")
+			lines.add(currentLine);
+	}
 }
