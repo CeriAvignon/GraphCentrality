@@ -26,7 +26,7 @@ class XMLUserDefinedAttribute
 	private static final String GEXF_ATT_DEFAULT_VALUE_IDENTIFIER = "default";
 	
 	/** Attribute name identifier in GraphML files */
-	private static final String GRAPHML_ATT_NAME_IDENTIFIER = "title";
+	private static final String GRAPHML_ATT_NAME_IDENTIFIER = "attr.name";
 	
 	/**
 	 * Default constructor

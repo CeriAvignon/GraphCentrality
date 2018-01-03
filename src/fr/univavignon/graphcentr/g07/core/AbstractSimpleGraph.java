@@ -1,5 +1,8 @@
 package fr.univavignon.graphcentr.g07.core;
 
+import java.util.Iterator;
+import java.util.List;
+
 /**
  * 
  * @author Holstein Kelian
@@ -48,6 +51,10 @@ extends AbstractGraph<NodeType, LinkType>
 	@Override
 	public LinkType createLink(int inSourceNodeIndex, int inDestinationNodeIndex)
 	{
+		// If link already exists, return it
+		if(isAdjacentTo(inSourceNodeIndex, inDestinationNodeIndex))
+			return getLink(inSourceNodeIndex, inDestinationNodeIndex);
+		
 		// Create link between source and destination node
 		LinkType link = createLink();
 		link.setSourceIdentifier(inSourceNodeIndex);
@@ -66,6 +73,37 @@ extends AbstractGraph<NodeType, LinkType>
 		return link;
 	}
 	
+	@Override
+	public void removeLink(int inSourceNodeID, int inDestinationNodeID)
+	{
+		List<LinkType> nodeLinks = links.get(inSourceNodeID);
+		Iterator<LinkType> it = nodeLinks.iterator();
+		while(it.hasNext())
+		{
+			LinkType currentLink = it.next();
+			if(currentLink.getDestinationIdentifier() == inDestinationNodeID)
+			{
+				it.remove();
+				linkCount--;
+				break;
+			}
+		}
+		
+		// Remove "back-link" as well
+		nodeLinks = links.get(inDestinationNodeID);
+		it = nodeLinks.iterator();
+		while(it.hasNext())
+		{
+			LinkType currentLink = it.next();
+			if(currentLink.getDestinationIdentifier() == inSourceNodeID)
+			{
+				it.remove();
+				linkCount--;
+				break;
+			}
+		}
+	}
+	
 	/**
 	 * Returns node degree
 	 * @param inNode
@@ -77,8 +115,18 @@ extends AbstractGraph<NodeType, LinkType>
 	}
 	
 	/**
+	 * Returns node degree
+	 * @param inNodeIndex Node index
+	 * @return Node's degree
+	 */
+	public int getNodeDegree(int inNodeIndex)
+	{
+		return getNodeDegree(getNodeAt(inNodeIndex));
+	}
+	
+	/**
 	 * Returns an array of nodes degree 
-	 * @return Array of nodes degree
+	 * @return All nodes degree
 	 */
 	public int[] getNodesDegree()
 	{
@@ -130,5 +178,12 @@ extends AbstractGraph<NodeType, LinkType>
 		}
 		
 		return incidenceMatrix;
+	}
+	
+	@Override
+	public int getLinkCount()
+	{
+		// On simple graphs there are twice more links because of back-links
+		return linkCount / 2;
 	}
 }
