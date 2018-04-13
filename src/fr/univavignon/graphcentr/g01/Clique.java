@@ -18,9 +18,17 @@ public class Clique  implements SimpleCentrality{
 	@Override
 	public CentralityResult evaluate(SimpleGraph inGraph) {
 		CentralityResult centraliteNoeud = new CentralityResult();
+		for(Node u : inGraph.getNodes()) {
+			centraliteNoeud.add(0.0);
+		}
+		List<List<Integer>> listeClique = rechercheCliqueRecursive(inGraph);
+		for( List<Integer> clique : listeClique ) {
+			for( int node : clique ) {
+				centraliteNoeud.set(node, (centraliteNoeud.get(node))+1);
+			}
+		}
 		
 		return centraliteNoeud;
-		
 	}
 	
 	private List<List<Integer>> RechercheCliqueBouda( SimpleGraph inGraph ) {
@@ -94,6 +102,70 @@ public class Clique  implements SimpleCentrality{
 		return kClique;
 	}
 	
+	public List<List<Integer>> rechercheCliqueRecursive(SimpleGraph inGraph){
+		List<List<Integer>> listeClique = new ArrayList<List<Integer>>();
+		List<Integer> NoeudUse = new ArrayList<Integer>();
+		for(Node uN : inGraph.getNodes()) {
+			int u = uN.getIdentifier();
+			List<Integer> uVoisin = new ArrayList<Integer>();
+			uVoisin = getVoisins(inGraph,u);
+			uVoisin.removeAll(NoeudUse);
+			if( uVoisin.size() >= 2 ) {
+				List<Integer> cliqueTest = new ArrayList<Integer>();
+				cliqueTest.add(u);
+				rechercheCliqueRec(inGraph, listeClique, uVoisin, cliqueTest);
+			}
+			NoeudUse.add(u);
+		}
+		return listeClique;
+	}
+	
+	private void rechercheCliqueRec(SimpleGraph inGraph, List<List<Integer>> listeClique, List<Integer> uVoisin, List<Integer> cliqueTest) {
+		/*System.out.println("///////////////////////");
+		for (List<Integer> p : listeClique) {
+			for (int m : p) {
+				System.out.print(p+" ");
+			}
+			System.out.println();
+		}
+		System.out.println("///////////////////////");
+		*/
+		if( cliqueTest.size() >= 3 ) {
+			/*for(int i : cliqueTest) System.out.print(i+" ");
+			System.out.println();*/
+			List<Integer> toAdd = new ArrayList<Integer>(cliqueTest);
+			//Collections.copy(toAdd, cliqueTest);
+			Collections.sort(toAdd);
+			if( !listeClique.contains(toAdd) ) {
+				listeClique.add(toAdd);
+			}
+		}
+	
+		for(int w : uVoisin ) {
+			List<Integer> wVoisin = new ArrayList<Integer>();
+			wVoisin = getVoisins(inGraph,w);
+			List<Integer> wTemp = new ArrayList<Integer>();
+		
+			for(int wDel : wVoisin ) {
+				if( uVoisin.contains(wDel) ) {
+					wTemp.add(wDel);
+				}
+			}
+			wVoisin = wTemp;
+			cliqueTest.add(w);
+			rechercheCliqueRec(inGraph, listeClique, wVoisin, cliqueTest);
+			cliqueTest.remove(new Integer(w));		
+		}
+	}
+	
+	public List<Integer> getVoisins(SimpleGraph inGraph, int u){
+		List<Integer> Voisins = new ArrayList<Integer>();
+		for (Link l : inGraph.getNodeLinks(inGraph.getNodeAt(u))) {
+			if ( l.getDestinationIdentifier() == u) Voisins.add(l.getSourceIdentifier());
+			else Voisins.add(l.getDestinationIdentifier()); 
+		}
+		
+		return Voisins;
+	}
 }
-
 
