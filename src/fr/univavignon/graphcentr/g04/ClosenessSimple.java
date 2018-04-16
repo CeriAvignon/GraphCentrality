@@ -10,15 +10,8 @@ import fr.univavignon.graphcentr.g07.core.graphs.SimpleGraph;
  *
  */
 
-public class proximiteOriente implements SimpleCentrality
+public class ClosenessSimple implements SimpleCentrality
 {
-	private String orientation;
-	
-	public void setOrientation(String o)
-	{
-		orientation = o;
-	}
-	
 	@Override
 	public CentralityResult evaluate(SimpleGraph inGraph)
 	{
@@ -33,14 +26,8 @@ public class proximiteOriente implements SimpleCentrality
 			{
 				if (i != j)
 				{
-					if (orientation == "in")
-					{
-						somme += dist(result.get(j), result.get(i));
-					}
-					else
-					{
-						somme += dist(result.get(i), result.get(j));
-					}
+					/* La fonction dist va être implementée par le groupe 11 */
+					somme += dist(result.get(i), result.get(j));
 				}
 			}
 			result.add((n-1)/somme);
