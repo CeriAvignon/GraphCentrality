@@ -121,20 +121,9 @@ public class Clique  implements SimpleCentrality{
 	}
 	
 	private void rechercheCliqueRec(SimpleGraph inGraph, List<List<Integer>> listeClique, List<Integer> uVoisin, List<Integer> cliqueTest) {
-		/*System.out.println("///////////////////////");
-		for (List<Integer> p : listeClique) {
-			for (int m : p) {
-				System.out.print(p+" ");
-			}
-			System.out.println();
-		}
-		System.out.println("///////////////////////");
-		*/
+		
 		if( cliqueTest.size() >= 3 ) {
-			/*for(int i : cliqueTest) System.out.print(i+" ");
-			System.out.println();*/
 			List<Integer> toAdd = new ArrayList<Integer>(cliqueTest);
-			//Collections.copy(toAdd, cliqueTest);
 			Collections.sort(toAdd);
 			if( !listeClique.contains(toAdd) ) {
 				listeClique.add(toAdd);
