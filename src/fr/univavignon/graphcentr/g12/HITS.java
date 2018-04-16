@@ -1,4 +1,9 @@
 package fr.univavignon.graphcentr.g12;
+
+import fr.univavignon.graphcentr.g07.core.centrality.CentralityResult;
+import fr.univavignon.graphcentr.g07.core.centrality.DirectedCentrality;
+import fr.univavignon.graphcentr.g07.core.graphs.DirectedGraph;
+
 import java.util.ArrayList;
 import java.lang.Math;
 
@@ -13,6 +18,12 @@ public class HITS implements DirectedCentrality
 	 */
 	public HITS()
 	{
+	}
+	
+	@Override
+	public CentralityResult evaluate(DirectedGraph inGraph) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	/**
@@ -31,7 +42,7 @@ public class HITS implements DirectedCentrality
 		
 		ArrayList<Double> a = new ArrayList<Double>();
 		ArrayList<Double> h = new ArrayList<Double>();	
-		for(int i = 0; i < graphe.size();i++)
+		for(int i = 0; i < graphe.getNodeCount();i++)
 		{
 			a.add(1.0);
 			h.add(1.0);
@@ -48,30 +59,28 @@ public class HITS implements DirectedCentrality
 			
 			atemp.clear();
 			htemp.clear();
-			for(int i = 0; i < graphe.size();i++)
+			for(int i = 0; i < graphe.getNodeCount();i++)
 			{
 				atemp.add(a.get(i));
 				htemp.add(h.get(i));
 			}
 			
-			for(int i = 0; i < graphe.size();i++)
+			for(int i = 0; i < graphe.getNodeCount();i++)
 			{
 				// Compute the authority value for node i
-				ArrayList<Double> NodeIn = graphe.getIncomingDegree(i);
-				for(int j = 0; j < NodeIn.size();j++)
-					a.set(i, a.get(i) + NodeIn.get(j));
+				double NodeIn = graphe.getIncomingDegree(i);
+				a.set(i, a.get(i) + NodeIn);
 
 				// Compute the hub value for node i
-				ArrayList<Double> NodeOut = graphe.getOutGoingDegree(i);
-				for(int j = 0; j < NodeOut.size();j++)
-					h.set(i, h.get(i) + NodeOut.get(j));
+				double NodeOut = graphe.getOutgoingDegree(i);
+				h.set(i, h.get(i) + NodeOut);
 				
 				norma += a.get(i)*a.get(i);
 				normh += h.get(i)*h.get(i);
 			}
 
 			// Normalisation
-			for(int i = 0; i < graphe.size();i++)
+			for(int i = 0; i < graphe.getNodeCount();i++)
 			{
 				a.set(i, a.get(i)/Math.sqrt(norma));
 				h.set(i, h.get(i)/Math.sqrt(normh));
@@ -81,7 +90,7 @@ public class HITS implements DirectedCentrality
 			if(s != 0)
 			{
 				loop = false;
-				for(int i = 0; i < graphe.size();i++)
+				for(int i = 0; i < graphe.getNodeCount();i++)
 				{
 					if(a.get(i) - atemp.get(i) > s)
 					{
@@ -99,5 +108,93 @@ public class HITS implements DirectedCentrality
 					loop = false;
 			}
 		}
+		
+		return a;
+	}
+	
+	/**
+	 * @param graphe
+	 * @param s
+	 * @param c
+	 * @return hub values for each node
+	 */
+	public ArrayList<Double> FindHubCentrality(DirectedGraph graphe, int s, int c)
+	{
+		// Initialisation
+		boolean loop = false;
+		int iteration = 0;
+		double norma;
+		double normh;
+		
+		ArrayList<Double> a = new ArrayList<Double>();
+		ArrayList<Double> h = new ArrayList<Double>();	
+		for(int i = 0; i < graphe.getNodeCount();i++)
+		{
+			a.add(1.0);
+			h.add(1.0);
+		}
+		
+		ArrayList<Double> atemp = new ArrayList<Double>();
+		ArrayList<Double> htemp = new ArrayList<Double>();
+		
+		// Main loop
+		while(loop)
+		{
+			norma = 0;
+			normh = 0;
+			
+			atemp.clear();
+			htemp.clear();
+			for(int i = 0; i < graphe.getNodeCount();i++)
+			{
+				atemp.add(a.get(i));
+				htemp.add(h.get(i));
+			}
+			
+			for(int i = 0; i < graphe.getNodeCount();i++)
+			{
+				// Compute the authority value for node i
+				double NodeIn = graphe.getIncomingDegree(i);
+				a.set(i, a.get(i) + NodeIn);
+
+				// Compute the hub value for node i
+				double NodeOut = graphe.getOutgoingDegree(i);
+				h.set(i, h.get(i) + NodeOut);
+				
+				norma += a.get(i)*a.get(i);
+				normh += h.get(i)*h.get(i);
+			}
+
+			// Normalisation
+			for(int i = 0; i < graphe.getNodeCount();i++)
+			{
+				a.set(i, a.get(i)/Math.sqrt(norma));
+				h.set(i, h.get(i)/Math.sqrt(normh));
+			}
+
+			// Check authority convergence
+			if(s != 0)
+			{
+				loop = false;
+				for(int i = 0; i < graphe.getNodeCount();i++)
+				{
+					if(h.get(i) - htemp.get(i) > s)
+					{
+						loop = true;
+						break;
+					}
+				}
+			}
+
+			// Check loop iteration
+			if(c != 0)
+			{
+				iteration += 1;
+				if(iteration == c)
+					loop = false;
+			}
+		}
+		
+		return h;
 	}
 }
