@@ -1,6 +1,7 @@
 package fr.univavignon.graphcentr.g07.core.centrality;
 
-import fr.univavignon.graphcentr.g07.core.graphs.SpatialWeightedGraph;
+import fr.univavignon.graphcentr.g07.core.AbstractCentrality;
+import fr.univavignon.graphcentr.g07.core.graphs.SpatialGraph;
 
 /**
  * 
@@ -8,12 +9,7 @@ import fr.univavignon.graphcentr.g07.core.graphs.SpatialWeightedGraph;
  * 
  * @brief Used to compute centrality on spatial & weighted graph
  */
-public interface SpatialWeightedCentrality 
+public interface SpatialWeightedCentrality extends AbstractCentrality<SpatialGraph>
 {
-	/**
-	 * Evaluate given graph
-	 * @param inGraph Graph to evaluate
-	 * @return Centrality results
-	 */
-	public CentralityResult evaluate(SpatialWeightedGraph inGraph);
+	// Nothing to do
 }
