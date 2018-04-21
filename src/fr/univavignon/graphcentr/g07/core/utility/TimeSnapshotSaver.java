@@ -26,6 +26,7 @@ class TimeSnapshotSaver
 	public static void start()
 	{
 		startTime = System.nanoTime();
+		endTime = 0;
 		lastSnapshotTime = startTime;
 		snapshots.clear();
 	}

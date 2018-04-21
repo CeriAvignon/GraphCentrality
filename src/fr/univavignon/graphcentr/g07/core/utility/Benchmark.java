@@ -36,6 +36,7 @@ public class Benchmark
 		TimeSnapshotSaver.start();
 		snapshots.clear();
 		fullExecution = new BenchmarkSnapshot();
+		currentSnapshot = null;
 	}
 	
 	/**
@@ -75,7 +76,8 @@ public class Benchmark
 	 */
 	public static void addIteration()
 	{
-		snapshots.get(snapshots.size() - 1).iterationCount += 1;
+		if(snapshots.size() > 0)
+			snapshots.get(snapshots.size() - 1).iterationCount += 1;
 		fullExecution.iterationCount += 1;
 	}
 	
@@ -85,33 +87,36 @@ public class Benchmark
 	public static void printSnapshots()
 	{
 		System.out.println("--------------- Benchmark ---------------");
-		System.out.println("Snapshots :");
-		
-		int longestNameSize = PRINT_TABLE_FIRST_COLUMN.length();
-		for(BenchmarkSnapshot currentSnapshot : snapshots)
+		if(snapshots.size() > 0)
 		{
-			if(currentSnapshot.name.length() > longestNameSize)
-				longestNameSize = currentSnapshot.name.length();
-		}
+			System.out.println("Snapshots :");
 		
-		System.out.print(PRINT_TABLE_FIRST_COLUMN);
-		for(int i = 0; i < longestNameSize - PRINT_TABLE_FIRST_COLUMN.length(); i++)
-			System.out.print(" ");
-		System.out.print(" |");
-		
-		System.out.print(PRINT_TABLE_SECOND_COLUMN + "\t\t |");
-		System.out.println(PRINT_TABLE_THIRD_COLUMN);
-		
-		for(BenchmarkSnapshot currentSnapshot : snapshots)
-		{
-			System.out.print(currentSnapshot.name);
-			for(int i = 0; i < longestNameSize - currentSnapshot.name.length(); i++)
-				System.out.print(" ");
+			int longestNameSize = PRINT_TABLE_FIRST_COLUMN.length();
+			for(BenchmarkSnapshot currentSnapshot : snapshots)
+			{
+				if(currentSnapshot.name.length() > longestNameSize)
+					longestNameSize = currentSnapshot.name.length();
+			}
 			
-			System.out.println(" |" + TimeSnapshotSaver.toMilliseconds(currentSnapshot.time) + "ms\t |" + currentSnapshot.iterationCount);
+			System.out.print(PRINT_TABLE_FIRST_COLUMN);
+			for(int i = 0; i < longestNameSize - PRINT_TABLE_FIRST_COLUMN.length(); i++)
+				System.out.print(" ");
+			System.out.print(" |");
+			
+			System.out.print(PRINT_TABLE_SECOND_COLUMN + "\t\t |");
+			System.out.println(PRINT_TABLE_THIRD_COLUMN);
+			
+			for(BenchmarkSnapshot currentSnapshot : snapshots)
+			{
+				System.out.print(currentSnapshot.name);
+				for(int i = 0; i < longestNameSize - currentSnapshot.name.length(); i++)
+					System.out.print(" ");
+				
+				System.out.println(" |" + TimeSnapshotSaver.toMilliseconds(currentSnapshot.time) + "ms\t |" + currentSnapshot.iterationCount);
+			}
+			System.out.println("");
 		}
 		
-		System.out.println("");
 		System.out.println("Full execution time : "+TimeSnapshotSaver.toMilliseconds(fullExecution.time)+"ms");
 		System.out.println("Total iteration count : "+fullExecution.iterationCount);
 		
@@ -127,14 +132,17 @@ public class Benchmark
 		try (PrintWriter file = new PrintWriter(inFileName)) 
 		{
 			file.println("--------------- Benchmark ---------------");
-			file.println("Name Time(ms) Iteration_count");
-			
-			for(BenchmarkSnapshot currentSnapshot : snapshots)
+			if(snapshots.size() > 0)
 			{
-				file.println(currentSnapshot.name+" "+TimeSnapshotSaver.toMilliseconds(currentSnapshot.time)+" "+currentSnapshot.iterationCount);
+				file.println("Name Time(ms) Iteration_count");
+				
+				for(BenchmarkSnapshot currentSnapshot : snapshots)
+				{
+					file.println(currentSnapshot.name+" "+TimeSnapshotSaver.toMilliseconds(currentSnapshot.time)+" "+currentSnapshot.iterationCount);
+				}
+				
+				file.println("");
 			}
-			
-			file.println("");
 			file.println("Full execution time : "+TimeSnapshotSaver.toMilliseconds(fullExecution.time)+"ms");
 			file.println("Total iteration count : "+fullExecution.iterationCount);
 			
