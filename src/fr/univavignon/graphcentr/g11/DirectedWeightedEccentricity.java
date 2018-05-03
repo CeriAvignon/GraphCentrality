@@ -9,6 +9,7 @@ public class DirectedWeightedEccentricity implements DirectedWeightedCentrality 
 	@Override
 	public CentralityResult evaluate(DirectedWeightedGraph inGraph) {
 		// TODO Auto-generated method stub
+		// test
 		return null;
 	}
 
