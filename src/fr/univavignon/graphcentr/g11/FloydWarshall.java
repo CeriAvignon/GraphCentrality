@@ -23,7 +23,7 @@ public abstract class FloydWarshall {
 		/** n represents the number of node in the graph */
 		int n = inGraph.getNodeCount();
 		
-		/** dist the matrix that contains the shortest distances between all the nodes of the graph*/
+		/** dist[][] the matrix that contains the shortest distances between all the nodes of the graph*/
 		double[][] dist = new double[n][n];
 		
 		/** We convert the graph as an adjacency matrix*/
