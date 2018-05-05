@@ -36,7 +36,7 @@ public class WeightedEccentricity implements WeightedCentrality{
 		/** These nested loops are used to diagonally traverse the dist[][] 
 		 * matrix to avoid doing the same thing twice
 		 */
-		for(int i = 0; i < n-1; i++) {
+		for(int i = 0; i < n; i++) {
 			for(int j = i+1; j < n; j++) {
 				if(Cex[i] < dist[i][j]) {
 					Cex[i] = dist[i][j];
