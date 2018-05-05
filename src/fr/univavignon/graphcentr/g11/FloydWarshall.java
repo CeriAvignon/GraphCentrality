@@ -13,7 +13,7 @@ import fr.univavignon.graphcentr.g07.core.AbstractGraph;
 public abstract class FloydWarshall {
 	
 	/**
-	 * A static method to find shortest Distances between all pairs of nodes, negative edges allowed
+	 * static method to find shortest Distances between all pairs of nodes, negative edges allowed
 	 * @param inGraph Directed or undirected graph
 	 * @return matrix of the shortest distances
 	 */
