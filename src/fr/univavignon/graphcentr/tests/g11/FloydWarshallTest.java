@@ -13,9 +13,9 @@ import fr.univavignon.graphcentr.g11.FloydWarshall;
  * 
  */
 
-class FloydWarshallTest {
+public class FloydWarshallTest {
 
-	public static void execute()
+	static public void execute()
 	{
 		System.out.println("=============== FloydWarshall test ===============");
 		
