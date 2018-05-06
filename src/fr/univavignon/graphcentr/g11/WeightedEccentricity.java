@@ -6,7 +6,7 @@ import fr.univavignon.graphcentr.g07.core.graphs.WeightedGraph;
 
 /**
  * 
- * @author Djebablia Mustapha
+ * @author Lounissa Imane
  * 
  * @brief The Eccentricity class applied on Weighted Graph
  * 
