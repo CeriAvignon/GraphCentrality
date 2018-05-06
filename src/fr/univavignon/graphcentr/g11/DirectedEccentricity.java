@@ -27,7 +27,7 @@ public class DirectedEccentricity implements DirectedCentrality {
 			}
 			
 			for(int i = 0; i < n; i++) {
-				for(int j =1; j < n; j++) {
+				for(int j =0; j < n; j++) {
 					if(Cex[i] < dist[i][j]) {
 						Cex[i] = dist[i][j];
 					}
