@@ -4,22 +4,68 @@ import fr.univavignon.graphcentr.g07.core.centrality.CentralityResult;
 import fr.univavignon.graphcentr.g07.core.centrality.DirectedCentrality;
 import fr.univavignon.graphcentr.g07.core.graphs.DirectedGraph;
 
+//import java.util.*;
+
 import cern.colt.matrix.impl.*;
 import cern.colt.matrix.linalg.*;
 import cern.jet.math.*;
 
+/**
+* @author MENGUY Loïc 
+*
+* @brief Computes centrality using Katz Algorithm
+*/
+
 public class Katz implements DirectedCentrality
 {
+	private double alpha;
+	
+	//Constructor with alpha arg
+	public Katz(double alphaArg)
+	{
+		this.alpha = alphaArg;
+	}
+	
+	//Default constructor
+	public Katz()
+	{
+		this.alpha = 0.5;
+	}
+	
+	//Alpha getter
+	public double getAlpha()
+	{
+		return this.alpha;
+	}
+	
+	
+	//Alpha setter
+	public void setAlpha(double alphaArg)
+	{
+		this.alpha = alphaArg;
+	}
+	
+	
 	@Override
 	public CentralityResult evaluate(DirectedGraph inGraph)
 	{
-		CentralityResult result = new CentralityResult();
+		CentralityResult returnResult = new CentralityResult();
+		double[] katzResult = KatzAlgorithm(inGraph);
 		
-		//result.add(KatzAlgorithm(inGraph));
-		return result;
+		for(int i = 0; i<katzResult.length; i++)
+		{
+			returnResult.add(katzResult[i]);
+		}
+		return returnResult;
 	}
 	
-	private double[] KatzAlgorithm(DirectedGraph inGraph, float alpha)
+	
+	
+	/**
+	 * @param inGraph
+	 * @return Array containing each node's centrality
+	 */
+	private double[] KatzAlgorithm(DirectedGraph inGraph)
 	{
 		int n = inGraph.getNodeCount(); 														//Number of nodes in the graph
 		double[][] adjacencyMatrix = inGraph.toAdjacencyMatrix(); 								//Converting graph to adjacency matrix (to be able to use Colt functions)
@@ -45,25 +91,26 @@ public class Katz implements DirectedCentrality
 		DenseDoubleMatrix1D coltResult = new DenseDoubleMatrix1D(result); 						//Return vector using Colt needed type
 		
 		DenseDoubleMatrix2D coltInGraph = new DenseDoubleMatrix2D(adjacencyMatrix); 			//Creating a matrix using the Colt needed type
-		DenseDoubleMatrix2D coltIdentityMatrix = new DenseDoubleMatrix2D(identityMatrix);		//Indentity matric using Colt needed type
+		DenseDoubleMatrix2D coltIdentityMatrix1 = new DenseDoubleMatrix2D(identityMatrix);		//Indentity matric using Colt needed type (will be changed for computing)
+		DenseDoubleMatrix2D coltIdentityMatrix2 = new DenseDoubleMatrix2D(identityMatrix);		//Indentity matric using Colt needed type (will not be changed)
 		DenseDoubleMatrix2D coltTransposedMatrix = (DenseDoubleMatrix2D)coltInGraph.viewDice(); //Transposing Matrix
-		
-		coltTransposedMatrix.assign(Functions.mult(alpha));										//Multiplying all values in matrix by alpha.
-		coltTransposedMatrix = (DenseDoubleMatrix2D)coltIdentityMatrix.assign(coltTransposedMatrix, Functions.minus); // I - alpha*transposedMatrix
-		
+
+		coltTransposedMatrix.assign(Functions.mult(this.alpha));										//Multiplying all values in matrix by alpha.
+
+		coltTransposedMatrix = (DenseDoubleMatrix2D)coltIdentityMatrix1.assign(coltTransposedMatrix, Functions.minus); // I - alpha*transposedMatrix
+
 		Algebra varAlgebra = new Algebra(); //To be able to use inverse function
 		coltTransposedMatrix = (DenseDoubleMatrix2D)varAlgebra.inverse(coltTransposedMatrix);	//Inversing matrix
-		
-		coltTransposedMatrix = (DenseDoubleMatrix2D)coltIdentityMatrix.assign(coltIdentityMatrix, Functions.minus); // ((I - alpha*transposedMatrix)^-1) - I
-		
-		coltResult = (DenseDoubleMatrix1D)coltTransposedMatrix.zMult(coltResult, coltResult);	//Multiplying Matrix by vector fulfilled with 1
 
+		coltTransposedMatrix.assign(coltIdentityMatrix2, Functions.minus); // ((I - alpha*transposedMatrix)^-1) - I
+
+		coltResult = (DenseDoubleMatrix1D) varAlgebra.mult(coltTransposedMatrix, coltResult);	//Multiplying Matrix by vector fulfilled with 1
 		
 		//Normalization
 		// s computing
-		double s = Arithmetic.factorial(n);
+		double s = Arithmetic.factorial(n-1);
 		
-		s = s * Math.pow(alpha, n-1) * Math.exp(1/alpha);
+		s = s * Math.pow(this.alpha, n-1) * Math.exp(1/this.alpha);
 		
 		coltResult.toArray(result); //Converting colt format vector to array
 		
@@ -71,6 +118,17 @@ public class Katz implements DirectedCentrality
 		{
 			result[i] = result[i] / s;
 		}
+		
+		/*
+		//Converting double to Double
+		Double[] doubleArray = new Double[n];
+		for(int i = 0; i < n; i++)										
+		{
+			doubleArray[i] = result[i];
+		}
+		
+		ArrayList<Double> arrayResult = new ArrayList<Double>(Arrays.asList(doubleArray));
+		*/
 		
 		return result;
 		
