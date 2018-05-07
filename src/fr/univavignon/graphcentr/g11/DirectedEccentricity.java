@@ -14,7 +14,8 @@ import fr.univavignon.graphcentr.g07.core.graphs.DirectedWeightedGraph;
 public class DirectedEccentricity implements DirectedCentrality {
 	
 		@Override
-		public CentralityResult evaluate(DirectedGraph inGraph) {
+		public CentralityResult evaluate(DirectedGraph inGraph) 
+		{
 			CentralityResult result = new CentralityResult();
 			int n = inGraph.getNodeCount();
 			double Cex[] = new double[n];
