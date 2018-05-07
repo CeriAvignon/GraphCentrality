@@ -1,6 +1,8 @@
 package fr.univavignon.graphcentr.tests;
 
 import fr.univavignon.graphcentr.tests.g07.CoreTest;
+import fr.univavignon.graphcentr.tests.g11.WeightedEccentricityTest;
+import fr.univavignon.graphcentr.tests.g11.FloydWarshallTest;
 
 /**
  * 
@@ -19,5 +21,10 @@ public class Test
 		CoreTest.execute();
 		
 		// Tests on "centralitites"
+		
+		// g11 tests
+		FloydWarshallTest.execute();
+		WeightedEccentricityTest.execute();
+		
 	}
 }

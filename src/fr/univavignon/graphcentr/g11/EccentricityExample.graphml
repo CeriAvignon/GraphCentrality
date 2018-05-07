@@ -1,0 +1,30 @@
+<graphml>
+<key id="d1" for="node" attr.name="X" attr.type="double"> 0.0 </key>
+<key id="d2" for="edge" attr.name="weight" attr.type="double"/>
+<graph id="G" edgedefault="undirected">
+<node id="D"/>
+<node id="E"/>
+<node id="C"/>
+<node id="A"/>
+<node id="B"/>
+<edge id="e0" source="D" target="E">
+<data key="d2">4.0</data>
+</edge>
+<edge id="e1" source="D" target="C">
+<data key="d2">3.0</data>
+</edge>
+<edge id="e2" source="E" target="A">
+<data key="d2">3.0</data>
+</edge>
+<edge id="e3" source="C" target="A">
+<data key="d2">1.0</data>
+</edge>
+<edge id="e4" source="C" target="B">
+<data key="d2">4.0</data>
+</edge>
+<edge id="e5" source="A" target="B">
+<data key="d2">2.0</data>
+</edge>
+</graph>
+</graphml>
+
