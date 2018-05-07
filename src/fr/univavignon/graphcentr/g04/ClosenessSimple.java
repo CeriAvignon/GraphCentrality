@@ -5,6 +5,8 @@ import fr.univavignon.graphcentr.g07.core.centrality.CentralityResult;
 import fr.univavignon.graphcentr.g07.core.centrality.SimpleCentrality;
 import fr.univavignon.graphcentr.g07.core.graphs.SimpleGraph;
 
+import fr.univavignon.graphcentr.g11.FloydWarshall;
+
 /**
  * @author Agbektas Ahmet
  *
@@ -19,15 +21,17 @@ public class ClosenessSimple implements SimpleCentrality
 
 		double somme = 0;
 		int n = inGraph.getNodeCount();
-
+		
+		double distance[][]= FloydWarshall.findShortestDistances(inGraph);
+		
 		for (int i = 0; i < n; i++)
 		{
 			for (int j = 0; j < n; j++)
 			{
 				if (i != j)
 				{
-					/* La fonction dist va être implementée par le groupe 11 */
-					somme += dist(result.get(i), result.get(j));
+					
+					somme += distance[i][j];
 				}
 			}
 			result.add((n-1)/somme);

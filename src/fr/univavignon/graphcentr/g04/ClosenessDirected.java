@@ -5,6 +5,8 @@ import fr.univavignon.graphcentr.g07.core.centrality.CentralityResult;
 import fr.univavignon.graphcentr.g07.core.centrality.DirectedCentrality;
 import fr.univavignon.graphcentr.g07.core.graphs.DirectedGraph;
 
+import fr.univavignon.graphcentr.g11.FloydWarshall;
+
 /**
  * @author Agbektas Ahmet
  *
@@ -27,6 +29,8 @@ public class ClosenessDirected implements DirectedCentrality
 		double somme = 0;
 		int n = inGraph.getNodeCount();
 
+		double distance[][]= FloydWarshall.findShortestDistances(inGraph);	
+		
 		for (int i = 0; i < n; i++)
 		{
 			for (int j = 0; j < n; j++)
@@ -35,13 +39,11 @@ public class ClosenessDirected implements DirectedCentrality
 				{
 					if (orientation == "in")
 					{
-						/* La fonction dist va être implementée par le groupe 11 */
-						somme += dist(result.get(j), result.get(i));
+						somme += distance[j][i];
 					}
 					else
 					{
-						/* La fonction dist va être implementée par le groupe 11 */
-						somme += dist(result.get(i), result.get(j));
+						somme += distance[i][j];
 					}
 				}
 			}
