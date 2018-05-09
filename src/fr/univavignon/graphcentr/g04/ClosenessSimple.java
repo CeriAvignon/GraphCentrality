@@ -30,8 +30,7 @@ public class ClosenessSimple implements SimpleCentrality
             {
                 if (i != j)
                 {
-                    
-                    somme += distance[i][j];
+                	somme += distance[i][j];
                 }
             }
             
