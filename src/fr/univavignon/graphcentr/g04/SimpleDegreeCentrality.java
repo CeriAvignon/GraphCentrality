@@ -25,7 +25,7 @@ public class SimpleDegreeCentrality implements SimpleCentrality{
         {
         	Node node = inGraph.getNodeAt(i);
         	
-        	result.add((double)(inGraph.getNodeDegree(node) / n - 1));
+        	result.add(inGraph.getNodeDegree(node) / (double)(n - 1));
         }
         
         return result;
