@@ -2,12 +2,16 @@ package fr.univavignon.graphcentr.g02;
 
 import fr.univavignon.graphcentr.g07.core.centrality.CentralityResult;
 import fr.univavignon.graphcentr.g07.core.graphs.DirectedGraph;
+import fr.univavignon.graphcentr.g07.core.readers.*;
+import fr.univavignon.graphcentr.g07.core.utility.Benchmark;
+
 
 public class KatzTest 
 {
 	public static void main(String[] args)
 	{
-		DirectedGraph testGraph = new DirectedGraph();
+		// Graph from example
+		/*DirectedGraph testGraph = new DirectedGraph();
 		
 		testGraph.createNode();
 		testGraph.createNode();
@@ -24,10 +28,22 @@ public class KatzTest
 		testGraph.createLink(2,3);
 		
 		testGraph.createLink(3,1);
+		*/
 		
-		Katz katzCentrality = new Katz(0.5);
+		Benchmark.start();
+		Benchmark.addSnapshot("Graph Loading");
 		
+		DirectedGraph testGraph = new DirectedGraph();
+		GraphMLReader reader = new GraphMLReader();
+		reader.updateFromFile("C:\\Users\\Loic\\git\\GraphCentrality\\src\\fr\\univavignon\\graphcentr\\g02\\n=10_m=2.graphml", testGraph);
+				
+		Benchmark.addSnapshot("Centrality Computing");
+		Katz katzCentrality = new Katz(0.5);	
 		CentralityResult katzResult = katzCentrality.evaluate(testGraph);
+		
+		Benchmark.stop();
+		Benchmark.printSnapshots();
+		
 		
 
 		for(int i = 0; i < katzResult.size(); i++)
