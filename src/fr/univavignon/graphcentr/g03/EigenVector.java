@@ -3,10 +3,9 @@ package fr.univavignon.graphcentr.g03;
 import fr.univavignon.graphcentr.g07.core.graphs.SimpleGraph;
 import fr.univavignon.graphcentr.g07.core.centrality.*;
 
-import cern.colt.matrix.DoubleMatrix2D;
+
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.impl.DenseDoubleMatrix2D;
-import cern.colt.matrix.linalg.EigenvalueDecomposition;
 import cern.colt.matrix.DoubleFactory1D;
 import cern.colt.matrix.linalg.Algebra;
 import cern.jet.math.Functions;
