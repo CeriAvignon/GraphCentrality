@@ -6,7 +6,7 @@ package fr.univavignon.graphcentr.g04;
 import fr.univavignon.graphcentr.g07.core.centrality.CentralityResult;
 import fr.univavignon.graphcentr.g07.core.centrality.SimpleCentrality;
 import fr.univavignon.graphcentr.g07.core.graphs.SimpleGraph;
-import fr.univavignon.graphcentr.g07.core.AbstractSimpleGraph;
+import fr.univavignon.graphcentr.g07.core.Node;
 
 /**
  * @author Abidi Hamza
