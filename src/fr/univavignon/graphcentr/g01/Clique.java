@@ -15,6 +15,7 @@ import fr.univavignon.graphcentr.g07.core.graphs.SimpleGraph;
 
 
 public class Clique  implements SimpleCentrality{
+	
 	@Override
 	public CentralityResult evaluate(SimpleGraph inGraph) {
 		CentralityResult centraliteNoeud = new CentralityResult();
