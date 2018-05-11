@@ -69,6 +69,7 @@ public class SpatialWeightedGraph extends AbstractSimpleGraph<SpatialNode, Weigh
 	{
 		WeightedLink createdLink = super.createLink(inSourceNode, inDestinationNode);
 		createdLink.setWeight(inWeight);
+		lastBackLink.setWeight(inWeight);
 		return createdLink;
 	}
 	
@@ -83,6 +84,7 @@ public class SpatialWeightedGraph extends AbstractSimpleGraph<SpatialNode, Weigh
 	{
 		WeightedLink createdLink = super.createLink(inSourceNodeIndex, inDestinationNodeIndex);
 		createdLink.setWeight(inWeight);
+		lastBackLink.setWeight(inWeight);
 		return createdLink;
 	}
 	
