@@ -16,7 +16,7 @@ import fr.univavignon.graphcentr.g11.WeightedEccentricity;
 
 public class WeightedEccentricityTest {
 
-	public static void execute()
+	public static void main(String[] args)
 	{
 		System.out.println("=============== Weighted Eccentricity test ===============");
 		
@@ -29,11 +29,11 @@ public class WeightedEccentricityTest {
 		Node node4 = graph.createNode();
 		
 		graph.createLink(node0, node1, 4);
-		graph.createLink(node0, node2, 3);
+		graph.createLink(node0, node2, 2);
 		graph.createLink(node1, node3, 3);
-		graph.createLink(node2, node3, 1);
-		graph.createLink(node2, node4, 4);
-		graph.createLink(node3, node4, 2);
+		graph.createLink(node1, node2, 1);
+		graph.createLink(node2, node4, 3);
+		graph.createLink(node3, node4, 4);
 		
 		WeightedEccentricity centrality = new WeightedEccentricity();
 
