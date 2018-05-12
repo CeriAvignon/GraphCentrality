@@ -1,6 +1,5 @@
 package fr.univavignon.graphcentr.g11;
 import fr.univavignon.graphcentr.g07.core.centrality.CentralityResult;
-import fr.univavignon.graphcentr.g07.core.centrality.DirectedCentrality;
 import fr.univavignon.graphcentr.g07.core.centrality.DirectedWeightedCentrality;
 import fr.univavignon.graphcentr.g07.core.graphs.DirectedWeightedGraph;
 /**
