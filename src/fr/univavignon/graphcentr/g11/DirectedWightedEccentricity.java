@@ -1,9 +1,8 @@
 package fr.univavignon.graphcentr.g11;
 import fr.univavignon.graphcentr.g07.core.centrality.CentralityResult;
 import fr.univavignon.graphcentr.g07.core.centrality.DirectedCentrality;
-import fr.univavignon.graphcentr.g07.core.graphs.DirectedGraph;
+import fr.univavignon.graphcentr.g07.core.centrality.DirectedWeightedCentrality;
 import fr.univavignon.graphcentr.g07.core.graphs.DirectedWeightedGraph;
-
 /**
  * 
  * @author KHELAFI Abdelhamid
@@ -11,10 +10,10 @@ import fr.univavignon.graphcentr.g07.core.graphs.DirectedWeightedGraph;
  *
 
  */
-public class DirectedEccentricity implements DirectedCentrality {
+public class DirectedWightedEccentricity implements DirectedWeightedCentrality {
 	
 		@Override
-		public CentralityResult evaluate(DirectedGraph inGraph) {
+		public CentralityResult evaluate(DirectedWeightedGraph inGraph) {
 			CentralityResult result = new CentralityResult();
 			int n = inGraph.getNodeCount();
 			double Cex[] = new double[n];
