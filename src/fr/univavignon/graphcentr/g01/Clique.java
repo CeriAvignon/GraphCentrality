@@ -13,7 +13,11 @@ import fr.univavignon.graphcentr.g07.core.centrality.CentralityResult;
 import fr.univavignon.graphcentr.g07.core.centrality.SimpleCentrality;
 import fr.univavignon.graphcentr.g07.core.graphs.SimpleGraph;
 
-
+/**
+ * Centrality of Cliques
+ * @author Colin Riviere & Loris Benoit
+ *
+ */
 public class Clique  implements SimpleCentrality{
 	
 	@Override
@@ -32,6 +36,12 @@ public class Clique  implements SimpleCentrality{
 		return centraliteNoeud;
 	}
 	
+	
+	/**
+	 * Use Bouda's algorithm for find clique
+	 * @param inGraph
+	 * @return List of clique
+	 */
 	private List<List<Integer>> RechercheCliqueBouda( SimpleGraph inGraph ) {
 		List<List<Integer>> listeClique = new ArrayList<List<Integer>>();
 		int k = 2;
@@ -58,7 +68,11 @@ public class Clique  implements SimpleCentrality{
 		
 	}
 	
-	
+	/**
+	 * Generate all combination of 2 in KClique
+	 * @param kClique
+	 * @return combination
+	 */
 	private List<Pair<List<Integer>,List<Integer>>> combinaisions(List<List<Integer>> kClique){
 		List<Pair<List<Integer>,List<Integer>>> sortie = new ArrayList<Pair<List<Integer>,List<Integer>>>();
 		for(int i=0;i<kClique.size()-1;i++) {
@@ -70,6 +84,12 @@ public class Clique  implements SimpleCentrality{
 		return sortie;
 	}
 	
+	/**
+	 * Symmetrical difference of u and v
+	 * @param u
+	 * @param v
+	 * @return Symmetrical difference
+	 */
 	private List<Integer> diffSyme(List<Integer> u, List<Integer> v){
 		List<Integer> same = new ArrayList<Integer>(u);
 		same.retainAll(v);
@@ -79,6 +99,13 @@ public class Clique  implements SimpleCentrality{
 		return diff;
 	}
 	
+	
+	/**
+	 * Union of u and v
+	 * @param u
+	 * @param v
+	 * @return Union
+	 */
 	private List<Integer> union(List<Integer> u, List<Integer> v){
 		Set<Integer> s = new HashSet<Integer>();
 		s.addAll(u);
@@ -86,6 +113,12 @@ public class Clique  implements SimpleCentrality{
 		return new ArrayList<Integer>(s);
 	}
 	
+	
+	/**
+	 * Return all Link of the graph as a list of list
+	 * @param inGraph
+	 * @return List of Clique
+	 */
 	private List<List<Integer>> getAllLink(SimpleGraph inGraph){
 		List<List<Integer>> kClique = new ArrayList<List<Integer>>();
 		Set<List<Integer>> kCliqueTmp = new HashSet<List<Integer>>();
@@ -103,6 +136,12 @@ public class Clique  implements SimpleCentrality{
 		return kClique;
 	}
 	
+	
+	/**
+	 * Use Recursive's algorithm for find clique
+	 * @param inGraph
+	 * @return List of cliques
+	 */
 	public List<List<Integer>> rechercheCliqueRecursive(SimpleGraph inGraph){
 		List<List<Integer>> listeClique = new ArrayList<List<Integer>>();
 		List<Integer> NoeudUse = new ArrayList<Integer>();
@@ -121,6 +160,14 @@ public class Clique  implements SimpleCentrality{
 		return listeClique;
 	}
 	
+	
+	/** 
+	 * Function recursive of of recursive's algorithm
+	 * @param inGraph
+	 * @param listeClique
+	 * @param uVoisin
+	 * @param cliqueTest
+	 */
 	private void rechercheCliqueRec(SimpleGraph inGraph, List<List<Integer>> listeClique, List<Integer> uVoisin, List<Integer> cliqueTest) {
 		
 		if( cliqueTest.size() >= 3 ) {
@@ -148,6 +195,13 @@ public class Clique  implements SimpleCentrality{
 		}
 	}
 	
+
+	/**
+	 * List of neighbour of u
+	 * @param inGraph
+	 * @param u
+	 * @return List of neighbour
+	 */
 	public List<Integer> getVoisins(SimpleGraph inGraph, int u){
 		List<Integer> Voisins = new ArrayList<Integer>();
 		for (Link l : inGraph.getNodeLinks(inGraph.getNodeAt(u))) {
