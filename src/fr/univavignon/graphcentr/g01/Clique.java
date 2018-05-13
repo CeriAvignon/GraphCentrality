@@ -15,7 +15,7 @@ import fr.univavignon.graphcentr.g07.core.graphs.SimpleGraph;
 
 /**
  * Centrality of Cliques
- * @author Colin Riviere & Loris Benoit
+ * @author Colin Riviere , Loris Benoit
  *
  */
 public class Clique  implements SimpleCentrality{

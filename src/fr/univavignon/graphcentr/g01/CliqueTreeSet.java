@@ -16,7 +16,7 @@ import fr.univavignon.graphcentr.g07.core.graphs.SimpleGraph;
 
 /**
  * Centrality of Cliques with TreeSet
- * @author Colin Riviere & Loris Benoit
+ * @author Colin Riviere, Loris Benoit
  *
  */
 public class CliqueTreeSet implements SimpleCentrality{
