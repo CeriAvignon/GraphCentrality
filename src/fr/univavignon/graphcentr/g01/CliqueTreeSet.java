@@ -28,7 +28,7 @@ public class CliqueTreeSet implements SimpleCentrality{
 		for(Node u : inGraph.getNodes()) {
 			centraliteNoeud.add(0.0);
 		}
-		TreeSet<TreeSet<Integer>> listeClique = rechercheCliqueBouda(inGraph);
+		TreeSet<TreeSet<Integer>> listeClique = rechercheCliqueRecursive(inGraph);
 		for( TreeSet<Integer> clique : listeClique ) {
 			for( int node : clique ) {
 				centraliteNoeud.set(node, (centraliteNoeud.get(node))+1);

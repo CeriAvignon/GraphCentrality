@@ -12,7 +12,7 @@ import fr.univavignon.graphcentr.g07.core.graphs.SimpleGraph;
 
 
 /**
- * Centrality of Leverage
+ * Centrality of Leverage Simple Graph
  * @author Riviere Colin, Benoit Loris
  *
  */
