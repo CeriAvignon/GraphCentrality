@@ -3,6 +3,7 @@ package fr.univavignon.graphcentr.g01;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -27,13 +28,12 @@ public class CliqueTreeSet implements SimpleCentrality{
 		for(Node u : inGraph.getNodes()) {
 			centraliteNoeud.add(0.0);
 		}
-		List<TreeSet<Integer>> listeClique = rechercheCliqueRecursive(inGraph);
+		TreeSet<TreeSet<Integer>> listeClique = rechercheCliqueBouda(inGraph);
 		for( TreeSet<Integer> clique : listeClique ) {
 			for( int node : clique ) {
 				centraliteNoeud.set(node, (centraliteNoeud.get(node))+1);
 			}
 		}
-		
 		return centraliteNoeud;
 	}
 	
@@ -43,19 +43,21 @@ public class CliqueTreeSet implements SimpleCentrality{
 	 * @param inGraph
 	 * @return List of clique
 	 */
-	private List<TreeSet<Integer>> RechercheCliqueBouda( SimpleGraph inGraph ) {
-		List<TreeSet<Integer>> listeClique = new ArrayList<TreeSet<Integer>>();
+	private TreeSet<TreeSet<Integer>> rechercheCliqueBouda( SimpleGraph inGraph ) {
+		TreeSet<TreeSet<Integer>> listeClique = new TreeSet<TreeSet<Integer>>(new CompareTreeSet());
 		int k = 2;
-		List<TreeSet<Integer>> kClique  = getAllLink(inGraph);
-	
+		TreeSet<TreeSet<Integer>> kClique  = getAllLink(inGraph);
+		
 		
 		while (!kClique.isEmpty()){
+			
 			if (k != 2) {
 				listeClique.addAll(kClique);
 			}
-			Set<TreeSet<Integer>> cliques1 = new HashSet<TreeSet<Integer>>();
+			TreeSet<TreeSet<Integer>> cliques1 = new TreeSet<TreeSet<Integer>>(new CompareTreeSet());
 			
 			for(Pair<TreeSet<Integer>, TreeSet<Integer>> cliq : combinaisions(kClique)) {
+				
 				List<Integer> diff = diffSyme(cliq.first, cliq.second);
 				if ( diff.size() == 2 && inGraph.isAdjacentTo(diff.get(0), diff.get(1))) {
 					cliques1.add(union(cliq.first, cliq.second));
@@ -75,11 +77,20 @@ public class CliqueTreeSet implements SimpleCentrality{
 	 * @param kClique
 	 * @return combination
 	 */
-	private List<Pair<TreeSet<Integer>,TreeSet<Integer>>> combinaisions(List<TreeSet<Integer>> kClique){
+	private List<Pair<TreeSet<Integer>,TreeSet<Integer>>> combinaisions(TreeSet<TreeSet<Integer>> kClique){
 		List<Pair<TreeSet<Integer>,TreeSet<Integer>>> sortie = new ArrayList<Pair<TreeSet<Integer>,TreeSet<Integer>>>();
-		for(int i=0;i<kClique.size()-1;i++) {
-			for(int j=i+1;j<kClique.size();j++) {
-				sortie.add(new Pair<TreeSet<Integer>,TreeSet<Integer>>(kClique.get(i),kClique.get(j)));
+		
+		Iterator<TreeSet<Integer>> it1 = kClique.iterator();
+		
+		
+		
+		while(it1.hasNext()) {
+			
+			TreeSet<Integer> n1 = it1.next();
+			Iterator<TreeSet<Integer>> it2 = kClique.iterator();
+			while(it2.next() != n1); // No method for copy Iterator need to go at the good indexs
+			while(it2.hasNext()) {
+				sortie.add(new Pair<TreeSet<Integer>,TreeSet<Integer>>(n1,it2.next()));
 			}
 		}
 		
@@ -119,19 +130,17 @@ public class CliqueTreeSet implements SimpleCentrality{
 	 * @param inGraph
 	 * @return List of Clique
 	 */
-	private List<TreeSet<Integer>> getAllLink(SimpleGraph inGraph){
-		List<TreeSet<Integer>> kClique = new ArrayList<TreeSet<Integer>>();
-		Set<TreeSet<Integer>> kCliqueTmp = new HashSet<TreeSet<Integer>>();
+	private TreeSet<TreeSet<Integer>> getAllLink(SimpleGraph inGraph){
+		TreeSet<TreeSet<Integer>> kClique = new TreeSet<TreeSet<Integer>>(new CompareTreeSet());
 		for(int i =0; i < inGraph.getNodeCount();i++) {
 			List<Link> listeLinkNoeud = inGraph.getNodeLinks(inGraph.getNodeAt(i));
 			for (int j=0 ; j< listeLinkNoeud.size();j++) {
 				TreeSet<Integer> tempo = new TreeSet<Integer>();
 				tempo.add(listeLinkNoeud.get(j).getDestinationIdentifier());
 				tempo.add(listeLinkNoeud.get(j).getSourceIdentifier());
-				kCliqueTmp.add(tempo);
+				kClique.add(tempo);
 			}
 		}
-		kClique.addAll(kCliqueTmp);
 		return kClique;
 	}
 	
@@ -141,8 +150,8 @@ public class CliqueTreeSet implements SimpleCentrality{
 	 * @param inGraph
 	 * @return List of cliques
 	 */
-	public List<TreeSet<Integer>> rechercheCliqueRecursive(SimpleGraph inGraph){
-		List<TreeSet<Integer>> listeClique = new ArrayList<TreeSet<Integer>>();
+	public TreeSet<TreeSet<Integer>> rechercheCliqueRecursive(SimpleGraph inGraph){
+		TreeSet<TreeSet<Integer>> listeClique = new TreeSet<TreeSet<Integer>>(new CompareTreeSet());
 		TreeSet<Integer> NoeudUse = new TreeSet<Integer>();
 		for(Node uN : inGraph.getNodes()) {
 			int u = uN.getIdentifier();
@@ -166,13 +175,11 @@ public class CliqueTreeSet implements SimpleCentrality{
 	 * @param uVoisin
 	 * @param cliqueTest
 	 */
-	private void rechercheCliqueRec(SimpleGraph inGraph, List<TreeSet<Integer>> listeClique, TreeSet<Integer> uVoisin, TreeSet<Integer> cliqueTest) {
+	private void rechercheCliqueRec(SimpleGraph inGraph, TreeSet<TreeSet<Integer>> listeClique, TreeSet<Integer> uVoisin, TreeSet<Integer> cliqueTest) {
 		
 		if( cliqueTest.size() >= 3 ) {
 			TreeSet<Integer> toAdd = new TreeSet<Integer>(cliqueTest);
-			if( !listeClique.contains(toAdd) ) {
-				listeClique.add(toAdd);
-			}
+			listeClique.add(toAdd);
 		}
 	
 		for(int w : uVoisin ) {
