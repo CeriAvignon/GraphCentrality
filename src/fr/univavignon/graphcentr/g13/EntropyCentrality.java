@@ -53,14 +53,31 @@ public class EntropyCentrality implements SimpleCentrality
 		 }
 	 }
 	
-	public int tau(int a)
+	public int tau(SimpleGraph inGraph , int a)
 	{
-		return 1;
+		if( inGraph.getNodeDegree(a) == 0  )
+		{
+			return 0;
+		}
+		else
+		{
+			double[][] matrice = inGraph.toAdjacencyMatrix();
+			return ((int)matrice[a][a+1]/inGraph.getNodeDegree(a));
+		}
 	}
 	
-	public int tau2(int a)
+	public int sigma(SimpleGraph inGraph , int a)
 	{
-		return 1;
+		if( inGraph.getNodeDegree(a) == 0  )
+		{
+			return 1;
+		}
+		else
+		{
+			double[][] matrice = inGraph.toAdjacencyMatrix();
+			
+			return ((int)matrice[a][a]/inGraph.getNodeDegree(a));
+		}
 	}
 	
 	public int calculProba(SimpleGraph inGraph,int i,int j)
@@ -70,22 +87,31 @@ public class EntropyCentrality implements SimpleCentrality
 		
 		if(i != j)
 		{
-				ArrayList res = new ArrayList();
+				ArrayList[] res = new ArrayList[inGraph.getNodeCount()];
 				ArrayList parcours = new ArrayList();
 				
-				ElemPath(inGraph,i,j,parcours,res);
-					
+				ElemPath(inGraph,i,j,parcours,res,i);
+				
+				int rsize=0;
+				for (int a=0; a<inGraph.getNodeCount(); a++)
+				{
+					if (!res[a].isEmpty())
+						rsize++;
+					else
+						break;
+				}
+				
 				int k=0;
-				for( k=0 ; k<res.size(); k++)
+				for( k=0 ; k<rsize; k++)
 				{
 					int y=1;
 					int t=1;
-					for(t=1;t<res.get(1).size()-1;t++)
+					for(t=1;t<res[1].size()-1;t++)
 					{
-						b=tau(res.get(k).get(t));
+						b=tau(inGraph,(int)res[k].get(t));
 						y=y*b;
 					}
-					y=y*tau2(j);
+					y=y*sigma(inGraph,j);
 					z=z+y;
 				}
 		}
