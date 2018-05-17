@@ -38,7 +38,7 @@ public class Clique  implements SimpleCentrality{
 	
 	
 	/**
-	 * Use Bouda's algorithm for find clique
+	 * Use Bouda's algorithm in order to find clique
 	 * @param inGraph
 	 * @return List of clique
 	 */
@@ -85,7 +85,7 @@ public class Clique  implements SimpleCentrality{
 	}
 	
 	/**
-	 * Symmetrical difference of u and v
+	 * Symmetrical difference between u and v
 	 * @param u
 	 * @param v
 	 * @return Symmetrical difference
@@ -101,7 +101,7 @@ public class Clique  implements SimpleCentrality{
 	
 	
 	/**
-	 * Union of u and v
+	 * Union between u and v
 	 * @param u
 	 * @param v
 	 * @return Union
@@ -115,7 +115,7 @@ public class Clique  implements SimpleCentrality{
 	
 	
 	/**
-	 * Return all Link of the graph as a list of list
+	 * Return all Link of the graph as a 2 dimension list
 	 * @param inGraph
 	 * @return List of Clique
 	 */
@@ -138,7 +138,7 @@ public class Clique  implements SimpleCentrality{
 	
 	
 	/**
-	 * Use Recursive's algorithm for find clique
+	 * Use Recursive's algorithm in order to find clique
 	 * @param inGraph
 	 * @return List of cliques
 	 */
@@ -162,7 +162,7 @@ public class Clique  implements SimpleCentrality{
 	
 	
 	/** 
-	 * Function recursive of of recursive's algorithm
+	 * Function recursive of recursive's algorithm
 	 * @param inGraph
 	 * @param listeClique
 	 * @param uVoisin
@@ -197,10 +197,10 @@ public class Clique  implements SimpleCentrality{
 	
 
 	/**
-	 * List of neighbour of u
+	 * List of neighbours of u
 	 * @param inGraph
 	 * @param u
-	 * @return List of neighbour
+	 * @return List of neighbours
 	 */
 	public List<Integer> getVoisins(SimpleGraph inGraph, int u){
 		List<Integer> Voisins = new ArrayList<Integer>();
