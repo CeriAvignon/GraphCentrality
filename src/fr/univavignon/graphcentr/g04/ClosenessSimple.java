@@ -8,6 +8,7 @@ import fr.univavignon.graphcentr.g11.FloydWarshall;
 
 /**
  * @author Agbektas Ahmet
+ * 
  */
 
 public class ClosenessSimple implements SimpleCentrality
@@ -32,11 +33,9 @@ public class ClosenessSimple implements SimpleCentrality
                 {
                 	somme += distance[i][j];
                 }
-            }
-            
+            }   
             result.add((n-1)/somme);
         }
-
         return result;
     }
 }

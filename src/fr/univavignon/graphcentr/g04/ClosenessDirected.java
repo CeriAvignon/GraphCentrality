@@ -8,17 +8,37 @@ import fr.univavignon.graphcentr.g11.FloydWarshall;
 
 /**
  * @author Agbektas Ahmet
+ * 
  */
 
 public class ClosenessDirected implements DirectedCentrality
 {
-	private String orientation;
+	/**
+	 * For incoming closeness
+	 */
+	public static String IN = "IN";
 	
+	/**
+	 * For outgoing closeness
+	 */
+	public static String OUT = "OUT";
+	
+	/**
+	 * By default it's IN
+	 */
+	public String orientation = IN;
+	
+	/**
+	 * @param o : IN or OUT
+	 */
 	public void setOrientation(String o)
 	{
 		orientation = o;
 	}
 	
+	/**
+	 * @return Return the variable 'orientation' which is either 'in' or 'out'
+	 */
 	public String getOrientation()
 	{
 		return orientation;
@@ -42,14 +62,14 @@ public class ClosenessDirected implements DirectedCentrality
             {
                 if (i != j)
                 {
-                    if (getOrientation() == "in")
+                    if (getOrientation() == IN)
                     {
                         if (distance[j][i] != Double.MAX_VALUE)
                         {
                             somme += distance[j][i];
                         }
                     }
-                    else
+                    else if (getOrientation() == OUT)
                     {
                         if (distance[i][j] != Double.MAX_VALUE)
                         {
@@ -68,7 +88,6 @@ public class ClosenessDirected implements DirectedCentrality
                 result.add((n-1)/somme);
             }
         }
-
         return result;
     }
 }
