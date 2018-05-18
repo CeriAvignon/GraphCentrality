@@ -12,7 +12,7 @@ import fr.univavignon.graphcentr.g07.core.Node;
  * @author Abidi Hamza
  *
  */
-public class SimpleDegreeCentrality implements SimpleCentrality{
+public class SimpleDegreeCentrality implements SimpleCentrality  {
 
 	@Override
     public CentralityResult evaluate(SimpleGraph inGraph)
@@ -24,7 +24,6 @@ public class SimpleDegreeCentrality implements SimpleCentrality{
         for (int i = 0; i < n; i++)
         {
         	Node node = inGraph.getNodeAt(i);
-        	
         	result.add(inGraph.getNodeDegree(node) / (double)(n - 1));
         }
         
