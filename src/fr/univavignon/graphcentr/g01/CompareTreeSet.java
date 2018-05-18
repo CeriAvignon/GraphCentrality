@@ -4,8 +4,8 @@ import java.util.Iterator;
 import java.util.TreeSet;
 
 /**
- * Comparator for comparate two TreeSet<Integer>
- * @author ColinRiviere
+ * Comparator in order to comparate two TreeSet<Integer>
+ * @author Colin Riviere
  *
  */
 public class CompareTreeSet implements Comparator<TreeSet<Integer>> {

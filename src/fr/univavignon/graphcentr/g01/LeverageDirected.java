@@ -11,7 +11,7 @@ import fr.univavignon.graphcentr.g07.core.graphs.DirectedGraph;
 
 
 /**
- * Centrality of Leverage Directed Graph
+ * Centrality of Leverage for Directed Graph
  * @author Riviere Colin, Benoit Loris
  *
  */

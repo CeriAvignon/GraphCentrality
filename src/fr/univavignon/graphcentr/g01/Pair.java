@@ -22,12 +22,20 @@ public class Pair<Type1 , Type2> {
 	
 	
 	/**
+	 * Constructor with 2 param
 	 * @param firstElement
 	 * @param SecondElement
 	 */
 	public Pair(Type1 firstElement, Type2 SecondElement) {
 		first = firstElement;
 		second = SecondElement;
+	}
+	
+	/**
+	 * Constructor with no param
+	 */
+	public Pair() {
+		
 	}
 	
 	public String toString() {

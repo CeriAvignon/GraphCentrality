@@ -19,7 +19,17 @@ import fr.univavignon.graphcentr.g07.core.graphs.SimpleGraph;
  *
  */
 public class Clique  implements SimpleCentrality{
+	/**
+	 * First iterator for the function "combinaisions"
+	 */
+	private int iCombi;
 	
+	/**
+	 * Second iterator for the function "combinaisions"
+	 */
+	private int jCombi;
+	
+	@SuppressWarnings("unused")
 	@Override
 	public CentralityResult evaluate(SimpleGraph inGraph) {
 		CentralityResult centraliteNoeud = new CentralityResult();
@@ -38,11 +48,51 @@ public class Clique  implements SimpleCentrality{
 	
 	
 	/**
-	 * Use Bouda's algorithm in order to find clique
+	 * Use Bouda's algorithm in order to find clique with the algorithm which don't stack combination in an array
 	 * @param inGraph
 	 * @return List of clique
 	 */
-	private List<List<Integer>> RechercheCliqueBouda( SimpleGraph inGraph ) {
+	@SuppressWarnings("unused")
+	private List<List<Integer>> rechercheCliqueBouda( SimpleGraph inGraph ) {
+		List<List<Integer>> listeClique = new ArrayList<List<Integer>>();
+		int k = 2;
+		List<List<Integer>> kClique = getAllLink(inGraph);
+		
+		
+		while (!kClique.isEmpty()){
+			if (k != 2) {
+				listeClique.addAll(kClique);
+			}
+			Set<List<Integer>> cliques1 = new HashSet<List<Integer>>();
+			iCombi = 0;
+			jCombi = 1;
+			Pair<List<Integer>,List<Integer>> cliq = combinaisions(kClique);
+			while(cliq != null) {
+				
+				List<Integer> diff = diffSyme(cliq.first, cliq.second);
+				if ( diff.size() == 2 && inGraph.isAdjacentTo(diff.get(0), diff.get(1))) {
+					cliques1.add(union(cliq.first, cliq.second));
+				}
+				cliq = combinaisions(kClique);
+				
+			}
+			kClique.clear();
+			kClique.addAll(cliques1);
+			k++;
+		}
+		return listeClique;
+		
+	}
+	
+	
+	/**
+	 * Use Bouda's algorithm in order to find clique
+	 * Unappreciated
+	 * @param inGraph
+	 * @return List of clique
+	 */
+	@SuppressWarnings("unused")
+	private List<List<Integer>> rechercheCliqueBoudaWithTab( SimpleGraph inGraph ) {
 		List<List<Integer>> listeClique = new ArrayList<List<Integer>>();
 		int k = 2;
 		List<List<Integer>> kClique = getAllLink(inGraph);
@@ -54,7 +104,7 @@ public class Clique  implements SimpleCentrality{
 			}
 			Set<List<Integer>> cliques1 = new HashSet<List<Integer>>();
 			
-			for(Pair<List<Integer>, List<Integer>> cliq : combinaisions(kClique)) {
+			for(Pair<List<Integer>, List<Integer>> cliq : combinaisionsWithTab(kClique)) {
 				List<Integer> diff = diffSyme(cliq.first, cliq.second);
 				if ( diff.size() == 2 && inGraph.isAdjacentTo(diff.get(0), diff.get(1))) {
 					cliques1.add(union(cliq.first, cliq.second));
@@ -67,13 +117,39 @@ public class Clique  implements SimpleCentrality{
 		return listeClique;
 		
 	}
+		
+	
 	
 	/**
-	 * Generate all combination of 2 in KClique
+	 * Generate all combination of 2 in KClique.
+	 * Send the next combination when called.
+	 * Return null if there is no more combination
 	 * @param kClique
 	 * @return combination
 	 */
-	private List<Pair<List<Integer>,List<Integer>>> combinaisions(List<List<Integer>> kClique){
+	private Pair<List<Integer>,List<Integer>> combinaisions(List<List<Integer>> kClique){
+		if ( iCombi == kClique.size()-1) return null;
+		
+		Pair<List<Integer>,List<Integer>> sortie= new Pair<List<Integer>,List<Integer>>(kClique.get(iCombi), kClique.get(jCombi));
+		
+		jCombi++;
+		if (jCombi == kClique.size()) {
+			iCombi++;
+			jCombi = iCombi+1; 
+		}
+		
+		return sortie;
+	}
+	
+	
+	
+	/**
+	 * Generate all combination of 2 in KClique
+	 * Unappreciated
+	 * @param kClique
+	 * @return combination
+	 */
+	private List<Pair<List<Integer>,List<Integer>>> combinaisionsWithTab(List<List<Integer>> kClique){
 		List<Pair<List<Integer>,List<Integer>>> sortie = new ArrayList<Pair<List<Integer>,List<Integer>>>();
 		for(int i=0;i<kClique.size()-1;i++) {
 			for(int j=i+1;j<kClique.size();j++) {
@@ -83,6 +159,9 @@ public class Clique  implements SimpleCentrality{
 		
 		return sortie;
 	}
+	
+	
+	
 	
 	/**
 	 * Symmetrical difference between u and v
@@ -142,6 +221,7 @@ public class Clique  implements SimpleCentrality{
 	 * @param inGraph
 	 * @return List of cliques
 	 */
+	@SuppressWarnings("unused")
 	public List<List<Integer>> rechercheCliqueRecursive(SimpleGraph inGraph){
 		List<List<Integer>> listeClique = new ArrayList<List<Integer>>();
 		List<Integer> NoeudUse = new ArrayList<Integer>();
