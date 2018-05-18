@@ -44,6 +44,10 @@ public class ClosenessDirected implements DirectedCentrality
 		return orientation;
 	}
 	
+	/**
+	 *  Algorithm for closeness if the graph is oriented
+	 */
+	
 	@Override
     public CentralityResult evaluate(DirectedGraph inGraph)
     {

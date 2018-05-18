@@ -13,6 +13,10 @@ import fr.univavignon.graphcentr.g11.FloydWarshall;
 
 public class ClosenessSimple implements SimpleCentrality
 {
+	/**
+	 *  Algorithm for closeness if the graph is simple
+	 */
+	
     @Override
     public CentralityResult evaluate(SimpleGraph inGraph)
     {
