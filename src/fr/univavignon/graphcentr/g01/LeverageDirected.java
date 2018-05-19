@@ -33,8 +33,7 @@ public class LeverageDirected implements DirectedCentrality{
 				}else {
 					nbVoisinW = inGraph.getOutgoingDegree(test.getSourceIdentifier());
 				}
-				score += ((double)(nbVoisinU-nbVoisinW))/((double)(nbVoisinU+nbVoisinW));
-					
+				score += ((double)(nbVoisinU-nbVoisinW))/((double)(nbVoisinU+nbVoisinW));	
 			}
 			result.add(score/((double)nbVoisinU));
 		}

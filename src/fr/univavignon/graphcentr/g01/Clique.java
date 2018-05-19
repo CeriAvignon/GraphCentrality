@@ -45,7 +45,7 @@ public class Clique  implements SimpleCentrality{
 		
 		return centraliteNoeud;
 	}
-	
+
 	
 	/**
 	 * Use Bouda's algorithm in order to find clique with the algorithm which don't stack combination in an array
@@ -277,10 +277,10 @@ public class Clique  implements SimpleCentrality{
 	
 
 	/**
-	 * List of neighbours of u
+	 * List of neighbors of u
 	 * @param inGraph
 	 * @param u
-	 * @return List of neighbours
+	 * @return List of neighbors
 	 */
 	public List<Integer> getVoisins(SimpleGraph inGraph, int u){
 		List<Integer> Voisins = new ArrayList<Integer>();

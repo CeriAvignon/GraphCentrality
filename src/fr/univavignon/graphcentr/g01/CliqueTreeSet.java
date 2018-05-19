@@ -292,10 +292,10 @@ public class CliqueTreeSet implements SimpleCentrality{
 	
 	
 	/**
-	 * List of neighbour of u
+	 * List of neighbors of u
 	 * @param inGraph
 	 * @param u
-	 * @return List of neighbour
+	 * @return List of neighbors
 	 */
 	public TreeSet<Integer> getVoisins(SimpleGraph inGraph, int u){
 		TreeSet<Integer> Voisins = new TreeSet<Integer>();

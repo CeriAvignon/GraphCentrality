@@ -35,7 +35,6 @@ public class Laverage implements SimpleCentrality{
 					nbVoisinW = inGraph.getNodeDegree(test.getSourceIdentifier());
 				}
 				score += ((double)(nbVoisinU-nbVoisinW))/((double)(nbVoisinU+nbVoisinW));
-					
 			}
 			result.add(score/((double)nbVoisinU));
 		}
