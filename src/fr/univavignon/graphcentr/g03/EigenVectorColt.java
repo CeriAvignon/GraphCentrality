@@ -42,7 +42,7 @@ class EigenVectorColt implements SimpleCentrality
 		
 		EigenvalueDecomposition ed=new EigenvalueDecomposition(adj);
 		DoubleMatrix2D eignV2d=ed.getV();
-		DoubleMatrix1D eignV=eignV2d.viewColumn(0);
+		DoubleMatrix1D eignV=eignV2d.viewColumn(3);
 		values=eignV.toArray();
 		return values;
 	}
