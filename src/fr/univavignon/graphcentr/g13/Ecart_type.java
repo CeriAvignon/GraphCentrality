@@ -11,13 +11,55 @@ import fr.univavignon.graphcentr.g07.core.graphs.SimpleGraph;
 
 public class Ecart_type implements SimpleCentrality
 {
-	public CentralityResult AlgoPrincipaleTemps(SimpleGraph inGraph, boolean normalize, int time)
+	// Temps = true, Nombre = false
+	private boolean tempsOuNombre;
+	private int tempsEnSeconde;
+	private int nombreDePasParNoeud;
+	
+	public int getTempsEnSeconde()
+	{
+		return this.tempsEnSeconde;
+	}
+	
+	public void setTempsEnSeconde(int temps)
+	{
+		this.tempsEnSeconde = temps;
+	}
+	
+	public boolean getTempsOuNombre()
+	{
+		return this.tempsOuNombre;
+	}
+	
+	public void setTempsOuNombre(boolean tempsOuNombre)
+	{
+		this.tempsOuNombre = tempsOuNombre;
+	}
+	
+	public int getNombreDePasParNoeud()
+	{
+		return this.nombreDePasParNoeud;
+	}
+	
+	public void setNombreDePasParNoeud(int nombreDePasParNoeud)
+	{
+		this.nombreDePasParNoeud = nombreDePasParNoeud;
+	}
+	
+	Ecart_type()
+	{
+		tempsOuNombre = false;
+		tempsEnSeconde = 10;
+		nombreDePasParNoeud = 20000;
+	}
+	
+	public CentralityResult AlgoPrincipaleTemps(SimpleGraph inGraph)
 	{
 		long tmpAuLancement = System.currentTimeMillis();
-		long tmpMax = tmpAuLancement + (time * 1000);
+		long tmpMax = tmpAuLancement + (tempsEnSeconde * 1000);
 		
 		ArrayList<ArrayList<Integer>> CS = new ArrayList<ArrayList<Integer>>();
-		for(int i=0; i<inGraph.getLinkCount(); i++)
+		for(int i=0; i<inGraph.getNodeCount(); i++)
 		{
 			CS.add(new ArrayList<Integer>());
 		}
@@ -39,9 +81,9 @@ public class Ecart_type implements SimpleCentrality
 				CS.get(i).add(pas - res);
 			}
 			
-			pas+=1;
+			pas+=1; 
 			Node j = rand(i, inGraph);
-			int dj = inGraph.getNodeDegree(j);
+			double dj = inGraph.getNodeDegree(j);
 			double p = Math.random();
 			if(p <= inGraph.getNodeDegree(i)/dj)
 			{
@@ -52,20 +94,23 @@ public class Ecart_type implements SimpleCentrality
 		
 		for(int j=0; j<CS.size(); j++)
 		{
-			if(CS.get(j).size() <3)
+			if(CS.get(j).size() > 3)
 			{
 				resultat.add(ET_calc(CS.get(j)));
+			}
+			else
+			{
+				System.out.print("Le noeud numéro " + j + "est en dessous des 3 valeurs nécessaire au calcul de cette mesure");
 			}
 		}
 		return resultat;
 	}
 	
-
-	public CentralityResult AlgoPrincipalePas(SimpleGraph inGraph, boolean normalize, int nbrPasMin)
+	public CentralityResult AlgoPrincipalePas(SimpleGraph inGraph)
 	{
 		ArrayList<ArrayList<Integer>> CS = new ArrayList<ArrayList<Integer>>();
 		
-		for(int i=0; i<inGraph.getLinkCount(); i++)
+		for(int i=0; i<inGraph.getNodeCount(); i++)
 		{
 			CS.add(new ArrayList<Integer>());
 		}
@@ -89,17 +134,19 @@ public class Ecart_type implements SimpleCentrality
 			
 			pas+=1;
 			Node j = rand(i, inGraph);
-			int dj = inGraph.getNodeDegree(j);
+			double dj = inGraph.getNodeDegree(j);
 			double p = Math.random();
-			if(p <= inGraph.getNodeDegree(i)/dj)
+			double di = inGraph.getNodeDegree(i);
+			if(p <= di/dj)
 			{
 				i = j.getIdentifier();
 			}
-			
+
+			suffisementDePas = true;
 			for(ArrayList<Integer> tableau : CS)
-				if(tableau.size() < nbrPasMin)
+				if(tableau.size() < nombreDePasParNoeud)
 				{
-					suffisementDePas = true;
+					suffisementDePas = false;
 					break;
 				}
 		}
@@ -107,19 +154,30 @@ public class Ecart_type implements SimpleCentrality
 		
 		for(int j=0; j<CS.size(); j++)
 		{
-			if(CS.get(j).size() <3)
+			if(CS.get(j).size() > 3)
 			{
 				resultat.add(ET_calc(CS.get(j)));
 			}
+			else
+			{
+				System.out.print("Le noeud numéro " + j + "est en dessous des 3 valeurs nécessaire au calcul de cette mesure");
+			}
+				
 		}
 		return resultat;
 	}
 	
 	private Node rand(int a, SimpleGraph inGraph)
 	{
-		List<Link> noeudsEnLiens = inGraph.getNodeLinks(inGraph.getNodeAt(a));
-		int noeud = (int)(Math.random() * (noeudsEnLiens.size()+1));
-		return inGraph.getNodeAt(noeud);
+		Node i = inGraph.getNodeAt(a);
+		List<Link> noeudsEnLiens = inGraph.getNodeLinks(i);
+		Node noeud = i;
+		while(noeud.getIdentifier() == i.getIdentifier())
+		{
+			int random = (int)(Math.random() * (noeudsEnLiens.size()));
+			noeud = inGraph.getNodeAt(noeudsEnLiens.get(random).getDestinationIdentifier());
+		}
+		return noeud;
 	}
 
 	
@@ -145,7 +203,9 @@ public class Ecart_type implements SimpleCentrality
 	@Override
 	public CentralityResult evaluate(SimpleGraph inGraph) {
 		// TODO Auto-generated method stub
-		return null;
+		if(tempsOuNombre)
+			return this.AlgoPrincipaleTemps(inGraph);
+		return this.AlgoPrincipalePas(inGraph);
+				
 	}
-
 }
