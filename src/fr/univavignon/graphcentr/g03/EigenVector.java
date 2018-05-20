@@ -56,20 +56,33 @@ class EigenVector implements SimpleCentrality
 		
 			//Création de deux vecteurs aléatoires
 		DoubleFactory1D randV=DoubleFactory1D.dense;
-		DoubleMatrix1D v0=randV.sample(n, 1, p);	//Vecteur de l'itération précédente
-		DoubleMatrix1D v1=randV.sample(n, 1, p);	//Vecteur de l'itération actuelle
+		DoubleMatrix1D v0=randV.sample(n, 1, 1);	//Vecteur de l'itération précédente
+		DoubleMatrix1D v1=randV.sample(n, 0.5, 1);	//Vecteur de l'itération actuelle
 		DoubleMatrix1D vtmp;
 		
 		//Algo
 		double lambda;
 		Algebra calNorm=new Algebra();
-			//tant que la précision est supérieure à la différence entre la norme du vecteur de l'itération précédente, et la norme du vecteur de l'itération courante:
-		while(Math.abs(calNorm.norm2(v0)-calNorm.norm2(v1))>=p)
+		int i=0;
+			//tant que la précision est inférieure à la différence entre la norme du vecteur de l'itération précédente, et la norme du vecteur de l'itération courante:
+		//while(Math.abs(calNorm.norm2(v1)-calNorm.norm2(v0))>=p)
+		DoubleMatrix1D comp=v1.assign(v0, Functions.minus);
+		comp.assign(Functions.abs);
+		while(comp.zSum()>p)
 		{
+			System.out.println("v0: "+i+": "+v0);
+			System.out.println("v1: "+i+": "+v1);
+			System.out.println("|v0-v1|= "+(calNorm.norm2(v0)-calNorm.norm2(v1)));
 			v0.assign(v1);			//v0=v1
-			v1=adj.zMult(v1, v1);	//v1= A*v1
+			//v1=adj.zMult(v1, v1);	//v1= A*v1
+			v1=calNorm.mult(adj, v1);	//v1=A*v1
 			lambda=calNorm.norm2(v1);
+			System.out.println("lambda: " + lambda);
 			v1=v1.assign(Functions.mult(1/lambda));
+			System.out.println("v1/LAMBDA: "+i+": "+v1);
+			comp=v1.assign(v0, Functions.minus);
+			comp.assign(Functions.abs);
+			i++;
 		}
 		values=v1.toArray();
 		return values;

@@ -4,7 +4,7 @@ import fr.univavignon.graphcentr.g07.core.graphs.SimpleGraph;
 import fr.univavignon.graphcentr.g07.core.centrality.CentralityResult;
 
 
-public class EigenVectorTest
+public class EigenVectorColtTest
 {
 	public static void main(String[] args)
 	{
@@ -22,7 +22,7 @@ public class EigenVectorTest
 		g.createLink(1, 3);
 		
 		
-		EigenVector eigen=new EigenVector(1);
+		EigenVectorColt eigen=new EigenVectorColt();
 		CentralityResult res=eigen.evaluate(g);
 		
 		System.out.println(res);
