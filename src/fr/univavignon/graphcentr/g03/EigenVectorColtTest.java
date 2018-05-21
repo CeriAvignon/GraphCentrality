@@ -21,7 +21,6 @@ public class EigenVectorColtTest
 		g.createLink(2, 3);
 		g.createLink(1, 3);
 		
-		
 		EigenVectorColt eigen=new EigenVectorColt();
 		CentralityResult res=eigen.evaluate(g);
 		

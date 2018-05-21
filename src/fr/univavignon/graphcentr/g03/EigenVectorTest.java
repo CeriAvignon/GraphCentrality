@@ -22,7 +22,7 @@ public class EigenVectorTest
 		g.createLink(1, 3);
 		
 		
-		EigenVector eigen=new EigenVector(1);
+		EigenVector eigen=new EigenVector(0.01);
 		CentralityResult res=eigen.evaluate(g);
 		
 		System.out.println(res);

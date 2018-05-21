@@ -33,7 +33,7 @@ class EigenVector implements SimpleCentrality
 	public CentralityResult evaluate(SimpleGraph g)
 	{
 		CentralityResult r=new CentralityResult();
-		double[] eigenV=EigneVectorAlgorithm(g);
+		double[] eigenV=EigenVectorAlgorithm(g);
 		for(int i=0; i<eigenV.length; i++)
 		{
 			r.add(eigenV[i]);
@@ -46,7 +46,7 @@ class EigenVector implements SimpleCentrality
 	 * @param g the graph
 	 * @return array containing each node's centrality
 	 */
-	public double[] EigneVectorAlgorithm(SimpleGraph g)
+	public double[] EigenVectorAlgorithm(SimpleGraph g)
 	{
 		//Initialisation
 		double[] values;
@@ -70,21 +70,21 @@ class EigenVector implements SimpleCentrality
 		comp.assign(Functions.abs);
 		while(comp.zSum()>p)
 		{
-			System.out.println("v0: "+i+": "+v0);
+			/*System.out.println("v0: "+i+": "+v0);
 			System.out.println("v1: "+i+": "+v1);
-			System.out.println("|v0-v1|= "+(calNorm.norm2(v0)-calNorm.norm2(v1)));
+			System.out.println("|v0-v1|= "+(calNorm.norm2(v0)-calNorm.norm2(v1)));*/
 			v0.assign(v1);			//v0=v1
 			//v1=adj.zMult(v1, v1);	//v1= A*v1
 			v1=calNorm.mult(adj, v1);	//v1=A*v1
 			lambda=calNorm.norm2(v1);
-			System.out.println("lambda: " + lambda);
+			//System.out.println("lambda: " + lambda);
 			v1=v1.assign(Functions.mult(1/lambda));
-			System.out.println("v1/LAMBDA: "+i+": "+v1);
+			//System.out.println("v1/LAMBDA: "+i+": "+v1);
 			comp=v1.assign(v0, Functions.minus);
 			comp.assign(Functions.abs);
 			i++;
 		}
-		values=v1.toArray();
+		values=v0.toArray();
 		return values;
 	}
 }
