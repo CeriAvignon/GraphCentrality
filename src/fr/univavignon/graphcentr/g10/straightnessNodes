@@ -37,5 +37,5 @@ return resStraightness;
 }
 public static double distanceEuclidienne(SpatialNode u,SpatialNode v)
 {
-	return Math.sqrt(Math.pow((u.x-v.x),2)+Math.pow((u.y-v.y),2));
+	return Math.sqrt(Math.pow((u.getX()-v.getX()),2)+Math.pow((u.getY()-v.getY()),2));
 }
