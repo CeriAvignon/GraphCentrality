@@ -1,6 +1,7 @@
 package fr.univavignon.graphcentr.g03;
 
 import fr.univavignon.graphcentr.g07.core.graphs.SimpleGraph;
+import fr.univavignon.graphcentr.g07.core.utility.Benchmark;
 import fr.univavignon.graphcentr.g07.core.centrality.*;
 
 import cern.colt.matrix.DoubleMatrix2D;
@@ -19,7 +20,7 @@ class EigenVectorColt implements SimpleCentrality
 	public CentralityResult evaluate(SimpleGraph g)
 	{
 		CentralityResult r=new CentralityResult();
-		double[] eigenV=EigneVectorAlgorithm(g);
+		double[] eigenV=EigenVectorAlgorithm(g);
 		for(int i=0; i<eigenV.length; i++)
 		{
 			r.add(eigenV[i]);
@@ -34,7 +35,7 @@ class EigenVectorColt implements SimpleCentrality
 	 * @return array containing each node's centrality
 	 *
 	 */
-	public double[] EigneVectorAlgorithm(SimpleGraph g)
+	public double[] EigenVectorAlgorithm(SimpleGraph g)
 	{
 		double[] values;
 		double [][] adjMat=g.toAdjacencyMatrix();
@@ -42,7 +43,6 @@ class EigenVectorColt implements SimpleCentrality
 		
 		EigenvalueDecomposition ed=new EigenvalueDecomposition(adj);
 		DoubleMatrix2D eignV2d=ed.getV();
-		System.out.println(eignV2d);
 		DoubleMatrix1D eignV=eignV2d.viewColumn(g.getNodeCount()-1);
 		values=eignV.toArray();
 		return values;
