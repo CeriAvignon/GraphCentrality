@@ -42,13 +42,13 @@ public class TestEcratType {
 		
 		Ecart_type et = new Ecart_type();
 		Directed_Ecart_Type det = new Directed_Ecart_Type();
-		CentralityResult resTemps = et.AlgoPrincipaleTemps(test);
+	/*	CentralityResult resTemps = et.AlgoPrincipaleTemps(test);
 		et.setTempsOuNombre(true);
 		CentralityResult resPas = et.AlgoPrincipalePas(test);
 		System.out.println("Algo nombre de pas (" + et.getNombreDePasParNoeud() + ") :");
 		System.out.println(resPas.toString());
 		System.out.println("Algo fct temps (" + et.getTempsEnSeconde() + "s) :");
-		System.out.println(resTemps.toString());
+		System.out.println(resTemps.toString()); */
 		
 		CentralityResult resTemps2 = det.AlgoPrincipaleTemps(test2);
 		det.setTempsOuNombre(true);
