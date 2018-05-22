@@ -12,63 +12,76 @@ import fr.univavignon.graphcentr.g07.core.graphs.SimpleGraph;
 public class EntropyCentrality implements SimpleCentrality
 {
 
-
-	public void ElemPath(SimpleGraph inGraph, int v1, int v2,  ArrayList Parcours, ArrayList[] Res, int v3)
+	/**
+	 * @param inGraph
+	 * @param v1
+	 * @param v2
+	 * @param Parcours
+	 * @param Res
+	 * @param v3
+	 */
+	public void ElemPath(SimpleGraph inGraph, int v1, int v2,  ArrayList<Integer> Parcours, ArrayList<ArrayList<Integer>> Res, int v3)
 	{
 		 Parcours.add(v3);
 		 if(v2 == v3)
 		 {
-			 boolean b = false;
-			 int i = 0;
-			 while (b == false)
-			 {
-				 if(Res[i].isEmpty())
-				 {
-					 b = true;
-				 }
-				 else
-				 {
-					 i++;
-				 }
-			 }
-			 Res[i+1].add(Parcours);
+			 Res.add(Parcours);
 		 }
 		 else
 		 {
-			 ArrayList Tab = new ArrayList();
+			 ArrayList<Integer> Tab = new ArrayList<Integer>();
 			 for (int i = 0; i < Parcours.size(); i++)
 			 {
 				 Tab.add(Parcours.get(i));
 			 }
-			 Node n = inGraph.getNodeAt(v3);
-			 inGraph.getNodeLinks(n);
-			 List<Link> links = inGraph.getNodeLinks(n);
-			 for (int j = 0; j < links.size(); j++)
+			 Node v = inGraph.getNodeAt(v3);
+			 List<Link> links = inGraph.getNodeLinks(v);
+			 List<Link> links_v2 = new ArrayList<Link>();
+			 for (int i=0; i < links.size(); i++)
 			 {
-				 if(!Tab.contains( links.get(j).getDestinationIdentifier()) )
+				 if (links.get(i).getDestinationIdentifier() != links.get(i).getSourceIdentifier())
+					 links_v2.add(links.get(i));
+			 }
+			 
+			 for (int j = 0; j < links_v2.size(); j++)
+			 {
+				 if(!Tab.contains( links_v2.get(j).getDestinationIdentifier()) )
 				 {
-					 ElemPath(inGraph, v1, v2, Tab, Res, links.get(j).getDestinationIdentifier());
+					 ElemPath(inGraph, v1, v2, Tab, Res, links_v2.get(j).getDestinationIdentifier());
 				 }
 			 }
 		 }
 	 }
 	
-	public int tau(SimpleGraph inGraph , int a)
+	/**
+	 * @param inGraph
+	 * @param a
+	 * 
+	 * @return
+	 */
+	public double tau(SimpleGraph inGraph , int a , int b)
 	{
-		if( inGraph.getNodeDegree(a) == 0  )
+		if( inGraph.getNodeDegree(a) < 2.  )
 		{
 			return 0;
 		}
 		else
 		{
 			double[][] matrice = inGraph.toAdjacencyMatrix();
-			return ((int)matrice[a][a+1]/inGraph.getNodeDegree(a));
+			return (matrice[a][b]/(inGraph.getNodeDegree(a)-1));
 		}
 	}
 	
-	public int sigma(SimpleGraph inGraph , int a)
+	/**
+	 * calcul du taux sigma
+	 * 
+	 * @param inGraph
+	 * @param a
+	 * @return double, le taux calculé
+	 */
+	public double sigma(SimpleGraph inGraph , int a)
 	{
-		if( inGraph.getNodeDegree(a) == 0  )
+		if( inGraph.getNodeDegree(a) < 2 )
 		{
 			return 1;
 		}
@@ -76,84 +89,104 @@ public class EntropyCentrality implements SimpleCentrality
 		{
 			double[][] matrice = inGraph.toAdjacencyMatrix();
 			
-			return ((int)matrice[a][a]/inGraph.getNodeDegree(a));
+
+			System.out.println("deg : "+inGraph.getNodeDegree(a));
+			return (matrice[a][a]/(inGraph.getNodeDegree(a)-1));
 		}
 	}
 	
-	public int calculProba(SimpleGraph inGraph,int i,int j)
+	/**
+	 * @param inGraph
+	 * @param i
+	 * @param j
+	 * @return
+	 */
+	public double calculProba(SimpleGraph inGraph,int i,int j)
 	{
-		int z = 0;
-		int b;
+		double z = 0;
+		double b;
 		
 		if(i != j)
 		{
-				ArrayList[] res = new ArrayList[inGraph.getNodeCount()];
-				ArrayList parcours = new ArrayList();
+				ArrayList<ArrayList<Integer>> res = new ArrayList<ArrayList<Integer>>();
+				ArrayList<Integer> parcours = new ArrayList<Integer>();
 				
+
 				ElemPath(inGraph,i,j,parcours,res,i);
 				
-				int rsize=0;
-				for (int a=0; a<inGraph.getNodeCount(); a++)
-				{
-					if (!res[a].isEmpty())
-						rsize++;
-					else
-						break;
-				}
 				
 				int k=0;
-				for( k=0 ; k<rsize; k++)
+				for( k=0 ; k<res.size(); k++)
 				{
-					int y=1;
-					int t=1;
-					for(t=1;t<res[1].size()-1;t++)
+					System.out.println("chemin "+ k );
+					double y=1;
+					for(int t=0;t<res.get(k).size()-1;t++)
 					{
-						b=tau(inGraph,(int)res[k].get(t));
+						b=tau(inGraph,(int)res.get(k).get(t),(int)res.get(k).get(t+1));
 						y=y*b;
+						System.out.println("b = "+b);
 					}
 					y=y*sigma(inGraph,j);
 					z=z+y;
+					System.out.println("sigma(inGraph,j) :"+sigma(inGraph,j));
+					System.out.println("z :"+z);
 				}
 		}
 		else
 		{
 			Node v=inGraph.getNodeAt(i);
-			z= 1 / (inGraph.getNodeDegree(v));
+			z= 1.0 / (inGraph.getNodeDegree(v)-1);
 		}
-		
 		return z;	
 	}
 
-	public void AlgoPrincipale(SimpleGraph inGraph,boolean normalise)
+	/**
+	 * @param inGraph
+	 * @param normalise
+	 * @return résultat de l'algo
+	 */
+	public CentralityResult AlgoPrincipale(SimpleGraph inGraph,boolean normalise)
 	{
 		int n = inGraph.getNodeCount();
 
-		double[] C_Ent = new double[n];
+		CentralityResult C_Ent = new CentralityResult();
 		
 		double x=0;
 
-		for(int i = 0; i <= n ; i++)
+		for(int i = 0; i < n ; i++)
 		{
-			for(int j = 0; j <=n ; j++)
+			x=0;
+			for(int j = 0; j <n ; j++)
 			{
-				x = x + calculProba(inGraph,i,j) * Math.log( calculProba(inGraph,i,j) );
+				System.out.println("step 1 :"+x+"ij"+i+j);
+				System.out.println("prob : " +calculProba(inGraph,i,j)+"ij"+i+j);
+				x = x + calculProba(inGraph,i,j) * Math.log10( calculProba(inGraph,i,j) );
+				System.out.println("step 2 :"+x+"ij"+i+j);
+
 			}
 			if(normalise == true)
 			{
-				x = x * (-1) / Math.log(n);
+				x = x * (-1) / Math.log10(n);
+				System.out.println("step 3 :"+x);
+
 			}
 
-			C_Ent[i] = x;	  			
+			C_Ent.add(x);	  			
 		}
+		
+		for(int i=0; i<4; i++)
+		{
+			System.out.println(inGraph.getNodeDegree(i));
+		}
+		
+		return C_Ent;
 	}
 
 	@Override
 	public CentralityResult evaluate(SimpleGraph inGraph) {
 		
-
-		
+		return AlgoPrincipale(inGraph, true);
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 }
