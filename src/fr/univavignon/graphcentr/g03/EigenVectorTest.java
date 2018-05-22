@@ -21,7 +21,6 @@ public class EigenVectorTest
 		g.createLink(2, 3);
 		g.createLink(1, 3);
 		
-		
 		EigenVector eigen=new EigenVector(0.01);
 		CentralityResult res=eigen.evaluate(g);
 		
