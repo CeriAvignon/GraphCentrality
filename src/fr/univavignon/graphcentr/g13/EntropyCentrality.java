@@ -20,12 +20,13 @@ public class EntropyCentrality implements SimpleCentrality
 	 * @param Res
 	 * @param v3
 	 */
-	public void ElemPath(SimpleGraph inGraph, int v1, int v2,  ArrayList<Integer> Parcours, ArrayList<ArrayList<Integer>> Res, int v3)
+/*	public void ElemPath(SimpleGraph inGraph, int v1, int v2,  ArrayList<Integer> Parcours, ArrayList<ArrayList<Integer>> Res, int v3)
 	{
 		 Parcours.add(v3);
 		 if(v2 == v3)
 		 {
 			 Res.add(Parcours);
+			 return;
 		 }
 		 else
 		 {
@@ -52,6 +53,33 @@ public class EntropyCentrality implements SimpleCentrality
 			 }
 		 }
 	 }
+	*/
+	public void ElemPath(SimpleGraph inGraph, int nouedActuel, int noeudFin, ArrayList<Integer> Parcours, ArrayList<ArrayList<Integer>> Res)
+	{
+		 Parcours.add(nouedActuel);
+		 if(nouedActuel == noeudFin)
+		 {
+			 Res.add(Parcours);
+		 }
+		 else
+		 {
+			 Node n = inGraph.getNodeAt(nouedActuel);
+			 List<Link> links = inGraph.getNodeLinks(n);
+			 for (int j = 0; j < links.size(); j++)
+			 {
+				 if(!Parcours.contains( links.get(j).getDestinationIdentifier()) )
+				 {
+					 ArrayList<Integer> Tab = new ArrayList<Integer>();
+					 for (int i = 0; i < Parcours.size(); i++)
+					 {
+						 Tab.add(new Integer(Parcours.get(i)));
+					 }
+					 ElemPath(inGraph, links.get(j).getDestinationIdentifier() , noeudFin, Tab, Res);
+				 }
+			 }
+		 }
+	}
+
 	
 	/**
 	 * @param inGraph
@@ -61,7 +89,7 @@ public class EntropyCentrality implements SimpleCentrality
 	 */
 	public double tau(SimpleGraph inGraph , int a , int b)
 	{
-		if( inGraph.getNodeDegree(a) < 2.  )
+		if( inGraph.getNodeDegree(a) -1 == 0  )
 		{
 			return 0;
 		}
@@ -81,7 +109,7 @@ public class EntropyCentrality implements SimpleCentrality
 	 */
 	public double sigma(SimpleGraph inGraph , int a)
 	{
-		if( inGraph.getNodeDegree(a) < 2 )
+		if( inGraph.getNodeDegree(a) -1  == 0 )
 		{
 			return 1;
 		}
@@ -89,8 +117,6 @@ public class EntropyCentrality implements SimpleCentrality
 		{
 			double[][] matrice = inGraph.toAdjacencyMatrix();
 			
-
-			System.out.println("deg : "+inGraph.getNodeDegree(a));
 			return (matrice[a][a]/(inGraph.getNodeDegree(a)-1));
 		}
 	}
@@ -112,28 +138,30 @@ public class EntropyCentrality implements SimpleCentrality
 				ArrayList<Integer> parcours = new ArrayList<Integer>();
 				
 
-				ElemPath(inGraph,i,j,parcours,res,i);
+				ElemPath(inGraph,i,j,parcours,res);
 				
 				
 				int k=0;
 				for( k=0 ; k<res.size(); k++)
 				{
-					System.out.println("chemin "+ k );
 					double y=1;
 					for(int t=0;t<res.get(k).size()-1;t++)
 					{
-						b=tau(inGraph,(int)res.get(k).get(t),(int)res.get(k).get(t+1));
+						b=tau(inGraph,res.get(k).get(t),res.get(k).get(t+1));
+						System.out.print("tau("+res.get(k).get(t)+")" + b +" * ");
 						y=y*b;
-						System.out.println("b = "+b);
 					}
-					y=y*sigma(inGraph,j);
+					y=y*sigma(inGraph,res.get(k).get(res.get(k).size()-1));
+					System.out.print("sigma("+res.get(k).get(res.get(k).size()-1)+")" + sigma(inGraph,res.get(k).get(res.get(k).size()-1)) +" ");
+					System.out.print("+");
 					z=z+y;
-					System.out.println("sigma(inGraph,j) :"+sigma(inGraph,j));
-					System.out.println("z :"+z);
+
 				}
+				System.out.println();
 		}
 		else
-		{
+		{	
+			System.out.println("Chemin de " + i + " a " +j );
 			Node v=inGraph.getNodeAt(i);
 			z= 1.0 / (inGraph.getNodeDegree(v)-1);
 		}
@@ -158,16 +186,15 @@ public class EntropyCentrality implements SimpleCentrality
 			x=0;
 			for(int j = 0; j <n ; j++)
 			{
-				System.out.println("step 1 :"+x+"ij"+i+j);
-				System.out.println("prob : " +calculProba(inGraph,i,j)+"ij"+i+j);
-				x = x + calculProba(inGraph,i,j) * Math.log10( calculProba(inGraph,i,j) );
-				System.out.println("step 2 :"+x+"ij"+i+j);
+				double resultproba =  calculProba(inGraph,i,j) ;
+				
+				
+				x = x + resultproba * Math.log10( resultproba );
 
 			}
 			if(normalise == true)
 			{
 				x = x * (-1) / Math.log10(n);
-				System.out.println("step 3 :"+x);
 
 			}
 
@@ -176,7 +203,6 @@ public class EntropyCentrality implements SimpleCentrality
 		
 		for(int i=0; i<4; i++)
 		{
-			System.out.println(inGraph.getNodeDegree(i));
 		}
 		
 		return C_Ent;
