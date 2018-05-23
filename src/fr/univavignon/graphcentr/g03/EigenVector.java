@@ -2,7 +2,7 @@ package fr.univavignon.graphcentr.g03;
 
 import fr.univavignon.graphcentr.g07.core.graphs.SimpleGraph;
 import fr.univavignon.graphcentr.g07.core.centrality.*;
-
+import fr.univavignon.graphcentr.g07.core.utility.Benchmark;
 
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.impl.DenseDoubleMatrix2D;
@@ -82,7 +82,8 @@ class EigenVector implements SimpleCentrality
 			//System.out.println("v1/LAMBDA: "+i+": "+v1);
 			comp=v1.assign(v0, Functions.minus);
 			comp.assign(Functions.abs);
-			i++;
+			//i++;
+			Benchmark.addIteration();
 		}
 		values=v0.toArray();
 		return values;
