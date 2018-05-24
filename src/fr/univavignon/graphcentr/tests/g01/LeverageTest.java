@@ -1,6 +1,6 @@
 package fr.univavignon.graphcentr.tests.g01;
 
-import fr.univavignon.graphcentr.g01.Laverage;
+import fr.univavignon.graphcentr.g01.Leverage;
 import fr.univavignon.graphcentr.g07.core.centrality.CentralityResult;
 import fr.univavignon.graphcentr.g07.core.graphs.SimpleGraph;
 
@@ -8,7 +8,7 @@ import fr.univavignon.graphcentr.g07.core.graphs.SimpleGraph;
  * @author Riviere Colin, Benoit Loris
  *
  */
-public class LaverageTest {
+public class LeverageTest {
 	
 	/**
 	 * Execute Leverage Test
@@ -33,7 +33,7 @@ public class LaverageTest {
 		graph.createLink(4, 5);
 		graph.createLink(5, 6);
 		
-		Laverage centrality = new Laverage();	
+		Leverage centrality = new Leverage();	
 		CentralityResult result = centrality.evaluate(graph);
 		System.out.println(result);
 	}

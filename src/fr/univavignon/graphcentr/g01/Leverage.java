@@ -16,7 +16,7 @@ import fr.univavignon.graphcentr.g07.core.graphs.SimpleGraph;
  * @author Riviere Colin, Benoit Loris
  *
  */
-public class Laverage implements SimpleCentrality{
+public class Leverage implements SimpleCentrality{
 
 	@Override
 	public CentralityResult evaluate(SimpleGraph inGraph) {

@@ -35,7 +35,8 @@ public class LeverageDirected implements DirectedCentrality{
 				}
 				score += ((double)(nbVoisinU-nbVoisinW))/((double)(nbVoisinU+nbVoisinW));	
 			}
-			result.add(score/((double)nbVoisinU));
+			if (nbVoisinU == 0) result.add(0.0);
+			else result.add(score/((double)nbVoisinU));
 		}
 		return result;
 	}
