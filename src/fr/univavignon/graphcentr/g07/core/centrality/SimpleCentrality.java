@@ -1,5 +1,6 @@
 package fr.univavignon.graphcentr.g07.core.centrality;
 
+import fr.univavignon.graphcentr.g07.core.AbstractCentrality;
 import fr.univavignon.graphcentr.g07.core.graphs.SimpleGraph;
 
 /**
@@ -8,12 +9,7 @@ import fr.univavignon.graphcentr.g07.core.graphs.SimpleGraph;
  * 
  * @brief Used to compute centrality on simple graph
  */
-public interface SimpleCentrality 
+public interface SimpleCentrality extends AbstractCentrality<SimpleGraph>
 {
-	/**
-	 * Evaluate given graph
-	 * @param inGraph Graph to evaluate
-	 * @return Centrality results
-	 */
-	public CentralityResult evaluate(SimpleGraph inGraph);
+	// Nothing to do
 }
