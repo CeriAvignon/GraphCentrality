@@ -1,5 +1,10 @@
 package fr.univavignon.graphcentr.tests;
 
+
+import fr.univavignon.graphcentr.tests.g01.CliqueTest;
+import fr.univavignon.graphcentr.tests.g01.CliqueTreeSetTest;
+import fr.univavignon.graphcentr.tests.g01.LeverageDirectedTest;
+import fr.univavignon.graphcentr.tests.g01.LeverageTest;
 import fr.univavignon.graphcentr.tests.g07.CoreTest;
 
 /**
@@ -19,5 +24,11 @@ public class Test
 		CoreTest.execute();
 		
 		// Tests on "centralitites"
+		
+		//test g01
+		CliqueTest.execute();
+		CliqueTreeSetTest.execute();
+		LeverageTest.execute();
+		LeverageDirectedTest.execute();
 	}
 }
