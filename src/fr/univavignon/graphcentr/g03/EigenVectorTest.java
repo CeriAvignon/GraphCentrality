@@ -23,15 +23,44 @@ public class EigenVectorTest
 		g.createLink(2, 3);
 		g.createLink(1, 3);*/
 		
-		int n=100;
-		double p=0.1;
+		int n=10000;
+		int m=10;
+		int k=100;
+		double p=0.0;
 		SimpleGraph g=new SimpleGraph();
 		GraphMLReader r= new GraphMLReader();
-		r.updateFromFile("./res/Benchmark/erdos_renyi/n="+n+"_p="+p+".graphml",g);
+		//r.updateFromFile("./res/Benchmark/erdos_renyi/n="+n+"_p="+p+".graphml",g);
+		//r.updateFromFile("./res/Benchmark/barabasi_albert/n="+n+"_m="+m+".graphml",g);
+		r.updateFromFile("./res/Benchmark/watts_strogatz/n="+n+"_k="+k+".graphml",g);
 		
-		EigenVector eigen=new EigenVector(0.01);
+		System.out.println("Go!");
+		EigenVector eigen=new EigenVector();
 		Benchmark.start();
 		CentralityResult res=eigen.evaluate(g);
+		Benchmark.stop();
+		System.out.println(res);
+		Benchmark.printSnapshots();
+		
+		System.out.println("Go!");
+		eigen=new EigenVector();
+		Benchmark.start();
+		res=eigen.evaluate(g);
+		Benchmark.stop();
+		System.out.println(res);
+		Benchmark.printSnapshots();
+		
+		System.out.println("Go!");
+		eigen=new EigenVector();
+		Benchmark.start();
+		res=eigen.evaluate(g);
+		Benchmark.stop();
+		System.out.println(res);
+		Benchmark.printSnapshots();
+		
+		System.out.println("Go!");
+		eigen=new EigenVector();
+		Benchmark.start();
+		res=eigen.evaluate(g);
 		Benchmark.stop();
 		System.out.println(res);
 		Benchmark.printSnapshots();
