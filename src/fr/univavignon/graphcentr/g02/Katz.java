@@ -21,17 +21,26 @@ public class Katz implements DirectedCentrality
 	private double alpha;
 	
 	//Constructor with alpha arg
+	/**
+	 * @param alphaArg alpha parameter
+	 */
 	public Katz(double alphaArg)
 	{
 		this.alpha = alphaArg;
 	}
 	
+	/**
+	 * @brief Create Katz class with alpha value = 0.5
+	 */
 	//Default constructor
 	public Katz()
 	{
 		this.alpha = 0.5;
 	}
 	
+	/**
+	 * @return alpha value
+	 */
 	//Alpha getter
 	public double getAlpha()
 	{
@@ -39,6 +48,9 @@ public class Katz implements DirectedCentrality
 	}
 	
 	
+	/**
+	 * @param alphaArg New alpha value
+	 */
 	//Alpha setter
 	public void setAlpha(double alphaArg)
 	{
