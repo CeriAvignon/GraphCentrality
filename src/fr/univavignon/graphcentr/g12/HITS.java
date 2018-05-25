@@ -3,14 +3,15 @@ package fr.univavignon.graphcentr.g12;
 import fr.univavignon.graphcentr.g07.core.centrality.CentralityResult;
 import fr.univavignon.graphcentr.g07.core.centrality.DirectedCentrality;
 import fr.univavignon.graphcentr.g07.core.graphs.DirectedGraph;
+import fr.univavignon.graphcentr.g07.core.utility.Benchmark;
 
-import java.util.ArrayList;
 import java.lang.Math;
+import java.util.ArrayList;
 
 /**
- * @author Alexandre TRUCCHIERO, Yacine BATTIS, Cédric LARROSA
- *
- */
+* @author Alexandre TRUCCHIERO, Yacine BATTIS, Cédric LARROSA
+*
+*/
 public class HITS implements DirectedCentrality
 {
 	/**
@@ -32,10 +33,10 @@ public class HITS implements DirectedCentrality
 	 * @param c
 	 * @return authority values for each node
 	 */
-	public ArrayList<Double> FindAuthorityCentrality(DirectedGraph graphe, int s, int c)
+	public ArrayList<Double> FindAuthorityCentrality(DirectedGraph graphe, double s, int c)
 	{
 		// Initialisation
-		boolean loop = false;
+		boolean loop = true;
 		int iteration = 0;
 		double norma;
 		double normh;
@@ -54,6 +55,8 @@ public class HITS implements DirectedCentrality
 		// Main loop
 		while(loop)
 		{
+			Benchmark.addIteration();
+
 			norma = 0;
 			normh = 0;
 			
@@ -89,15 +92,18 @@ public class HITS implements DirectedCentrality
 			// Check authority convergence
 			if(s != 0)
 			{
-				loop = false;
+				double asum = 0;
+				double atempsum = 0;
+				
 				for(int i = 0; i < graphe.getNodeCount();i++)
 				{
-					if(a.get(i) - atemp.get(i) > s)
-					{
-						loop = true;
-						break;
-					}
+					asum += a.get(i);
+					atempsum += atemp.get(i);
 				}
+
+				double offset = Math.abs((asum / graphe.getNodeCount()) - (atempsum / graphe.getNodeCount()));
+				if(offset <= s)
+					loop = false;
 			}
 
 			// Check loop iteration
@@ -118,10 +124,10 @@ public class HITS implements DirectedCentrality
 	 * @param c
 	 * @return hub values for each node
 	 */
-	public ArrayList<Double> FindHubCentrality(DirectedGraph graphe, int s, int c)
+	public ArrayList<Double> FindHubCentrality(DirectedGraph graphe, double s, int c)
 	{
 		// Initialisation
-		boolean loop = false;
+		boolean loop = true;
 		int iteration = 0;
 		double norma;
 		double normh;
@@ -140,6 +146,8 @@ public class HITS implements DirectedCentrality
 		// Main loop
 		while(loop)
 		{
+			Benchmark.addIteration();
+
 			norma = 0;
 			normh = 0;
 			
@@ -172,18 +180,21 @@ public class HITS implements DirectedCentrality
 				h.set(i, h.get(i)/Math.sqrt(normh));
 			}
 
-			// Check authority convergence
+			// Check hub convergence
 			if(s != 0)
 			{
-				loop = false;
+				double hsum = 0;
+				double htempsum = 0;
+				
 				for(int i = 0; i < graphe.getNodeCount();i++)
 				{
-					if(h.get(i) - htemp.get(i) > s)
-					{
-						loop = true;
-						break;
-					}
+					hsum += h.get(i);
+					htempsum += htemp.get(i);
 				}
+
+				double offset = Math.abs((hsum / graphe.getNodeCount()) - (htempsum / graphe.getNodeCount()));
+				if(offset <= s)
+					loop = false;
 			}
 
 			// Check loop iteration
