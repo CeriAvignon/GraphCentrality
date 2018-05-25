@@ -9,15 +9,15 @@ import fr.univavignon.graphcentr.g07.core.graphs.SimpleGraph;
  * 
  * @brief Generate random graph with Erdos-Renyi method.
  */
-public class ErdosRenyiGenerator{
-	
+public class ErdosRenyiGenerator
+{
 	/**
 	 * Generate random graph with Erdos-Renyi method.
 	 * @param nodeCount Number of nodes in the generated graph.
 	 * @param probability The links' probability to be created.
 	 * @return Created graph.
 	 */
-	public SimpleGrah generate(int nodeCount, float probability)
+	public static SimpleGraph generate(int nodeCount, double probability)
 	{
 		SimpleGraph simpleGraph = new SimpleGraph();
 		
@@ -42,7 +42,5 @@ public class ErdosRenyiGenerator{
 		}
 		
 		return simpleGraph;
-		
 	}
-	
 }

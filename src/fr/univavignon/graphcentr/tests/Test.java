@@ -27,17 +27,14 @@ public class Test
 		
 		// Tests on "centralitites"
 		
-<<<<<<< HEAD
 		// g11 tests
 		FloydWarshallTest.execute();
 		WeightedEccentricityTest.execute();
 		
-=======
 		//test g01
 		CliqueTest.execute();
 		CliqueTreeSetTest.execute();
 		LeverageTest.execute();
 		LeverageDirectedTest.execute();
->>>>>>> refs/remotes/origin/master
 	}
 }

@@ -15,5 +15,6 @@ public class CoreTest
 	{
 		Graph.execute();
 		Reader.execute();
+		Generator.execute();
 	}
 }
