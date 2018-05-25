@@ -30,6 +30,7 @@ public class Betweeness implements DirectedCentrality {
 		int sigma[] = new int[inGraph.getNodeCount()];
 		List<Integer> delta = new LinkedList<Integer>();// dépendance de s par rapport à v
 		
+		Node v;
 		// Boucle principale :
 		for (Node s : inGraph.getNodes()) {
 			for (Node w : inGraph.getNodes()) {
@@ -42,6 +43,35 @@ public class Betweeness implements DirectedCentrality {
 			}
 			dist[inGraph.getNodeIndex(s)] = 0; // inGraph.getNode(s) plus ou moin la coord du noeud S
 			sigma[inGraph.getNodeIndex(s)] = 1;
+			F.add(s);
+			
+			while(!F.isEmpty()) // tant que la file n'est pas vide 
+			{
+				v =  F.remove();
+				P.add(v);
+				
+				for(Node w : inGraph.getNodes())	// pour chaque noeud w
+				{
+					if (inGraph.isAdjacentTo(v,w))	//si il est voisin de v
+					{
+						if(dist[inGraph.getNodeIndex(w)] = -1)	//si w est vue pour la première fois
+						{
+							dist[inGraph.getNodeIndex(w)] = dist[inGraph.getNodeIndex(v)] + 1;
+							F.add(w);
+						}
+						
+						if(dist[inGraph.getNodeIndex(w)] = dist[inGraph.getNodeIndex(v)] +1 )
+						{
+							
+							
+						}
+						
+					}
+				
+				}
+			}
+			
+			
 		}
 		
 		return null;
