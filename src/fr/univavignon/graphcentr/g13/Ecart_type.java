@@ -15,10 +15,16 @@ public class Ecart_type implements SimpleCentrality
 	private boolean tempsOuNombre;
 	private int tempsEnSeconde;
 	private int nombreDePasParNoeud;
+	private int pas;
+	
+	public int getNombreDePasEffectuer()
+	{
+		return pas;
+	}
 	
 	public int getTempsEnSeconde()
 	{
-		return this.tempsEnSeconde;
+		return tempsEnSeconde;
 	}
 	
 	public void setTempsEnSeconde(int temps)
@@ -28,7 +34,7 @@ public class Ecart_type implements SimpleCentrality
 	
 	public boolean getTempsOuNombre()
 	{
-		return this.tempsOuNombre;
+		return tempsOuNombre;
 	}
 	
 	public void setTempsOuNombre(boolean tempsOuNombre)
@@ -38,7 +44,7 @@ public class Ecart_type implements SimpleCentrality
 	
 	public int getNombreDePasParNoeud()
 	{
-		return this.nombreDePasParNoeud;
+		return nombreDePasParNoeud;
 	}
 	
 	public void setNombreDePasParNoeud(int nombreDePasParNoeud)
@@ -48,8 +54,6 @@ public class Ecart_type implements SimpleCentrality
 	
 	Ecart_type()
 	{
-		tempsOuNombre = false;
-		tempsEnSeconde = 10;
 		nombreDePasParNoeud = 20000;
 	}
 	
@@ -64,7 +68,16 @@ public class Ecart_type implements SimpleCentrality
 			CS.add(new ArrayList<Integer>());
 		}
 		
-		int pas = 0;
+		/*
+		ArrayList<long[]> CS = new ArrayList<long[]>();
+		for(int i=0; i<inGraph.getNodeCount(); i++)
+		{
+			long[] longArray = {0,0,0};
+			CS.add(longArray);
+		}
+		  */
+		
+		pas = 0;
 		int i = 0;
 		
 		while(System.currentTimeMillis() < tmpMax)
@@ -100,7 +113,7 @@ public class Ecart_type implements SimpleCentrality
 			}
 			else
 			{
-				System.out.print("Le noeud numéro " + j + "est en dessous des 3 valeurs nécessaire au calcul de cette mesure");
+				System.out.println("Le noeud numéro " + j + "est en dessous des 3 valeurs nécessaire au calcul de cette mesure");
 			}
 		}
 		return resultat;
@@ -115,7 +128,7 @@ public class Ecart_type implements SimpleCentrality
 			CS.add(new ArrayList<Integer>());
 		}
 		
-		int pas = 0;
+		pas = 0;
 		int i = 0;
 		boolean suffisementDePas = false;
 		while(!suffisementDePas)
@@ -160,7 +173,7 @@ public class Ecart_type implements SimpleCentrality
 			}
 			else
 			{
-				System.out.print("Le noeud numéro " + j + "est en dessous des 3 valeurs nécessaire au calcul de cette mesure");
+				System.out.println("Le noeud numéro " + j + "est en dessous des 3 valeurs nécessaire au calcul de cette mesure");
 			}
 				
 		}
@@ -184,20 +197,38 @@ public class Ecart_type implements SimpleCentrality
 	public double ET_calc(ArrayList<Integer> E)
 	{
 		int N = E.size();
-		double res = 0;
+		long sum = 0;
 		for(int i=0; i<N; i++)
 		{
-			res = res + E.get(i)*E.get(i);
+			sum+=E.get(i);
 		}
-		res = res/N;
-		double sum = 0;
-		for (int k=1; k<N; k++)
+		double moy = sum/N;
+		long quar = 0;
+		for(int i=0; i<N; i++)
 		{
-			sum = sum + E.get(k);
+			quar += (E.get(i) - moy) * (E.get(i) - moy);
 		}
-		sum = (sum/N) * (sum/N);
-		res = res - sum;
-		return Math.sqrt(res); 
+		double res = quar/N-1;
+		return Math.sqrt(res);
+	}
+	
+	public double ET_calc2(ArrayList<Integer> E)
+	{
+		// Cette algo ne marche pas
+		int N = E.size();
+		long quar = 0;
+		long sum = 0;
+		for(int i=0; i<N; i++)
+		{
+			quar += (E.get(i)*E.get(i));
+			sum += E.get(i);
+		}
+		
+		double resQuar = (double)quar/N;
+		double resSum = (double)(sum/N) * (double)(sum/N);
+		double res = resQuar - sum;
+		return Math.sqrt(res);
+		
 	}
 	
 	@Override

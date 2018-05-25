@@ -12,9 +12,22 @@ import fr.univavignon.graphcentr.g07.core.graphs.DirectedGraph;
 public class Directed_Ecart_Type implements DirectedCentrality
 {
 	// Temps = true, Nombre = false
+	
 	private boolean tempsOuNombre;
 	private int tempsEnSeconde;
 	private int nombreDePasParNoeud;
+	private int pas;
+	private List<Node> noeudsEntrer; 
+	
+	public int getNombreDePasEffectuer()
+	{
+		return pas;
+	}
+	
+	public void setNoeudEntrer(List<Node> entrer)
+	{
+		noeudsEntrer = entrer;
+	}
 	
 	public int getTempsEnSeconde()
 	{
@@ -51,6 +64,7 @@ public class Directed_Ecart_Type implements DirectedCentrality
 		tempsOuNombre = false;
 		tempsEnSeconde = 10;
 		nombreDePasParNoeud = 20000;
+		noeudsEntrer = new ArrayList<Node>();
 	}
 	
 	public CentralityResult AlgoPrincipaleTemps(DirectedGraph inGraph)
@@ -64,14 +78,14 @@ public class Directed_Ecart_Type implements DirectedCentrality
 			CS.add(new ArrayList<Integer>());
 		}
 		
-		int pas = 0;
+		pas = 0;
 		int i = 0;
 		
 		while(System.currentTimeMillis() < tmpMax)
 		{
 			if(CS.get(i).isEmpty())
 			{
-				CS.get(i).add(pas);
+				CS.get(i).add(new Integer(pas));
 			}
 			else
 			{
@@ -85,7 +99,8 @@ public class Directed_Ecart_Type implements DirectedCentrality
 			Node j = rand(i, inGraph);
 			double dj = inGraph.getOutgoingDegree(j);
 			double p = Math.random();
-			if(p <= inGraph.getOutgoingDegree(i)/dj)
+			double di = inGraph.getOutgoingDegree(i);
+			if(p <= di/dj || di == 0)
 			{
 				i = j.getIdentifier();
 			}
@@ -100,7 +115,7 @@ public class Directed_Ecart_Type implements DirectedCentrality
 			}
 			else
 			{
-				System.out.print("Le noeud numéro " + j + "est en dessous des 3 valeurs nécessaire au calcul de cette mesure");
+				System.out.println("Le noeud numéro " + j + "est en dessous des 3 valeurs nécessaire au calcul de cette mesure");
 			}
 		}
 		return resultat;
@@ -115,14 +130,14 @@ public class Directed_Ecart_Type implements DirectedCentrality
 			CS.add(new ArrayList<Integer>());
 		}
 		
-		int pas = 0;
+		pas = 0;
 		int i = 0;
 		boolean suffisementDePas = false;
 		while(!suffisementDePas)
 		{
 			if(CS.get(i).isEmpty())
 			{
-				CS.get(i).add(pas);
+				CS.get(i).add( new Integer(pas));
 			}
 			else
 			{
@@ -137,7 +152,7 @@ public class Directed_Ecart_Type implements DirectedCentrality
 			double dj = inGraph.getOutgoingDegree(j);
 			double p = Math.random();
 			double di = inGraph.getOutgoingDegree(i);
-			if(p <= di/dj)
+			if(p <= di/dj || di == 0)
 			{
 				i = j.getIdentifier();
 			}
@@ -160,7 +175,7 @@ public class Directed_Ecart_Type implements DirectedCentrality
 			}
 			else
 			{
-				System.out.print("Le noeud numéro " + j + "est en dessous des 3 valeurs nécessaire au calcul de cette mesure");
+				System.out.println("Le noeud numéro " + j + "est en dessous des 3 valeurs nécessaire au calcul de cette mesure");
 			}
 				
 		}
@@ -173,32 +188,49 @@ public class Directed_Ecart_Type implements DirectedCentrality
 		List<Link> noeudsEntrant = inGraph.getNodeIncomingLinks(i);
 		List<Link> noeudsEnLiens = new ArrayList<>(inGraph.getNodeLinks(i));
 		noeudsEnLiens.removeAll(noeudsEntrant);
-		Node noeud = i;
-		while(noeud.getIdentifier() == i.getIdentifier())
+		if(!noeudsEnLiens.isEmpty())
 		{
-			int random = (int)(Math.random() * (noeudsEnLiens.size()));
-			noeud = inGraph.getNodeAt(noeudsEnLiens.get(random).getDestinationIdentifier());
+			Node noeud = i;
+			
+			while(noeud.getIdentifier() == i.getIdentifier())
+			{
+				int random = (int)(Math.random() * (noeudsEnLiens.size()));
+				noeud = inGraph.getNodeAt(noeudsEnLiens.get(random).getDestinationIdentifier());
+			}
+			return noeud;
 		}
-		return noeud;
+		else
+		{
+			if(noeudsEntrer.isEmpty())
+			{
+				int random = (int)(Math.random() * (inGraph.getNodeCount()));
+				return inGraph.getNodeAt(random);
+			}
+			else
+			{
+				int random = (int)(Math.random() * (noeudsEntrer.size()));
+				return noeudsEntrer.get(random);
+			}
+			
+		}
 	}
 	
 	public double ET_calc(ArrayList<Integer> E)
-	{
+	{ 
 		int N = E.size();
-		double res = 0;
+		long sum = 0;
 		for(int i=0; i<N; i++)
 		{
-			res = res + E.get(i)*E.get(i);
+			sum+=E.get(i);
 		}
-		res = res/N;
-		double sum = 0;
-		for (int k=1; k<N; k++)
+		double moy = sum/N;
+		long quar = 0;
+		for(int i=0; i<N; i++)
 		{
-			sum = sum + E.get(k);
+			quar += (E.get(i) - moy) * (E.get(i) - moy);
 		}
-		sum = (sum/N) * (sum/N);
-		res = res - sum;
-		return Math.sqrt(res); 
+		double res = quar/N-1;
+		return Math.sqrt(res);
 	}
 	
 	@Override
