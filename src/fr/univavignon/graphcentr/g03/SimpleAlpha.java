@@ -69,12 +69,10 @@ class SimpleAlpha implements SimpleCentrality
 				
 				//Algo
 				int i=0;
-				Algebra calNorm=new Algebra();		//Object servant à calculer les normes
-					//tant que la précision est supérieure à la différence entre la norme du vecteur de l'itération précédente, et la norme du vecteur de l'itération courante:
+				Algebra calNorm=new Algebra();		//Object servant à calculer les normes et les multiplications de vecteurs et matrices
 				while(i<nbIt)
 				{
 					v0.assign(v1);			//v0=v1
-					//v1=adjT.zMult(v1, v1);	//v1= AT*v1
 					v1=calNorm.mult(adjT, v1);	//v1=AT*v1
 					v1=v1.assign(Functions.mult(this.alpha));	//v1=v1*alpha
 					v1=v1.assign(this.e, Functions.plus);		//v1=v1+e

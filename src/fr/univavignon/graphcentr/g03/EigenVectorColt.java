@@ -32,6 +32,7 @@ class EigenVectorColt implements SimpleCentrality
 	/**
 	 * 
 	 * @param g : the graph
+	 * @brief Compute EigenVector centrality using the Colt's algorithm
 	 * @return array containing each node's centrality
 	 *
 	 */

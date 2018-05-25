@@ -11,7 +11,7 @@ public class AlphaTest
 {
 	public static void execute()
 	{
-		
+			//Exemple du rapport
 		DirectedGraph g=new DirectedGraph();
 		
 		g.createNode();
@@ -31,7 +31,8 @@ public class AlphaTest
 		e[2]=1;
 		e[3]=5;
 		
-		/*int n=4;
+		/*//-------------Benchmarks------------------
+		int n=4;
 		double[] e=new double[n];
 		for(int i=0; i<n; i++)
 		{
@@ -47,7 +48,7 @@ public class AlphaTest
 		r.updateFromFile("./res/Benchmark/watts_strogatz/n="+n+"_k="+k+".graphml",g);*/
 		
 		System.out.println("Go!");
-		DirectedAlpha sA=new DirectedAlpha(0.5, e, 5);
+		DirectedAlpha sA=new DirectedAlpha(0.5, e, 1000);
 		Benchmark.start();
 		CentralityResult res=sA.evaluate(g);
 		Benchmark.stop();
