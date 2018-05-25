@@ -19,16 +19,17 @@ public class Betweeness implements DirectedCentrality {
 	
 	@Override
 	public CentralityResult evaluate(DirectedGraph inGraph) {
-
+		
+		int Cb[] = new int[inGraph.getNodeCount()];	// resultat betweenness centrality
 		Stack<Node> P = new Stack<Node>(); 			// Pile permettant de conserver les arrêtes dans un ordre non croissant des distance depuis s
 		Queue<Node> F = new LinkedList<Node>();		// File 
 		
 		int dist[] = new int[inGraph.getNodeCount()];
-		List<Node> pred = new LinkedList<Node>(); // Liste des prédecesseurs
+		List<List<Node>> pred = new LinkedList<List<Node>>(); // Liste des prédecesseurs
 		
 		//List<Integer> sigma = new LinkedList<Integer>();// Nombre de chemins le plus court
 		int sigma[] = new int[inGraph.getNodeCount()];
-		List<Integer> delta = new LinkedList<Integer>();// dépendance de s par rapport à v
+		int delta[] = new int[inGraph.getNodeCount()];// dépendance de s par rapport à v
 		
 		Node v;
 		// Boucle principale :
@@ -62,13 +63,22 @@ public class Betweeness implements DirectedCentrality {
 						
 						if(dist[inGraph.getNodeIndex(w)] = dist[inGraph.getNodeIndex(v)] +1 )
 						{
-							
-							
+							sigma[inGraph.getNodeIndex(w)] = sigma[inGraph.getNodeIndex(w)]+sigma[inGraph.getNodeIndex(v)];
+							pred.get(inGraph.getNodeIndex(w)).add(v);
 						}
-						
 					}
-				
 				}
+			}
+			for (Node y : inGraph.getNodes())
+				delta[inGraph.getNodeIndex(y)] = 0;
+			Node w;
+			while(!P.empty())
+			{
+				w = P.pop();
+				for(Node p : pred.get(inGraph.getNodeIndex(w)))			
+					delta[inGraph.getNodeIndex(p)] += (sigma[inGraph.getNodeIndex(p)]/ sigma[inGraph.getNodeIndex(w)])*(1 + delta[inGraph.getNodeIndex(w)]);
+				if(w != s)
+					Cb[inGraph.getNodeIndex(w)] += delta[inGraph.getNodeIndex(w)];
 			}
 			
 			
