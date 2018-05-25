@@ -9,7 +9,7 @@ import fr.univavignon.graphcentr.g07.core.graphs.SpatialGraph;
  * 
  * @brief Used to compute centrality on spatial & weighted graph
  */
-public interface SpatialWeightedCentrality extends AbstractCentrality<SpatialGraph>
+public interface SpatialWeightedCentrality extends AbstractCentrality<SpatialWeightedGraph>
 {
 	// Nothing to do
 }
