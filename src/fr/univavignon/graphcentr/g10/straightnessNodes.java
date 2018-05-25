@@ -6,6 +6,7 @@ import fr.univavignon.graphcentr.g07.core.WeightedLink;
 
 import fr.univavignon.graphcentr.g07.core.helper.WeightedGraphHelper;
 import fr.univavignon.graphcentr.g07.core.helper.SpatialGraphHelper;
+
 import fr.univavignon.graphcentr.g11.FloydWarshall;
 /**
  * @author Habib Mohamed
@@ -47,7 +48,7 @@ public static double StraightnessNodes(SpatialNode k,SpatialNode j,double distan
 	{
 	return Math.sqrt(Math.pow((u.getX()-v.getX()),2)+Math.pow((u.getY()-v.getY()),2));
 	}
-
+/*
 public static double[] fin(AbstractGraph inGraph)
 {
 
@@ -73,6 +74,6 @@ moyenne k ← moyenne k /(n − 1);
 return moyenne ;
 
 }
-
+*/
 
 }

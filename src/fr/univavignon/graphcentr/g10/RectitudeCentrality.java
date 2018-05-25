@@ -7,7 +7,9 @@ import fr.univavignon.graphcentr.g07.core.centrality.CentralityResult;
 import fr.univavignon.graphcentr.g07.core.centrality.SpatialWeightedCentrality;
 import fr.univavignon.graphcentr.g07.core.graphs.SpatialGraph;
 import fr.univavignon.graphcentr.g07.core.graphs.SpatialWeightedGraph;
+import fr.univavignon.graphcentr.g07.core.readers.GraphMLReader;
 import fr.univavignon.graphcentr.g07.core.utility.Benchmark;
+
 import java.util.List;
 
 /**
@@ -18,7 +20,6 @@ import java.util.List;
 public class RectitudeCentrality implements SpatialWeightedCentrality {
 	
 	private SpatialWeightedGraph graph = null ;
-	
 	
 	/**
 	 * @author Christophe
@@ -129,7 +130,7 @@ public class RectitudeCentrality implements SpatialWeightedCentrality {
 	}
 	
 	/**
-	 * 
+	 * @author Christophe
 	 * @param inGraph
 	 */
 	public void rectitudeBenchmark(SpatialWeightedGraph inGraph) {
@@ -144,6 +145,10 @@ public class RectitudeCentrality implements SpatialWeightedCentrality {
 		Benchmark.printSnapshots();
 	}
 	
+	/**
+	 * @author Christophe
+	 * @param inGraph
+	 */
 	public void rectitudeBenchmarkDetail(SpatialWeightedGraph inGraph) {
 		// Start benchmark
 		Benchmark.start();
@@ -162,11 +167,43 @@ public class RectitudeCentrality implements SpatialWeightedCentrality {
 				}
 			}
 			moyenne[k] /= nbNodes -1;			
-		}		
+		}
 		
+		Benchmark.addIteration();
+		Benchmark.addSnapshot("mettre les resultats dans CentralityResult");
+		CentralityResult result = new CentralityResult();
+		for (int i = 0 ; i < moyenne.length ; i++) {
+			result.add(moyenne[i]);
+		}
 		// Finishes benchmark
 		Benchmark.stop();
 		// And print snapshots
 		Benchmark.printSnapshots();
+	}
+	
+	/**
+	 * @author Christophe
+	 * 
+	 */
+	public void rectitudeBenchmarkFromFile(String sourceFile) {
+		
+		SpatialWeightedGraph graphe = new SpatialWeightedGraph();
+		
+		GraphMLReader reader = new GraphMLReader();
+		reader.updateFromFile(sourceFile, graphe);
+		
+		for (int i = 0 ; i < 3 ; i++) {
+			// Start benchmark
+			Benchmark.start();
+			// Create first snapshot point, called "First loop"
+			Benchmark.addSnapshot("temps pour l'evaluation complète");
+			evaluate(graphe);
+			// Finishes benchmark
+			Benchmark.stop();
+			// And print snapshots
+			Benchmark.printSnapshots();
+			
+			Benchmark.saveToFile("tests"+i+sourceFile);
+		}		
 	}
 }
