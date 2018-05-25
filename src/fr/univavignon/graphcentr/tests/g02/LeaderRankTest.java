@@ -1,17 +1,19 @@
-package fr.univavignon.graphcentr.g02;
+package fr.univavignon.graphcentr.tests.g02;
 
+import fr.univavignon.graphcentr.g02.BadErrorValue;
+import fr.univavignon.graphcentr.g02.LeaderRank;
 import fr.univavignon.graphcentr.g07.core.graphs.DirectedGraph;
 import fr.univavignon.graphcentr.g07.core.readers.*;
 import fr.univavignon.graphcentr.g07.core.utility.Benchmark;
 
-public class Test {
+public class LeaderRankTest {
 
 	public static void main(String[] args)
 	{
 		DirectedGraph graph = new DirectedGraph();
 		
 		/* Test graph */
-		/*graph.createNode();
+		graph.createNode();
 		graph.createNode();
 		graph.createNode();
 		graph.createNode();
@@ -27,7 +29,7 @@ public class Test {
 		graph.createLink(4, 1);
 		graph.createLink(4, 5);
 		graph.createLink(5, 2);
-		graph.createLink(5, 3);*/
+		graph.createLink(5, 3);
 
 		try
 		{
@@ -36,8 +38,8 @@ public class Test {
 			Benchmark.start();
 			Benchmark.addSnapshot("Graph loading...");
 			
-			GraphMLReader reader = new GraphMLReader();
-			reader.updateFromFile("C:/Users/Raph/Google Drive/Cours/L3/S1/Projet/Benchmark/erdos_renyi/n=1000_p=0.1.graphml", graph);
+//			GraphMLReader reader = new GraphMLReader();
+//			reader.updateFromFile("C:/Users/Raph/Google Drive/Cours/L3/S1/Projet/Benchmark/examples/source.graphml", graph);
 			
 			Benchmark.addSnapshot("Centrality processing...");
 			
