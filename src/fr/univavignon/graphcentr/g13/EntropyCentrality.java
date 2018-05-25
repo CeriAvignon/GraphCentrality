@@ -9,143 +9,170 @@ import fr.univavignon.graphcentr.g07.core.centrality.CentralityResult;
 import fr.univavignon.graphcentr.g07.core.centrality.SimpleCentrality;
 import fr.univavignon.graphcentr.g07.core.graphs.SimpleGraph;
 
+/**
+ * 
+ * The EntropyCentrality class can be used to calculate the centrality of each node in simple graphs
+ * The result can be normalised if you want to, just call the main method with true in the second argument 
+ * @author Thomas Duvignau & Florian Chevalier
+ * 
+ */
 public class EntropyCentrality implements SimpleCentrality
 {
 
 	/**
+	 * The ElemPath method is designed to find all the paths between two given vertices. All the paths will be stored in the Res array
 	 * @param inGraph
-	 * @param v1
-	 * @param v2
-	 * @param Parcours
+	 * @param actualNode 
+	 * @param finalNode 
+	 * @param Path 
 	 * @param Res
-	 * @param v3
 	 */
-	public void ElemPath(SimpleGraph inGraph, int v1, int v2,  ArrayList<Integer> Parcours, ArrayList<ArrayList<Integer>> Res, int v3)
+	public void ElemPath(SimpleGraph inGraph, int actualNode, int finalNode, ArrayList<Integer> Path, ArrayList<ArrayList<Integer>> Res)
 	{
-		 Parcours.add(v3);
-		 if(v2 == v3)
+		Path.add(actualNode);
+		 if(actualNode == finalNode)
 		 {
-			 Res.add(Parcours);
+			 Res.add(Path);
 		 }
 		 else
 		 {
-			 ArrayList<Integer> Tab = new ArrayList<Integer>();
-			 for (int i = 0; i < Parcours.size(); i++)
+			 Node n = inGraph.getNodeAt(actualNode);
+			 List<Link> links = inGraph.getNodeLinks(n);
+			 for (int j = 0; j < links.size(); j++)
 			 {
-				 Tab.add(Parcours.get(i));
-			 }
-			 Node v = inGraph.getNodeAt(v3);
-			 List<Link> links = inGraph.getNodeLinks(v);
-			 List<Link> links_v2 = new ArrayList<Link>();
-			 for (int i=0; i < links.size(); i++)
-			 {
-				 if (links.get(i).getDestinationIdentifier() != links.get(i).getSourceIdentifier())
-					 links_v2.add(links.get(i));
-			 }
-			 
-			 for (int j = 0; j < links_v2.size(); j++)
-			 {
-				 if(!Tab.contains( links_v2.get(j).getDestinationIdentifier()) )
+				 if(!Path.contains( links.get(j).getDestinationIdentifier()) )
 				 {
-					 ElemPath(inGraph, v1, v2, Tab, Res, links_v2.get(j).getDestinationIdentifier());
+					 ArrayList<Integer> Tab = new ArrayList<Integer>();
+					 for (int i = 0; i < Path.size(); i++)
+					 {
+						 Tab.add(new Integer(Path.get(i)));
+					 }
+					 ElemPath(inGraph, links.get(j).getDestinationIdentifier() , finalNode, Tab, Res);
 				 }
 			 }
 		 }
-	 }
+	}
+
 	
 	/**
+	 * Calculate the transfer probability of the actualNode
 	 * @param inGraph
-	 * @param a
-	 * 
-	 * @return
+	 * @param actualNode 
+	 * @param followingNode 
+	 * @param Path 
+	 * @return double
 	 */
-	public double tau(SimpleGraph inGraph , int a , int b)
+	public double tau(SimpleGraph inGraph , int actualNode, int followingNode, ArrayList<Integer> Path)
 	{
-		if( inGraph.getNodeDegree(a) < 2.  )
+		if( inGraph.getNodeDegree(actualNode) -1 == 0  )
 		{
 			return 0;
 		}
 		else
 		{
-			double[][] matrice = inGraph.toAdjacencyMatrix();
-			return (matrice[a][b]/(inGraph.getNodeDegree(a)-1));
+			int downstreamDegree;
+			double[][] matrix = inGraph.toAdjacencyMatrix();
+
+			downstreamDegree = (inGraph.getNodeDegree(actualNode)-1);
+			
+			int i=0;
+			while(Path.get(i) != actualNode)
+			{
+				if( matrix[actualNode][Path.get(i)] !=0 )
+				{
+					downstreamDegree--;
+				}
+				i++;
+			}
+			
+			return (matrix[actualNode][followingNode]/(downstreamDegree));
 		}
 	}
 	
 	/**
-	 * calcul du taux sigma
-	 * 
-	 * @param inGraph
-	 * @param a
-	 * @return double, le taux calculé
+	 * Calculate the probability that the flow stay on the same node
+	 * @param inGraph 
+	 * @param actualNode 
+	 * @param Path 
+	 * @return double
 	 */
-	public double sigma(SimpleGraph inGraph , int a)
+	public double sigma(SimpleGraph inGraph , int actualNode , ArrayList<Integer> Path)
 	{
-		if( inGraph.getNodeDegree(a) < 2 )
+		if( inGraph.getNodeDegree(actualNode) -1  == 0 )
 		{
 			return 1;
 		}
 		else
 		{
-			double[][] matrice = inGraph.toAdjacencyMatrix();
-			
+			int downstreamDegree;
+			double[][] matrix = inGraph.toAdjacencyMatrix();
 
-			System.out.println("deg : "+inGraph.getNodeDegree(a));
-			return (matrice[a][a]/(inGraph.getNodeDegree(a)-1));
+			downstreamDegree = (inGraph.getNodeDegree(actualNode)-1);
+			
+			int i=0;
+			while(Path.get(i) != actualNode)
+			{
+				if( matrix[actualNode][Path.get(i)] !=0 )
+				{
+					downstreamDegree--;
+				}
+				i++;
+			}
+			
+			return (matrix[actualNode][actualNode]/downstreamDegree);
 		}
 	}
 	
 	/**
+	 * Calculate the probability to pass from the actualNode to the finalNode
 	 * @param inGraph
-	 * @param i
-	 * @param j
-	 * @return
+	 * @param actualNode 
+	 * @param finalNode 
+	 * @return double
 	 */
-	public double calculProba(SimpleGraph inGraph,int i,int j)
+	public double calculProba(SimpleGraph inGraph,int actualNode,int finalNode)
 	{
 		double z = 0;
 		double b;
 		
-		if(i != j)
+		if(actualNode != finalNode)
 		{
+			System.out.println("Chemin de " + actualNode + " a " +finalNode );
+
 				ArrayList<ArrayList<Integer>> res = new ArrayList<ArrayList<Integer>>();
 				ArrayList<Integer> parcours = new ArrayList<Integer>();
 				
-
-				ElemPath(inGraph,i,j,parcours,res,i);
-				
-				
+				ElemPath(inGraph,actualNode,finalNode,parcours,res);				
 				int k=0;
 				for( k=0 ; k<res.size(); k++)
 				{
-					System.out.println("chemin "+ k );
 					double y=1;
 					for(int t=0;t<res.get(k).size()-1;t++)
 					{
-						b=tau(inGraph,(int)res.get(k).get(t),(int)res.get(k).get(t+1));
+						b=tau(inGraph,res.get(k).get(t),res.get(k).get(t+1),res.get(k));
 						y=y*b;
-						System.out.println("b = "+b);
 					}
-					y=y*sigma(inGraph,j);
+					y=y*sigma(inGraph,res.get(k).get(res.get(k).size()-1),res.get(k));
 					z=z+y;
-					System.out.println("sigma(inGraph,j) :"+sigma(inGraph,j));
-					System.out.println("z :"+z);
+
 				}
 		}
 		else
-		{
-			Node v=inGraph.getNodeAt(i);
+		{	
+			System.out.println("Chemin de " + actualNode + " a " +finalNode );
+			Node v=inGraph.getNodeAt(actualNode);
 			z= 1.0 / (inGraph.getNodeDegree(v)-1);
 		}
 		return z;	
 	}
 
 	/**
+	 * Main algorithm to find the entropy centrality of each node
 	 * @param inGraph
 	 * @param normalise
-	 * @return résultat de l'algo
+	 * @return CentralityResult
 	 */
-	public CentralityResult AlgoPrincipale(SimpleGraph inGraph,boolean normalise)
+	public CentralityResult MainAlgorithm(SimpleGraph inGraph,boolean normalise)
 	{
 		int n = inGraph.getNodeCount();
 
@@ -158,34 +185,30 @@ public class EntropyCentrality implements SimpleCentrality
 			x=0;
 			for(int j = 0; j <n ; j++)
 			{
-				System.out.println("step 1 :"+x+"ij"+i+j);
-				System.out.println("prob : " +calculProba(inGraph,i,j)+"ij"+i+j);
-				x = x + calculProba(inGraph,i,j) * Math.log10( calculProba(inGraph,i,j) );
-				System.out.println("step 2 :"+x+"ij"+i+j);
+				double resultproba =  calculProba(inGraph,i,j) ;				
+				x = x + resultproba * (Math.log( resultproba )/Math.log(10));
 
 			}
+			
 			if(normalise == true)
 			{
-				x = x * (-1) / Math.log10(n);
-				System.out.println("step 3 :"+x);
+				x = x * (-1) / (Math.log(n)/Math.log(10));
 
 			}
 
 			C_Ent.add(x);	  			
 		}
-		
-		for(int i=0; i<4; i++)
-		{
-			System.out.println(inGraph.getNodeDegree(i));
-		}
-		
+
 		return C_Ent;
 	}
 
 	@Override
 	public CentralityResult evaluate(SimpleGraph inGraph) {
-		
-		return AlgoPrincipale(inGraph, true);
+		for (int i=0; i<inGraph.getNodeCount(); i++)
+		{
+			inGraph.createLink(i, i);
+		}
+		return MainAlgorithm(inGraph, true);
 		// TODO Auto-generated method stub
 	}
 
