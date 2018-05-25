@@ -49,7 +49,7 @@ class CorenessCentrality implements SimpleCentrality
 		}
 		return Result;
 	}
-	
+	  
 	/**
 	 * @param D
 	 */
