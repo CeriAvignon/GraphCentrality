@@ -183,7 +183,7 @@ public class RectitudeCentrality implements SpatialWeightedCentrality {
 	
 	/**
 	 * @author Christophe
-	 * 
+	 * @param sourceFile
 	 */
 	public void rectitudeBenchmarkFromFile(String sourceFile) {
 		
