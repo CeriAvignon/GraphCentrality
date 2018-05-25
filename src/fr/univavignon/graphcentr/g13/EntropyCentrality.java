@@ -9,72 +9,45 @@ import fr.univavignon.graphcentr.g07.core.centrality.CentralityResult;
 import fr.univavignon.graphcentr.g07.core.centrality.SimpleCentrality;
 import fr.univavignon.graphcentr.g07.core.graphs.SimpleGraph;
 
+/**
+ * 
+ * The EntropyCentrality class can be used to calculate the centrality of each node in simple graphs
+ * The result can be normalised if you want to, just call the main method with true in the second argument 
+ * @author Thomas Duvignau & Florian Chevalier
+ * 
+ */
 public class EntropyCentrality implements SimpleCentrality
 {
 
 	/**
+	 * The ElemPath method is designed to find all the paths between two given vertices. All the paths will be stored in the Res array
 	 * @param inGraph
-	 * @param v1
-	 * @param v2
-	 * @param Parcours
+	 * @param actualNode 
+	 * @param finalNode 
+	 * @param Path 
 	 * @param Res
-	 * @param v3
 	 */
-/*	public void ElemPath(SimpleGraph inGraph, int v1, int v2,  ArrayList<Integer> Parcours, ArrayList<ArrayList<Integer>> Res, int v3)
+	public void ElemPath(SimpleGraph inGraph, int actualNode, int finalNode, ArrayList<Integer> Path, ArrayList<ArrayList<Integer>> Res)
 	{
-		 Parcours.add(v3);
-		 if(v2 == v3)
+		Path.add(actualNode);
+		 if(actualNode == finalNode)
 		 {
-			 Res.add(Parcours);
-			 return;
+			 Res.add(Path);
 		 }
 		 else
 		 {
-			 ArrayList<Integer> Tab = new ArrayList<Integer>();
-			 for (int i = 0; i < Parcours.size(); i++)
-			 {
-				 Tab.add(Parcours.get(i));
-			 }
-			 Node v = inGraph.getNodeAt(v3);
-			 List<Link> links = inGraph.getNodeLinks(v);
-			 List<Link> links_v2 = new ArrayList<Link>();
-			 for (int i=0; i < links.size(); i++)
-			 {
-				 if (links.get(i).getDestinationIdentifier() != links.get(i).getSourceIdentifier())
-					 links_v2.add(links.get(i));
-			 }
-			 
-			 for (int j = 0; j < links_v2.size(); j++)
-			 {
-				 if(!Tab.contains( links_v2.get(j).getDestinationIdentifier()) )
-				 {
-					 ElemPath(inGraph, v1, v2, Tab, Res, links_v2.get(j).getDestinationIdentifier());
-				 }
-			 }
-		 }
-	 }
-	*/
-	public void ElemPath(SimpleGraph inGraph, int nouedActuel, int noeudFin, ArrayList<Integer> Parcours, ArrayList<ArrayList<Integer>> Res)
-	{
-		 Parcours.add(nouedActuel);
-		 if(nouedActuel == noeudFin)
-		 {
-			 Res.add(Parcours);
-		 }
-		 else
-		 {
-			 Node n = inGraph.getNodeAt(nouedActuel);
+			 Node n = inGraph.getNodeAt(actualNode);
 			 List<Link> links = inGraph.getNodeLinks(n);
 			 for (int j = 0; j < links.size(); j++)
 			 {
-				 if(!Parcours.contains( links.get(j).getDestinationIdentifier()) )
+				 if(!Path.contains( links.get(j).getDestinationIdentifier()) )
 				 {
 					 ArrayList<Integer> Tab = new ArrayList<Integer>();
-					 for (int i = 0; i < Parcours.size(); i++)
+					 for (int i = 0; i < Path.size(); i++)
 					 {
-						 Tab.add(new Integer(Parcours.get(i)));
+						 Tab.add(new Integer(Path.get(i)));
 					 }
-					 ElemPath(inGraph, links.get(j).getDestinationIdentifier() , noeudFin, Tab, Res);
+					 ElemPath(inGraph, links.get(j).getDestinationIdentifier() , finalNode, Tab, Res);
 				 }
 			 }
 		 }
@@ -82,98 +55,124 @@ public class EntropyCentrality implements SimpleCentrality
 
 	
 	/**
+	 * Calculate the transfer probability of the actualNode
 	 * @param inGraph
-	 * @param a
-	 * 
-	 * @return
+	 * @param actualNode 
+	 * @param followingNode 
+	 * @param Path 
+	 * @return double
 	 */
-	public double tau(SimpleGraph inGraph , int a , int b)
+	public double tau(SimpleGraph inGraph , int actualNode, int followingNode, ArrayList<Integer> Path)
 	{
-		if( inGraph.getNodeDegree(a) -1 == 0  )
+		if( inGraph.getNodeDegree(actualNode) -1 == 0  )
 		{
 			return 0;
 		}
 		else
 		{
-			double[][] matrice = inGraph.toAdjacencyMatrix();
-			return (matrice[a][b]/(inGraph.getNodeDegree(a)-1));
+			int downstreamDegree;
+			double[][] matrix = inGraph.toAdjacencyMatrix();
+
+			downstreamDegree = (inGraph.getNodeDegree(actualNode)-1);
+			
+			int i=0;
+			while(Path.get(i) != actualNode)
+			{
+				if( matrix[actualNode][Path.get(i)] !=0 )
+				{
+					downstreamDegree--;
+				}
+				i++;
+			}
+			
+			return (matrix[actualNode][followingNode]/(downstreamDegree));
 		}
 	}
 	
 	/**
-	 * calcul du taux sigma
-	 * 
-	 * @param inGraph
-	 * @param a
-	 * @return double, le taux calculé
+	 * Calculate the probability that the flow stay on the same node
+	 * @param inGraph 
+	 * @param actualNode 
+	 * @param Path 
+	 * @return double
 	 */
-	public double sigma(SimpleGraph inGraph , int a)
+	public double sigma(SimpleGraph inGraph , int actualNode , ArrayList<Integer> Path)
 	{
-		if( inGraph.getNodeDegree(a) -1  == 0 )
+		if( inGraph.getNodeDegree(actualNode) -1  == 0 )
 		{
 			return 1;
 		}
 		else
 		{
-			double[][] matrice = inGraph.toAdjacencyMatrix();
+			int downstreamDegree;
+			double[][] matrix = inGraph.toAdjacencyMatrix();
+
+			downstreamDegree = (inGraph.getNodeDegree(actualNode)-1);
 			
-			return (matrice[a][a]/(inGraph.getNodeDegree(a)-1));
+			int i=0;
+			while(Path.get(i) != actualNode)
+			{
+				if( matrix[actualNode][Path.get(i)] !=0 )
+				{
+					downstreamDegree--;
+				}
+				i++;
+			}
+			
+			return (matrix[actualNode][actualNode]/downstreamDegree);
 		}
 	}
 	
 	/**
+	 * Calculate the probability to pass from the actualNode to the finalNode
 	 * @param inGraph
-	 * @param i
-	 * @param j
-	 * @return
+	 * @param actualNode 
+	 * @param finalNode 
+	 * @return double
 	 */
-	public double calculProba(SimpleGraph inGraph,int i,int j)
+	public double calculProba(SimpleGraph inGraph,int actualNode,int finalNode)
 	{
 		double z = 0;
 		double b;
 		
-		if(i != j)
+		if(actualNode != finalNode)
 		{
+			System.out.println("Chemin de " + actualNode + " a " +finalNode );
+
 				ArrayList<ArrayList<Integer>> res = new ArrayList<ArrayList<Integer>>();
 				ArrayList<Integer> parcours = new ArrayList<Integer>();
 				
-
-				ElemPath(inGraph,i,j,parcours,res);
-				
-				
+				ElemPath(inGraph,actualNode,finalNode,parcours,res);				
 				int k=0;
 				for( k=0 ; k<res.size(); k++)
 				{
 					double y=1;
 					for(int t=0;t<res.get(k).size()-1;t++)
 					{
-						b=tau(inGraph,res.get(k).get(t),res.get(k).get(t+1));
-						System.out.print("tau("+res.get(k).get(t)+")" + b +" * ");
+						b=tau(inGraph,res.get(k).get(t),res.get(k).get(t+1),res.get(k));
 						y=y*b;
 					}
-					y=y*sigma(inGraph,res.get(k).get(res.get(k).size()-1));
-					System.out.print("sigma("+res.get(k).get(res.get(k).size()-1)+")" + sigma(inGraph,res.get(k).get(res.get(k).size()-1)) +" ");
-					System.out.print("+");
+					y=y*sigma(inGraph,res.get(k).get(res.get(k).size()-1),res.get(k));
 					z=z+y;
 
 				}
-				System.out.println();
 		}
 		else
 		{	
-			System.out.println("Chemin de " + i + " a " +j );
-			Node v=inGraph.getNodeAt(i);
+			System.out.println("Chemin de " + actualNode + " a " +finalNode );
+			Node v=inGraph.getNodeAt(actualNode);
 			z= 1.0 / (inGraph.getNodeDegree(v)-1);
 		}
 		return z;	
 	}
 
 	/**
+	 * Main algorithm to find the entropy centrality of each node
 	 * @param inGraph
 	 * @param normalise
-	 * @return résultat de l'algo
+	 * @return CentralityResult
 	 */
-	public CentralityResult AlgoPrincipale(SimpleGraph inGraph,boolean normalise)
+	public CentralityResult MainAlgorithm(SimpleGraph inGraph,boolean normalise)
 	{
 		int n = inGraph.getNodeCount();
 
@@ -186,32 +185,30 @@ public class EntropyCentrality implements SimpleCentrality
 			x=0;
 			for(int j = 0; j <n ; j++)
 			{
-				double resultproba =  calculProba(inGraph,i,j) ;
-				
-				
-				x = x + resultproba * Math.log10( resultproba );
+				double resultproba =  calculProba(inGraph,i,j) ;				
+				x = x + resultproba * (Math.log( resultproba )/Math.log(10));
 
 			}
+			
 			if(normalise == true)
 			{
-				x = x * (-1) / Math.log10(n);
+				x = x * (-1) / (Math.log(n)/Math.log(10));
 
 			}
 
 			C_Ent.add(x);	  			
 		}
-		
-		for(int i=0; i<4; i++)
-		{
-		}
-		
+
 		return C_Ent;
 	}
 
 	@Override
 	public CentralityResult evaluate(SimpleGraph inGraph) {
-		
-		return AlgoPrincipale(inGraph, true);
+		for (int i=0; i<inGraph.getNodeCount(); i++)
+		{
+			inGraph.createLink(i, i);
+		}
+		return MainAlgorithm(inGraph, true);
 		// TODO Auto-generated method stub
 	}
 
