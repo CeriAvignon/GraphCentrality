@@ -1,6 +1,13 @@
 package fr.univavignon.graphcentr.tests;
 
+
+import fr.univavignon.graphcentr.tests.g01.CliqueTest;
+import fr.univavignon.graphcentr.tests.g01.CliqueTreeSetTest;
+import fr.univavignon.graphcentr.tests.g01.LeverageDirectedTest;
+import fr.univavignon.graphcentr.tests.g01.LeverageTest;
 import fr.univavignon.graphcentr.tests.g07.CoreTest;
+import fr.univavignon.graphcentr.tests.g11.WeightedEccentricityTest;
+import fr.univavignon.graphcentr.tests.g11.FloydWarshallTest;
 
 /**
  * 
@@ -19,5 +26,18 @@ public class Test
 		CoreTest.execute();
 		
 		// Tests on "centralitites"
+		
+<<<<<<< HEAD
+		// g11 tests
+		FloydWarshallTest.execute();
+		WeightedEccentricityTest.execute();
+		
+=======
+		//test g01
+		CliqueTest.execute();
+		CliqueTreeSetTest.execute();
+		LeverageTest.execute();
+		LeverageDirectedTest.execute();
+>>>>>>> refs/remotes/origin/master
 	}
 }

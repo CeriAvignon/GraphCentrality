@@ -1,5 +1,6 @@
 package fr.univavignon.graphcentr.g07.core.centrality;
 
+import fr.univavignon.graphcentr.g07.core.AbstractCentrality;
 import fr.univavignon.graphcentr.g07.core.graphs.DirectedGraph;
 
 /**
@@ -8,12 +9,7 @@ import fr.univavignon.graphcentr.g07.core.graphs.DirectedGraph;
  * 
  * @brief Used to compute centrality on directed graph
  */
-public interface DirectedCentrality 
+public interface DirectedCentrality extends AbstractCentrality<DirectedGraph>
 {
-	/**
-	 * Evaluate given graph
-	 * @param inGraph Graph to evaluate
-	 * @return Centrality results
-	 */
-	public CentralityResult evaluate(DirectedGraph inGraph);
+	// Nothing to do
 }
