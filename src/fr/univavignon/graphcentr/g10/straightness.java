@@ -18,7 +18,7 @@ public class straightness implements SpatialWeightedCentrality{
  */
 
 
-public static double[] Straightness(AbstractGraph inGraph)
+public static double[] Straightness(SpatialWeightedGraph inGraph)
 {
 
 
@@ -34,12 +34,11 @@ for(int k=0;k<n;k++)
 	{
 		if(k!=j)
 		{
-			moyenne[k]=moyenne[k]+ Straightness(inGraph.getNodeAt(k),inGraph.getNodeAt(j),distanceShortestPathMatrix[k][j]);
+			moyenne[k]=moyenne[k]+ StraightnessNodes(inGraph.getNodeAt(k),inGraph.getNodeAt(j),distanceShortestPathMatrix[k][j]);
 		}
 	}
+moyenne [k] = moyenne [k] /(n-1);
 }
-moyenne k ← moyenne k /(n − 1);
-
 return moyenne ;
 
 }
