@@ -134,17 +134,7 @@ public class Katz implements DirectedCentrality
 			result[i] = result[i] / s;
 		}
 		
-		/*
-		//Converting double to Double
-		Double[] doubleArray = new Double[n];
-		for(int i = 0; i < n; i++)										
-		{
-			doubleArray[i] = result[i];
-		}
-		
-		ArrayList<Double> arrayResult = new ArrayList<Double>(Arrays.asList(doubleArray));
-		*/
-		
+
 		return result;
 		
 	}
