@@ -75,7 +75,7 @@ public class RectitudeCentrality implements SpatialWeightedCentrality {
 		for (int k = 0 ; k < nbNodes ; k++) {
 			for (int j = 0 ; j < nbNodes ; j++) {
 				if (k != j) {
-					moyenne[k] += rectitude(k, j, distanceShortestPathMatrix[k][j]);
+					moyenne[k] += StraightnessNodes(k, j, distanceShortestPathMatrix[k][j]);
 				}
 			}
 			moyenne[k] /= nbNodes -1;			
@@ -83,28 +83,43 @@ public class RectitudeCentrality implements SpatialWeightedCentrality {
 		return moyenne ;
 	}
 	
-	private double rectitude(int k, int j, double distanceShortestPath) {
-		double resRectitude = 0 ;
-		double distanceEuclidienne = graph.getEuclideanDistance(graph.getNodeAt(k), graph.getNodeAt(j));
+	/**
+	 * @author Habib Mohamed
+	 * @param k
+	 * @param j
+	 * @param distanceShortestPath
+	 * @return
+	 */
+	public double StraightnessNodes(int k, int j, double distanceShortestPath)
+	{
+		//Initialisation
+		double resStraightness = 0;
+		double de = graph.getEuclideanDistance(graph.getNodeAt(k), graph.getNodeAt(j));
+		
 		if (distanceShortestPath == Double.MAX_VALUE) {
-			resRectitude = 0;
-		}
-		else {
-			if (distanceShortestPath == distanceEuclidienne){
-				resRectitude = 1 ;
-			} else {
-				resRectitude = distanceEuclidienne / distanceShortestPath ;
+			resStraightness = 0;
+		} else {
+			if (distanceShortestPath == de) {
+				resStraightness = 1;
+			}
+			else {
+				resStraightness = de / distanceShortestPath;
 			}
 		}
-		return resRectitude ;
+		return resStraightness;
 	}
-	
 	
 	/**
 	 * 
 	 */
 	@Override
 	public CentralityResult evaluate(SpatialGraph inGraph) {
+		CentralityResult result = new CentralityResult();
+		
+		double[] moyenne = rectitudeMoyenne();
+		for (int i = 0 ; i < moyenne.length ; i++) {
+			result.add(moyenne[i]);
+		}
 		
 		// TODO Auto-generated method stub
 		return null;
