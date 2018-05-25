@@ -113,7 +113,7 @@ public class RectitudeCentrality implements SpatialWeightedCentrality {
 	 * 
 	 */
 	@Override
-	public CentralityResult evaluate(SpatialWeightedGraph inGraph) {
+	public CentralityResult evaluate(SpatialGraph inGraph) {
 		CentralityResult result = new CentralityResult();
 		
 		double[] moyenne = rectitudeMoyenne();
