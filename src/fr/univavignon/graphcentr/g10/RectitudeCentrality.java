@@ -7,6 +7,7 @@ import fr.univavignon.graphcentr.g07.core.centrality.CentralityResult;
 import fr.univavignon.graphcentr.g07.core.centrality.SpatialWeightedCentrality;
 import fr.univavignon.graphcentr.g07.core.graphs.SpatialGraph;
 import fr.univavignon.graphcentr.g07.core.graphs.SpatialWeightedGraph;
+import fr.univavignon.graphcentr.g07.core.utility.Benchmark;
 import java.util.List;
 
 /**
@@ -31,7 +32,7 @@ public class RectitudeCentrality implements SpatialWeightedCentrality {
 	 * @param graph 			un graphe spatial
 	 * @return adjacencyMatrix	la matrice d'adjacence (distance)
 	 */
-	public double[][] WarshallFloyd() {
+	private double[][] WarshallFloyd() {
 		// recupère le nombre de noeud du graphe
 		int nbNodes = graph.getNodeCount();
 		// recupère la matrice d'adjacence du graphe
@@ -88,7 +89,7 @@ public class RectitudeCentrality implements SpatialWeightedCentrality {
 	 * @param k
 	 * @param j
 	 * @param distanceShortestPath
-	 * @return
+	 * @return resStraightness
 	 */
 	public double StraightnessNodes(int k, int j, double distanceShortestPath)
 	{
@@ -110,18 +111,62 @@ public class RectitudeCentrality implements SpatialWeightedCentrality {
 	}
 	
 	/**
-	 * 
+	 * @author Christophe
+	 * @param inGraph
+	 * @return result
 	 */
 	@Override
-	public CentralityResult evaluate(SpatialGraph inGraph) {
+	public CentralityResult evaluate(SpatialWeightedGraph inGraph) {
 		CentralityResult result = new CentralityResult();
+		this.graph = inGraph ;
 		
 		double[] moyenne = rectitudeMoyenne();
 		for (int i = 0 ; i < moyenne.length ; i++) {
 			result.add(moyenne[i]);
 		}
 		
-		// TODO Auto-generated method stub
-		return null;
+		return result;
+	}
+	
+	/**
+	 * 
+	 * @param inGraph
+	 */
+	public void rectitudeBenchmark(SpatialWeightedGraph inGraph) {
+		// Start benchmark
+		Benchmark.start();
+		// Create first snapshot point, called "First loop"
+		Benchmark.addSnapshot("temps pour l'evaluation complète");
+		evaluate(inGraph);
+		// Finishes benchmark
+		Benchmark.stop();
+		// And print snapshots
+		Benchmark.printSnapshots();
+	}
+	
+	public void rectitudeBenchmarkDetail(SpatialWeightedGraph inGraph) {
+		// Start benchmark
+		Benchmark.start();
+		// Create first snapshot point, called "First loop"
+		int nbNodes = graph.getNodeCount();
+		Benchmark.addSnapshot("WarshallFloyd");
+		double[][] distanceShortestPathMatrix = WarshallFloyd();
+		
+		Benchmark.addIteration();
+		Benchmark.addSnapshot("calcul des moyennes");
+		double[] moyenne = new double[nbNodes];
+		for (int k = 0 ; k < nbNodes ; k++) {
+			for (int j = 0 ; j < nbNodes ; j++) {
+				if (k != j) {
+					moyenne[k] += StraightnessNodes(k, j, distanceShortestPathMatrix[k][j]);
+				}
+			}
+			moyenne[k] /= nbNodes -1;			
+		}		
+		
+		// Finishes benchmark
+		Benchmark.stop();
+		// And print snapshots
+		Benchmark.printSnapshots();
 	}
 }
