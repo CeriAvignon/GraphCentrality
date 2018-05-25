@@ -1,10 +1,11 @@
-package fr.univavignon.graphcentr.g14;
+package fr.univavignon.graphcentr.tests.g14;
 
 
 
 import fr.univavignon.graphcentr.g07.core.WeightedLink;
 import fr.univavignon.graphcentr.g07.core.centrality.CentralityResult;
 import fr.univavignon.graphcentr.g07.core.graphs.DirectedWeightedGraph;
+import fr.univavignon.graphcentr.g14.RandomWalkCloseness;
 
 /**
  * @author Soufiane.sel
