@@ -14,7 +14,7 @@ import fr.univavignon.graphcentr.g07.core.graphs.DirectedGraph;
  */
 public class DirectedDegreeCentrality implements DirectedCentrality {
 	
-			
+	
 			/**
 			 * IN represents the incoming edges
 			 */
