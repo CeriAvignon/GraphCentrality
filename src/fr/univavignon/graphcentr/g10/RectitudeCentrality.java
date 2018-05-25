@@ -1,16 +1,10 @@
 package fr.univavignon.graphcentr.g10;
 
-import fr.univavignon.graphcentr.g10.NotImplementedException;
-import fr.univavignon.graphcentr.g07.core.SpatialNode;
-import fr.univavignon.graphcentr.g07.core.WeightedLink;
 import fr.univavignon.graphcentr.g07.core.centrality.CentralityResult;
 import fr.univavignon.graphcentr.g07.core.centrality.SpatialWeightedCentrality;
-import fr.univavignon.graphcentr.g07.core.graphs.SpatialGraph;
 import fr.univavignon.graphcentr.g07.core.graphs.SpatialWeightedGraph;
 import fr.univavignon.graphcentr.g07.core.readers.GraphMLReader;
 import fr.univavignon.graphcentr.g07.core.utility.Benchmark;
-
-import java.util.List;
 
 /**
  * @author Christophe
