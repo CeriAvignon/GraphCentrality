@@ -100,7 +100,9 @@ public class RectitudeCentrality implements SpatialWeightedCentrality {
 	}
 	
 	
-	
+	/**
+	 * 
+	 */
 	@Override
 	public CentralityResult evaluate(SpatialGraph inGraph) {
 		
