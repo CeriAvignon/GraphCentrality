@@ -1,7 +1,7 @@
 package fr.univavignon.graphcentr.g07.core.centrality;
 
 import fr.univavignon.graphcentr.g07.core.AbstractCentrality;
-import fr.univavignon.graphcentr.g07.core.graphs.SpatialGraph;
+import fr.univavignon.graphcentr.g07.core.graphs.SpatialWeightedGraph;
 
 /**
  * 
