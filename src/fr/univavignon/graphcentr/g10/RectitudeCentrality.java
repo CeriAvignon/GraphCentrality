@@ -36,6 +36,20 @@ public class RectitudeCentrality implements SpatialWeightedCentrality {
 		int nbNodes = graph.getNodeCount();
 		// recupère la matrice d'adjacence du graphe
 		double[][] adjacencyMatrix = graph.toAdjacencyMatrix();
+		{
+			double[][] adjacencyMatrix2 = new double[nbNodes][nbNodes];
+			for	(int i = 0 ; i < nbNodes ; i++) {
+				for (int j = 0 ; j < nbNodes ; j++) {				
+					if (i == j  || adjacencyMatrix[i][j] != 0) {
+						adjacencyMatrix2[i][j] = adjacencyMatrix[i][j];
+					}
+					else {
+						adjacencyMatrix2[i][j] = Double.MAX_VALUE; 
+					}
+				}
+			}
+			adjacencyMatrix = adjacencyMatrix2 ;	
+		}
 		// initialisation de chaque case avec la valeur max possible
 		for(int k = 0 ; k < nbNodes ; k++) {
 			for(int i = 0 ; i < nbNodes ; i++) {
