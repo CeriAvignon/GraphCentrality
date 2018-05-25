@@ -52,7 +52,7 @@ public class Ecart_type implements SimpleCentrality
 		this.nombreDePasParNoeud = nombreDePasParNoeud;
 	}
 	
-	Ecart_type()
+	public Ecart_type()
 	{
 		nombreDePasParNoeud = 20000;
 	}
