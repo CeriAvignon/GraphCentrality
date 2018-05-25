@@ -1,6 +1,5 @@
 package fr.univavignon.graphcentr.g07.core;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -43,8 +42,8 @@ public abstract class AbstractGraph
 	 */
 	public AbstractGraph()
 	{
-		nodes = new ArrayList<NodeType>();
-		links = new ArrayList<List<LinkType>>();
+		nodes = new GraphListType<NodeType>();
+		links = new GraphListType<List<LinkType>>();
 		
 		initializeClass();
 	}
@@ -139,7 +138,7 @@ public abstract class AbstractGraph
 	{
 		inNode.setIdentifier(nodes.size());
 		nodes.add(inNode);
-		links.add(new ArrayList<LinkType>());
+		links.add(new GraphListType<LinkType>());
 	}
 	
 	/**
