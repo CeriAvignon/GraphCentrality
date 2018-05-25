@@ -10,7 +10,7 @@ import fr.univavignon.graphcentr.g07.core.graphs.SimpleGraph;
  * @author Corentin Bettiol
  *
  */
-public class CentralityBasedTest {
+public class GeodesicBased {
 
 	
 	/**
