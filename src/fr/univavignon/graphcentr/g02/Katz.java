@@ -18,6 +18,9 @@ import cern.jet.math.*;
 
 public class Katz implements DirectedCentrality
 {
+	/**
+	 * alpha value
+	 */
 	private double alpha;
 	
 	//Constructor with alpha arg
