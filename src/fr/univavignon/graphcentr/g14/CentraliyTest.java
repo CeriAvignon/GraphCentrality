@@ -32,10 +32,10 @@ public class CentraliyTest {
 		//System.out.println(graph.getLinkCount());
 		CentralityResult result = Random.evaluate(graph);
 		
-		//for(int i = 0; i < result.size(); i++) {   
-		//System.out.print(result.get(i)+"\n");
+		for(int i = 0; i < result.size(); i++) {   
+			System.out.print(result.get(i)+"\n");
 		    
-		//}  
+		}  
 
 	}
 

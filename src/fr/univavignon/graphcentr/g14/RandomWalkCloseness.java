@@ -24,11 +24,13 @@ public class RandomWalkCloseness implements DirectedWeightedCentrality {
 	/**
 	 * @param inGraph
 	 * @return
+	 * Creation d'un matrice de transition pour le graphe orienté et pendéré 
 	 */
 	public static double [][] transitionWeightedMatrix (DirectedWeightedGraph inGraph)
 	{
-		double [][] tab2 = inGraph.toAdjacencyMatrix();
-		double [] tab = new double [inGraph.getNodeCount()]; 
+
+		double [] tableau = new double [inGraph.getNodeCount()]; 
+		double [][] tableau2 = inGraph.toAdjacencyMatrix();
 		for (int i=0;i<inGraph.getNodeCount();i++) 
 		{
 			double sommeW = 0;
@@ -36,28 +38,28 @@ public class RandomWalkCloseness implements DirectedWeightedCentrality {
 			{
 				sommeW = sommeW + inGraph.getNodeLinks(inGraph.getNodeAt(i)).get(j).getWeight();
 			}
-			tab[i]=sommeW;
+			tableau[i]=sommeW;
 		}
-		double [][] tab3 = new double [tab.length][tab.length];
-		for (int i=0;i<tab.length;i++) 
+		double [][] tableau3 = new double [tableau.length][tableau.length];
+		for (int i=0;i<tableau.length;i++) 
 		{
-			for (int j=0; j<tab.length;j++) 
+			for (int j=0; j<tableau.length;j++) 
 			{
-				if(tab2[i][j] != 0) {
-					tab3[i][j]= tab2[i][j]/tab[i];
+				if(tableau2[i][j] != 0) {
+					tableau3[i][j]= tableau2[i][j]/tableau[i];
 				} else {
-					tab3[i][j]=0;
+					tableau3[i][j]=0;
 				}
 			}
 		}
-		return tab3;
+		return tableau3;
 	}
 
     /**
      * @param tableau
      * @param index
      * @return
-     * Creation d'une 
+     * Creation d'une nouvelle matrice sans la ligne et la colonne donner en paramatére a partir de matrice de transition.
      */
     public static DenseDoubleMatrix2D removColumnAndRow(double[][] tableau, int index) {
         int nRows = tableau.length;
@@ -91,6 +93,7 @@ public class RandomWalkCloseness implements DirectedWeightedCentrality {
     /**
      * @param inGraph
      * @return
+     * Creation d'une matrice d'identité.
      */
     public static DenseDoubleMatrix2D matrixIdentityCreation (DirectedWeightedGraph inGraph)
     {
@@ -108,6 +111,7 @@ public class RandomWalkCloseness implements DirectedWeightedCentrality {
     /**
      * @param inGraph
      * @return
+     * creation d'une vacteur qui contient des uns.
      */
     public static DenseDoubleMatrix1D vectorOfOneCreation (DirectedWeightedGraph inGraph) 
     {
@@ -130,22 +134,17 @@ public class RandomWalkCloseness implements DirectedWeightedCentrality {
 		int i =0;
 		while (i !=inGraph.getNodeCount() ) 
 		{
-			DenseDoubleMatrix2D identityMatrix21 = removColumnAndRow(MatirxTransition,i);
-			DoubleMatrix1D identityMatrix4= a.inverse(matrixIdentityCreation(inGraph).assign(identityMatrix21, Functions.minus)).zMult(vectorOfOneCreation(inGraph), null);
-			for ( int j=0; j<identityMatrix4.size();j++) 
+			DenseDoubleMatrix2D MatrixOfNode = removColumnAndRow(MatirxTransition,i);
+			DoubleMatrix1D MatrixResult= a.inverse(matrixIdentityCreation(inGraph).assign(MatrixOfNode, Functions.minus)).zMult(vectorOfOneCreation(inGraph), null);
+			for ( int j=0; j<MatrixResult.size();j++) 
 			{
-				sommeCentrality += identityMatrix4.get(j); 
+				sommeCentrality += MatrixResult.get(j); 
 			}
-			System.out.print(sommeCentrality+"\n");
-			result.add(sommeCentrality);
+			result.add(inGraph.getNodeCount()/sommeCentrality);
+			//System.out.print(inGraph.getNodeCount()/sommeCentrality+"\n");
 			sommeCentrality=0;
-			System.out.print("***************"+"\n");
 			i++;
 		}
-		
-			//System.out.print(identityMatrix3.toString());
-			//System.out.print(sommeCentrlaty);
-		
 		return result;
 	}
 
