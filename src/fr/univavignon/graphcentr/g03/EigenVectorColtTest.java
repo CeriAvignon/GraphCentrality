@@ -11,16 +11,16 @@ public class EigenVectorColtTest
 	public static void execute()
 	{
 		int n=10000;
-		double p=0;
+		int k=2;
 		SimpleGraph g=new SimpleGraph();
 		GraphMLReader r= new GraphMLReader();
-		r.updateFromFile("./res/Benchmark/erdos_renyi/n="+n+"_p="+p+".graphml",g);
+		r.updateFromFile("./res/Benchmark/watts_strogatz/n="+n+"_k="+k+".graphml",g);
 		
 		Benchmark.start();
 		EigenVectorColt eigen=new EigenVectorColt();
 		CentralityResult res=eigen.evaluate(g);
 		Benchmark.stop();
 		
-		System.out.println(res);		
+		Benchmark.printSnapshots();
 	}
 }
