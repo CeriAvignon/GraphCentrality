@@ -30,7 +30,7 @@ public class Test
 		// g11 tests
 		FloydWarshallTest.execute();
 		WeightedEccentricityTest.execute();
-		
+
 		//test g01
 		CliqueTest.execute();
 		CliqueTreeSetTest.execute();
