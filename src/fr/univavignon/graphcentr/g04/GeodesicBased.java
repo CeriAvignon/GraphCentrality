@@ -21,8 +21,9 @@ public class GeodesicBased  implements SimpleCentrality
 
 	/**
 	 * delta value
+	 * 1 = centralité réciproque par défaut
 	 */
-	private int delta;
+	private float delta = 1;
 	
 	@Override
 	public CentralityResult evaluate(SimpleGraph g)
@@ -61,15 +62,15 @@ public class GeodesicBased  implements SimpleCentrality
 	/**
 	 * @param n the new delta value
 	 */
-	public void setDelta(int n)
+	public void setDelta(float n)
 	{
-		delta = n;
+		float = n;
 	}
 	
 	/**
 	 * @return delta the current delta value
 	 */
-	public int getDelta()
+	public float getDelta()
 	{
 		return delta;
 	}
